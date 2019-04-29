@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "bundle.css",
+  "sources": [
+    "../src/Map.svelte"
+  ],
+  "sourcesContent": [
+    "<script>\n\texport let time;\n\texport let id;\n\texport let censusTracts;\n\texport let file;\n\n\timport {onMount} from 'svelte';\n\timport jenks from './helpers/jenks.js';\n\timport tract2town from './helpers/tract2town.js';\n\timport comma from './helpers/comma.js';\n\timport Papa from './helpers/papaparse.min.js';\n\n\tlet data;\n\n\tPapa.parse(file, {\n\t\tdownload: true,\n\t\tcomplete: function(d) {\n\t\t\tdata = d;\n\t\t}\n\t});\n\n\tlet style = function() {\n\t\t\n\t}\n\n\tstyle()\n\n\tonMount(async () => {\n\t\tvar map = L.map(id, {\n\t\t\tcenter: [41.33, -72.65],\n\t\t\tzoom: 8,\n\t\t\tzoomControl: false,\n\t\t\tscrollWheelZoom: false,\n\t\t\tattributionControl: false,\n\t\t});\n\t\tmap.keyboard.disable();\n\t\tmap.doubleClickZoom.disable();\n\n\t\tfetch('./geo/towns.geojson').then(response => {\n\t\t  response.json().then(json => {\n\t\t    let geojson = json;\n\n\t\t\t\tlet geojsonLayer = L.geoJson(geojson, {\n\t\t\t\t\t//style: geojsonVisible,\n\t\t\t\t\t//onEachFeature: onEachFeature,\n\t\t\t\t}).addTo(map);\n\n\t\t  });\n\t\t});\n\n\t});\n\n\n</script>\n\n<style>\n\t:global(.leaflet-container) {\n\t\tbackground-color: white !important;\n\t}\n</style>\n\n<p class=\"f5 tc\">{time}</p>\n\n<div id=\"{id}\" class=\"w-100 h-100\"></div>\n"
+  ],
+  "names": [],
+  "mappings": "AAwDS,kBAAkB,AAAE,CAAC,AAC5B,gBAAgB,CAAE,KAAK,CAAC,UAAU,AACnC,CAAC"
+}
