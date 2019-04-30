@@ -1,8 +1,12 @@
 <script>
 	import config from './config.js';
+	import {data, jenksBreaks, geo2data} from './stores.js';
 
 	import Map from './Map.svelte';
-
+	import Legend from './Legend.svelte';
+	import Annotation from './Annotation.svelte';
+	import Papa from './helpers/papaparse.min.js';
+	import jenks from './helpers/jenks.js';
 
 	let currentIndex = 0;
 	let censusTracts = false;
@@ -10,8 +14,37 @@
 	$: dp = config.data[parseInt(currentIndex)];
 	$: downloadPath = 'data/' + dp.file;
 	$: description = dp.description;
+	$: col1 = dp.col1;
+	$: col2 = dp.col2;
 	$: time1 = dp.time1;
 	$: time2 = dp.time2;
+	$: moe1 = dp.moe1;
+	$: moe2 = dp.moe2;
+
+	$: {
+		fetch(downloadPath)
+			.then(function(res) {
+				return res.text();
+			})
+			.then(function(csv_str) {
+				let parsed = Papa.parse(csv_str, {
+					header: true,
+					dynamicTyping: true
+				}).data;
+
+				let parsedAsObj = {}
+				for (let i in parsed) {
+					parsedAsObj[parsed[i].Geography] = parsed[i];
+				}
+
+				let values1 = parsed.map(x => parseFloat(x[col1]) || 0);
+				let values2 = parsed.map(x => parseFloat(x[col2]) || 0);
+
+				jenksBreaks.update(x => jenks(values1.concat(values2), 5));
+				geo2data.update(x => parsedAsObj);
+				data.update(d => parsed);
+			});
+	}
 
 </script>
 
@@ -29,25 +62,52 @@
 		Double-click on the map for zoom. <a href="{downloadPath}" class="link dim">Download dataset</a> powering this visualization.
 	</p>
 
-	<p>
+	<p class="f6 lh-title">
 		{@html description}
 	</p>
 
+	<div class="mw8 h3">
+		<Legend />
+	</div>
+
 </div>
+
 
 <div class="mw9 center ph3" style="height: 600px;">
 	<div class="fl w-50 h-100">
 		<Map
 			id="map-time1"
 			time="{time1}"
-			file="{downloadPath}"
+			col="{col1}"
 			censusTracts="{censusTracts}"
 		/>
 	</div>
-<!--
 	<div class="fl w-50 h-100">
-		<Map id="map-time2" time="{time2}" />
-	</div> -->
+		<Map
+			id="map-time2"
+			time="{time2}"
+			col="{col2}"
+			censusTracts="{censusTracts}"
+		/>
+	</div>
+</div>
+
+
+<div class="mw9 center ph3 mb5 h3">
+	<div class="fl w-50">
+		<Annotation
+			period="{time1}"
+			col="{col1}"
+			moe="{moe1}"
+		/>
+	</div>
+	<div class="fl w-50">
+		<Annotation
+			period="{time2}"
+			col="{col2}"
+			moe="{moe2}"
+		/>
+	</div>
 </div>
 
 
