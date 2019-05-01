@@ -1,6 +1,6 @@
 <script>
 	import config from './config.js';
-	import {data, jenksBreaks, geo2data} from './stores.js';
+	import {data, jenksBreaks, geo2data, geojsonPath} from './stores.js';
 
 	import Map from './Map.svelte';
 	import Legend from './Legend.svelte';
@@ -8,8 +8,19 @@
 	import Papa from './helpers/papaparse.min.js';
 	import jenks from './helpers/jenks.js';
 
-	let currentIndex = 0;
-	let censusTracts = false;
+	let currentIndex = 0
+	let censusTracts = false
+	geojsonPath.update(x => './geo/tracts.geojson')
+
+	function handleCensusTracts() {
+		if (censusTracts) {
+			geojsonPath.update(x => './geo/tracts.geojson')
+			console.log($geojsonPath)
+		} else {
+			geojsonPath.update(x => './geo/towns.geojson')
+			console.log($geojsonPath)
+		}
+	}
 
 	$: dp = config.data[parseInt(currentIndex)];
 	$: downloadPath = 'data/' + dp.file;
@@ -20,6 +31,8 @@
 	$: time2 = dp.time2;
 	$: moe1 = dp.moe1;
 	$: moe2 = dp.moe2;
+	$: prefix = dp.prefix;
+	$: suffix = dp.suffix;
 
 	$: {
 		fetch(downloadPath)
@@ -58,6 +71,10 @@
 		{/each}
 	</select>
 
+	<label>
+		<input type="checkbox" name="checkbox" bind:checked={censusTracts} on:change={handleCensusTracts}> Census Tracts
+	</label>
+
 	<p class="black-80 f6">
 		Double-click on the map for zoom. <a href="{downloadPath}" class="link dim">Download dataset</a> powering this visualization.
 	</p>
@@ -67,7 +84,10 @@
 	</p>
 
 	<div class="mw8 h3">
-		<Legend />
+		<Legend
+			prefix="{prefix}"
+			suffix="{suffix}"
+		/>
 	</div>
 
 </div>
@@ -99,6 +119,8 @@
 			period="{time1}"
 			col="{col1}"
 			moe="{moe1}"
+			prefix="{prefix}"
+			suffix="{suffix}"
 		/>
 	</div>
 	<div class="fl w-50">
@@ -106,6 +128,8 @@
 			period="{time2}"
 			col="{col2}"
 			moe="{moe2}"
+			prefix="{prefix}"
+			suffix="{suffix}"
 		/>
 	</div>
 </div>

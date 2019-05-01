@@ -10,18 +10,29 @@
 	import comma from './helpers/comma.js';
 	import colors from './helpers/colors.js';
 
-	import {data, ann, jenksBreaks, geo2data} from './stores.js';
+	import {data, ann, jenksBreaks, geo2data, geojsonPath} from './stores.js';
 
 	let map;
 	let geojsonLayer;
 
 	let getColor = function(val) {
+		if (val === '-') {
+			return '#cccccc'
+		}
+
+		if (val[val.length - 1] === '+') {
+			return colors[4]
+		}
+
 		for (let i in $jenksBreaks) {
-			if (val <= $jenksBreaks[i]) {
-				return colors[i];
+			if (i > 0) {
+				if (val <= $jenksBreaks[i]) {
+					return colors[i-1]
+				}
 			}
 		}
-		return false;
+
+		return '#cccccc';
 	}
 
 	const resizeMaps = function() {
@@ -36,20 +47,17 @@
 			scrollWheelZoom: false,
 			attributionControl: false,
 		});
-		map.keyboard.disable();
-		map.doubleClickZoom.disable();
-		map.dragging.disable();
+		map.keyboard.disable()
+		map.doubleClickZoom.disable()
+		map.dragging.disable()
 
-		fetch('./geo/towns.geojson').then(response => {
+		$: fetch($geojsonPath).then(response => {
 		  response.json().then(json => {
-		    let geojson = json;
-
-				geojsonLayer = L.geoJson(geojson, {
+				geojsonLayer = L.geoJson(json, {
 					onEachFeature: function(f, l) {
 						l.on({
 							mouseover: function(e) {
 								ann.update(x => e.target.feature.properties.name)
-
 							},
 							mouseout: function(e) {
 								ann.update(x => '')
@@ -83,7 +91,7 @@
 
 <style>
 	:global(.leaflet-container) {
-		background-color: white !important;
+		background-color: rgba(0,0,0,0) !important;
 	}
 
 	:global(.leaflet-interactive:hover) {

@@ -78,6 +78,11 @@
 		return () => node.removeEventListener(event, handler, options);
 	}
 
+	function attr(node, attribute, value) {
+		if (value == null) node.removeAttribute(attribute);
+		else node.setAttribute(attribute, value);
+	}
+
 	function children(element) {
 		return Array.from(element.childNodes);
 	}
@@ -344,8 +349,7 @@
 	      "time2": "ACS 2013-2017",
 	      "col2": "ACS2017",
 	      "moe2": "ACS2017_moe",
-	      "change": "true",
-	      "positive": "true",
+	      "increase": "positive",
 	      "description": "<b>The median increase in household income across all towns in Connecticut was 5.8%.</b> In 129 towns, median household income increased, most significant increases in North Canaan (+26,400, or +58%), Westbrook (+31,700, or +50%), and Southbury (+23,100, or +34%). Note that North Canaan and Westbrook both have large margins of errors due to small populations. In 40 towns, median household income decreased compared to 2008-2012 estimate, with the highest decreases occurring in Ansonia (~ -$9,200, or nearly -17%), New London (~ –$6,800, or -15%), and East Haddam (~ $13,000, or -14%). <b>Hartford remains the town with the lowest median household income in Connecticut</b> despite a 17% increase in median household income between ACS 2008-2012 and 2013-2017 estimates. New Haven median income increased 1.8% and changing its rank from 2nd to 3rd poorest municipality, while New London dropped from 7th to 2nd due to a 15% decrease."
 	    },
 	    {
@@ -359,7 +363,7 @@
 	      "time2": "ACS 2013-2017",
 	      "col2": "ACS2017",
 	      "moe2": "ACS2017_moe",
-	      "change": "true",
+	      "increase": "positive",
 	      "description": "Per capita income increased in 142 municipalities and decreased in 27. <b>Hartford has the lowest per capita income at $19,220</b>, followed by Windham ($19,666), Waterbury ($21,605), Mansfield ($21,916), and Bridgeport ($22,806). New Canaan, Darien, and Westport are the towns with highest per capita income, all above $100,000."
 	    }
 	  ]
@@ -402,6 +406,7 @@
 	const jenksBreaks = writable(false);
 	const geo2data = writable(false);
 	const ann = writable(false);
+	const geojsonPath = writable(false);
 
 	// # [Jenks natural breaks optimization](http://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization)
 	//
@@ -579,7 +584,7 @@
 				div = element("div");
 				div.id = ctx.id;
 				div.className = "w-100 h-100";
-				add_location(div, file, 95, 0, 1807);
+				add_location(div, file, 103, 0, 1926);
 			},
 
 			l: function claim(nodes) {
@@ -608,10 +613,12 @@
 	}
 
 	function instance($$self, $$props, $$invalidate) {
-		let $jenksBreaks;
+		let $jenksBreaks, $geojsonPath;
 
 		validate_store(jenksBreaks, 'jenksBreaks');
 		subscribe($$self, jenksBreaks, $$value => { $jenksBreaks = $$value; $$invalidate('$jenksBreaks', $jenksBreaks); });
+		validate_store(geojsonPath, 'geojsonPath');
+		subscribe($$self, geojsonPath, $$value => { $geojsonPath = $$value; $$invalidate('$geojsonPath', $geojsonPath); });
 
 		let { time, id, censusTracts, col } = $$props;
 
@@ -619,12 +626,23 @@
 		let geojsonLayer;
 
 		let getColor = function(val) {
+			if (val === '-') {
+				return '#cccccc'
+			}
+
+			if (val[val.length - 1] === '+') {
+				return colors[4]
+			}
+
 			for (let i in $jenksBreaks) {
-				if (val <= $jenksBreaks[i]) {
-					return colors[i];
+				if (i > 0) {
+					if (val <= $jenksBreaks[i]) {
+						return colors[i-1]
+					}
 				}
 			}
-			return false;
+
+			return '#cccccc';
 		};
 
 		const resizeMaps = function() {
@@ -643,16 +661,13 @@
 			map.doubleClickZoom.disable();
 			map.dragging.disable();
 
-			fetch('./geo/towns.geojson').then(response => {
+			$: fetch($geojsonPath).then(response => {
 			  response.json().then(json => {
-			    let geojson = json;
-
-					$$invalidate('geojsonLayer', geojsonLayer = L.geoJson(geojson, {
+					$$invalidate('geojsonLayer', geojsonLayer = L.geoJson(json, {
 						onEachFeature: function(f, l) {
 							l.on({
 								mouseover: function(e) {
 									ann.update(x => e.target.feature.properties.name);
-
 								},
 								mouseout: function(e) {
 									ann.update(x => '');
@@ -756,29 +771,42 @@
 		return child_ctx;
 	}
 
-	// (8:2) {#each colors as color, i}
+	// (11:2) {#each colors as color, i}
 	function create_each_block(ctx) {
-		var div, t0_value = comma(ctx.$jenksBreaks[ctx.i+1]), t0, t1;
+		var div, raw_value = ctx.i == 0 ? '&leq;' : '', raw_after, t0, t1_value = ctx.i != 4 ? ctx.prefix + comma(ctx.$jenksBreaks[ctx.i + 1]) + ctx.suffix : '', t1, t2, t3_value = ctx.i == 4 ? ctx.prefix + comma(ctx.$jenksBreaks[ctx.i] + 1) + ctx.suffix + '+' : '', t3, t4;
 
 		return {
 			c: function create() {
 				div = element("div");
-				t0 = text(t0_value);
-				t1 = space();
+				raw_after = element('noscript');
+				t0 = space();
+				t1 = text(t1_value);
+				t2 = space();
+				t3 = text(t3_value);
+				t4 = space();
 				div.className = "fl " + (ctx.i < 4 ? 'tr' : 'tl white') + " w-20 pv1 ph2 f6";
 				set_style(div, "background-color", ctx.color);
-				add_location(div, file$1, 8, 4, 196);
+				add_location(div, file$1, 11, 4, 240);
 			},
 
 			m: function mount(target, anchor) {
 				insert(target, div, anchor);
+				append(div, raw_after);
+				raw_after.insertAdjacentHTML("beforebegin", raw_value);
 				append(div, t0);
 				append(div, t1);
+				append(div, t2);
+				append(div, t3);
+				append(div, t4);
 			},
 
 			p: function update(changed, ctx) {
-				if ((changed.$jenksBreaks) && t0_value !== (t0_value = comma(ctx.$jenksBreaks[ctx.i+1]))) {
-					set_data(t0, t0_value);
+				if ((changed.prefix || changed.$jenksBreaks || changed.suffix) && t1_value !== (t1_value = ctx.i != 4 ? ctx.prefix + comma(ctx.$jenksBreaks[ctx.i + 1]) + ctx.suffix : '')) {
+					set_data(t1, t1_value);
+				}
+
+				if ((changed.prefix || changed.$jenksBreaks || changed.suffix) && t3_value !== (t3_value = ctx.i == 4 ? ctx.prefix + comma(ctx.$jenksBreaks[ctx.i] + 1) + ctx.suffix + '+' : '')) {
+					set_data(t3, t3_value);
 				}
 
 				if (changed.colors) {
@@ -813,7 +841,7 @@
 					each_blocks[i].c();
 				}
 				div.className = "w-100";
-				add_location(div, file$1, 6, 0, 143);
+				add_location(div, file$1, 9, 0, 187);
 			},
 
 			l: function claim(nodes) {
@@ -829,7 +857,7 @@
 			},
 
 			p: function update(changed, ctx) {
-				if (changed.colors || changed.comma || changed.$jenksBreaks) {
+				if (changed.colors || changed.prefix || changed.comma || changed.$jenksBreaks || changed.suffix) {
 					each_value = colors;
 
 					for (var i = 0; i < each_value.length; i += 1) {
@@ -870,13 +898,47 @@
 		validate_store(jenksBreaks, 'jenksBreaks');
 		subscribe($$self, jenksBreaks, $$value => { $jenksBreaks = $$value; $$invalidate('$jenksBreaks', $jenksBreaks); });
 
-		return { $jenksBreaks };
+		
+
+	  let { prefix, suffix } = $$props;
+
+		$$self.$set = $$props => {
+			if ('prefix' in $$props) $$invalidate('prefix', prefix = $$props.prefix);
+			if ('suffix' in $$props) $$invalidate('suffix', suffix = $$props.suffix);
+		};
+
+		return { prefix, suffix, $jenksBreaks };
 	}
 
 	class Legend extends SvelteComponentDev {
 		constructor(options) {
 			super(options);
-			init(this, options, instance$1, create_fragment$1, safe_not_equal, []);
+			init(this, options, instance$1, create_fragment$1, safe_not_equal, ["prefix", "suffix"]);
+
+			const { ctx } = this.$$;
+			const props = options.props || {};
+			if (ctx.prefix === undefined && !('prefix' in props)) {
+				console.warn("<Legend> was created without expected prop 'prefix'");
+			}
+			if (ctx.suffix === undefined && !('suffix' in props)) {
+				console.warn("<Legend> was created without expected prop 'suffix'");
+			}
+		}
+
+		get prefix() {
+			throw new Error("<Legend>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set prefix(value) {
+			throw new Error("<Legend>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get suffix() {
+			throw new Error("<Legend>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set suffix(value) {
+			throw new Error("<Legend>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 	}
 
@@ -884,9 +946,9 @@
 
 	const file$2 = "src/Annotation.svelte";
 
-	// (14:2) {#if $ann}
+	// (16:2) {#if $ann}
 	function create_if_block(ctx) {
-		var p0, t0, t1, p1, t2_value = ctx.$geo2data[ctx.$ann] ? comma(ctx.$geo2data[ctx.$ann][ctx.col]) : '', t2, t3;
+		var p0, t0, t1, p1, t2, t3_value = ctx.$geo2data[ctx.$ann] ? comma(ctx.$geo2data[ctx.$ann][ctx.col]) : '', t3, t4, t5;
 
 		var if_block = (ctx.moe !== "false") && create_if_block_1(ctx);
 
@@ -896,13 +958,15 @@
 				t0 = text(ctx.$ann);
 				t1 = space();
 				p1 = element("p");
-				t2 = text(t2_value);
-				t3 = space();
+				t2 = text(ctx.prefix);
+				t3 = text(t3_value);
+				t4 = text(ctx.suffix);
+				t5 = space();
 				if (if_block) if_block.c();
 				p0.className = "f4 mt0 mb1";
-				add_location(p0, file$2, 14, 4, 281);
+				add_location(p0, file$2, 16, 4, 353);
 				p1.className = "f3 mv0";
-				add_location(p1, file$2, 15, 4, 320);
+				add_location(p1, file$2, 17, 4, 392);
 			},
 
 			m: function mount(target, anchor) {
@@ -912,6 +976,8 @@
 				insert(target, p1, anchor);
 				append(p1, t2);
 				append(p1, t3);
+				append(p1, t4);
+				append(p1, t5);
 				if (if_block) if_block.m(p1, null);
 			},
 
@@ -920,8 +986,16 @@
 					set_data(t0, ctx.$ann);
 				}
 
-				if ((changed.$geo2data || changed.$ann || changed.col) && t2_value !== (t2_value = ctx.$geo2data[ctx.$ann] ? comma(ctx.$geo2data[ctx.$ann][ctx.col]) : '')) {
-					set_data(t2, t2_value);
+				if (changed.prefix) {
+					set_data(t2, ctx.prefix);
+				}
+
+				if ((changed.$geo2data || changed.$ann || changed.col) && t3_value !== (t3_value = ctx.$geo2data[ctx.$ann] ? comma(ctx.$geo2data[ctx.$ann][ctx.col]) : '')) {
+					set_data(t3, t3_value);
+				}
+
+				if (changed.suffix) {
+					set_data(t4, ctx.suffix);
 				}
 
 				if (ctx.moe !== "false") {
@@ -950,7 +1024,7 @@
 		};
 	}
 
-	// (18:6) {#if moe !== "false"}
+	// (20:6) {#if moe !== "false"}
 	function create_if_block_1(ctx) {
 		var span, t0, t1_value = comma(ctx.$geo2data[ctx.$ann][ctx.moe]), t1;
 
@@ -960,7 +1034,7 @@
 				t0 = text("± ");
 				t1 = text(t1_value);
 				span.className = "black-50";
-				add_location(span, file$2, 18, 8, 434);
+				add_location(span, file$2, 20, 8, 522);
 			},
 
 			m: function mount(target, anchor) {
@@ -996,9 +1070,10 @@
 				t1 = space();
 				if (if_block) if_block.c();
 				p.className = "f6 black-80";
-				add_location(p, file$2, 12, 2, 226);
-				div.className = "w-100 tc";
-				add_location(div, file$2, 11, 0, 201);
+				add_location(p, file$2, 14, 2, 298);
+				div.className = "w-100 tc h5";
+				set_style(div, "margin-top", "-150px");
+				add_location(div, file$2, 13, 0, 243);
 			},
 
 			l: function claim(nodes) {
@@ -1055,21 +1130,31 @@
 
 		
 
-	  let { period, col, moe } = $$props;
+	  let { period, col, moe, prefix, suffix } = $$props;
 
 		$$self.$set = $$props => {
 			if ('period' in $$props) $$invalidate('period', period = $$props.period);
 			if ('col' in $$props) $$invalidate('col', col = $$props.col);
 			if ('moe' in $$props) $$invalidate('moe', moe = $$props.moe);
+			if ('prefix' in $$props) $$invalidate('prefix', prefix = $$props.prefix);
+			if ('suffix' in $$props) $$invalidate('suffix', suffix = $$props.suffix);
 		};
 
-		return { period, col, moe, $ann, $geo2data };
+		return {
+			period,
+			col,
+			moe,
+			prefix,
+			suffix,
+			$ann,
+			$geo2data
+		};
 	}
 
 	class Annotation extends SvelteComponentDev {
 		constructor(options) {
 			super(options);
-			init(this, options, instance$2, create_fragment$2, safe_not_equal, ["period", "col", "moe"]);
+			init(this, options, instance$2, create_fragment$2, safe_not_equal, ["period", "col", "moe", "prefix", "suffix"]);
 
 			const { ctx } = this.$$;
 			const props = options.props || {};
@@ -1081,6 +1166,12 @@
 			}
 			if (ctx.moe === undefined && !('moe' in props)) {
 				console.warn("<Annotation> was created without expected prop 'moe'");
+			}
+			if (ctx.prefix === undefined && !('prefix' in props)) {
+				console.warn("<Annotation> was created without expected prop 'prefix'");
+			}
+			if (ctx.suffix === undefined && !('suffix' in props)) {
+				console.warn("<Annotation> was created without expected prop 'suffix'");
 			}
 		}
 
@@ -1105,6 +1196,22 @@
 		}
 
 		set moe(value) {
+			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get prefix() {
+			throw new Error("<Annotation>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set prefix(value) {
+			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get suffix() {
+			throw new Error("<Annotation>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set suffix(value) {
 			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 	}
@@ -1136,7 +1243,7 @@
 		return child_ctx;
 	}
 
-	// (56:2) {#each config.data as dp, i}
+	// (69:2) {#each config.data as dp, i}
 	function create_each_block$1(ctx) {
 		var option, t_value = ctx.dp.name, t;
 
@@ -1146,7 +1253,7 @@
 				t = text(t_value);
 				option.__value = ctx.i;
 				option.value = option.__value;
-				add_location(option, file$3, 56, 3, 1417);
+				add_location(option, file$3, 69, 3, 1758);
 			},
 
 			m: function mount(target, anchor) {
@@ -1165,7 +1272,7 @@
 	}
 
 	function create_fragment$3(ctx) {
-		var div1, p0, raw0_value = config.title, t0, p1, raw1_value = config.subtitle, t1, select, t2, p2, t3, a, t4, t5, t6, p3, t7, div0, t8, div4, div2, t9, div3, t10, div7, div5, t11, div6, t12, footer, raw3_value = config.footer, current, dispose;
+		var div1, p0, raw0_value = config.title, t0, p1, raw1_value = config.subtitle, t1, select, t2, label, input, t3, t4, p2, t5, a, t6, t7, t8, p3, t9, div0, t10, div4, div2, t11, div3, t12, div7, div5, t13, div6, t14, footer, raw3_value = config.footer, current, dispose;
 
 		var each_value = config.data;
 
@@ -1175,14 +1282,20 @@
 			each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
 		}
 
-		var legend = new Legend({ $$inline: true });
+		var legend = new Legend({
+			props: {
+			prefix: ctx.prefix,
+			suffix: ctx.suffix
+		},
+			$$inline: true
+		});
 
 		var map0 = new Map$1({
 			props: {
 			id: "map-time1",
 			time: ctx.time1,
 			col: ctx.col1,
-			censusTracts: censusTracts
+			censusTracts: ctx.censusTracts
 		},
 			$$inline: true
 		});
@@ -1192,7 +1305,7 @@
 			id: "map-time2",
 			time: ctx.time2,
 			col: ctx.col2,
-			censusTracts: censusTracts
+			censusTracts: ctx.censusTracts
 		},
 			$$inline: true
 		});
@@ -1201,7 +1314,9 @@
 			props: {
 			period: ctx.time1,
 			col: ctx.col1,
-			moe: ctx.moe1
+			moe: ctx.moe1,
+			prefix: ctx.prefix,
+			suffix: ctx.suffix
 		},
 			$$inline: true
 		});
@@ -1210,7 +1325,9 @@
 			props: {
 			period: ctx.time2,
 			col: ctx.col2,
-			moe: ctx.moe2
+			moe: ctx.moe2,
+			prefix: ctx.prefix,
+			suffix: ctx.suffix
 		},
 			$$inline: true
 		});
@@ -1229,66 +1346,79 @@
 				}
 
 				t2 = space();
+				label = element("label");
+				input = element("input");
+				t3 = text(" Census Tracts");
+				t4 = space();
 				p2 = element("p");
-				t3 = text("Double-click on the map for zoom. ");
+				t5 = text("Double-click on the map for zoom. ");
 				a = element("a");
-				t4 = text("Download dataset");
-				t5 = text(" powering this visualization.");
-				t6 = space();
+				t6 = text("Download dataset");
+				t7 = text(" powering this visualization.");
+				t8 = space();
 				p3 = element("p");
-				t7 = space();
+				t9 = space();
 				div0 = element("div");
 				legend.$$.fragment.c();
-				t8 = space();
+				t10 = space();
 				div4 = element("div");
 				div2 = element("div");
 				map0.$$.fragment.c();
-				t9 = space();
+				t11 = space();
 				div3 = element("div");
 				map1.$$.fragment.c();
-				t10 = space();
+				t12 = space();
 				div7 = element("div");
 				div5 = element("div");
 				annotation0.$$.fragment.c();
-				t11 = space();
+				t13 = space();
 				div6 = element("div");
 				annotation1.$$.fragment.c();
-				t12 = space();
+				t14 = space();
 				footer = element("footer");
 				p0.className = "f3 f2-ns mb0";
-				add_location(p0, file$3, 51, 1, 1233);
+				add_location(p0, file$3, 64, 1, 1574);
 				p1.className = "f5 f3-ns mt1";
-				add_location(p1, file$3, 52, 1, 1283);
+				add_location(p1, file$3, 65, 1, 1624);
 				if (ctx.currentIndex === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
 				select.className = "f6";
-				add_location(select, file$3, 54, 1, 1337);
+				add_location(select, file$3, 67, 1, 1678);
+				attr(input, "type", "checkbox");
+				input.name = "checkbox";
+				add_location(input, file$3, 74, 2, 1828);
+				add_location(label, file$3, 73, 1, 1818);
 				a.href = ctx.downloadPath;
 				a.className = "link dim";
-				add_location(a, file$3, 61, 36, 1537);
+				add_location(a, file$3, 78, 36, 2013);
 				p2.className = "black-80 f6";
-				add_location(p2, file$3, 60, 1, 1477);
+				add_location(p2, file$3, 77, 1, 1953);
 				p3.className = "f6 lh-title";
-				add_location(p3, file$3, 64, 1, 1637);
+				add_location(p3, file$3, 81, 1, 2113);
 				div0.className = "mw8 h3";
-				add_location(div0, file$3, 68, 1, 1691);
+				add_location(div0, file$3, 85, 1, 2167);
 				div1.className = "mw9 center ph3";
-				add_location(div1, file$3, 50, 0, 1203);
+				add_location(div1, file$3, 63, 0, 1544);
 				div2.className = "fl w-50 h-100";
-				add_location(div2, file$3, 76, 1, 1796);
+				add_location(div2, file$3, 96, 1, 2316);
 				div3.className = "fl w-50 h-100";
-				add_location(div3, file$3, 84, 1, 1930);
+				add_location(div3, file$3, 104, 1, 2450);
 				div4.className = "mw9 center ph3";
 				set_style(div4, "height", "600px");
-				add_location(div4, file$3, 75, 0, 1743);
+				add_location(div4, file$3, 95, 0, 2263);
 				div5.className = "fl w-50";
-				add_location(div5, file$3, 96, 1, 2109);
+				add_location(div5, file$3, 116, 1, 2629);
 				div6.className = "fl w-50";
-				add_location(div6, file$3, 103, 1, 2211);
+				add_location(div6, file$3, 125, 1, 2773);
 				div7.className = "mw9 center ph3 mb5 h3";
-				add_location(div7, file$3, 95, 0, 2072);
+				add_location(div7, file$3, 115, 0, 2592);
 				footer.className = "w-100 center tc ph3 f6 mt5 pv5 black-80 bg-lightest-blue";
-				add_location(footer, file$3, 113, 0, 2321);
-				dispose = listen(select, "change", ctx.select_change_handler);
+				add_location(footer, file$3, 137, 0, 2925);
+
+				dispose = [
+					listen(select, "change", ctx.select_change_handler),
+					listen(input, "change", ctx.input_change_handler),
+					listen(input, "change", ctx.handleCensusTracts)
+				];
 			},
 
 			l: function claim(nodes) {
@@ -1312,32 +1442,39 @@
 				select_option(select, ctx.currentIndex);
 
 				append(div1, t2);
+				append(div1, label);
+				append(label, input);
+
+				input.checked = ctx.censusTracts;
+
+				append(label, t3);
+				append(div1, t4);
 				append(div1, p2);
-				append(p2, t3);
-				append(p2, a);
-				append(a, t4);
 				append(p2, t5);
-				append(div1, t6);
+				append(p2, a);
+				append(a, t6);
+				append(p2, t7);
+				append(div1, t8);
 				append(div1, p3);
 				p3.innerHTML = ctx.description;
-				append(div1, t7);
+				append(div1, t9);
 				append(div1, div0);
 				mount_component(legend, div0, null);
-				insert(target, t8, anchor);
+				insert(target, t10, anchor);
 				insert(target, div4, anchor);
 				append(div4, div2);
 				mount_component(map0, div2, null);
-				append(div4, t9);
+				append(div4, t11);
 				append(div4, div3);
 				mount_component(map1, div3, null);
-				insert(target, t10, anchor);
+				insert(target, t12, anchor);
 				insert(target, div7, anchor);
 				append(div7, div5);
 				mount_component(annotation0, div5, null);
-				append(div7, t11);
+				append(div7, t13);
 				append(div7, div6);
 				mount_component(annotation1, div6, null);
-				insert(target, t12, anchor);
+				insert(target, t14, anchor);
 				insert(target, footer, anchor);
 				footer.innerHTML = raw3_value;
 				current = true;
@@ -1366,6 +1503,7 @@
 				}
 
 				if (changed.currentIndex) select_option(select, ctx.currentIndex);
+				if (changed.censusTracts) input.checked = ctx.censusTracts;
 
 				if (!current || changed.downloadPath) {
 					a.href = ctx.downloadPath;
@@ -1375,28 +1513,37 @@
 					p3.innerHTML = ctx.description;
 				}
 
+				var legend_changes = {};
+				if (changed.prefix) legend_changes.prefix = ctx.prefix;
+				if (changed.suffix) legend_changes.suffix = ctx.suffix;
+				legend.$set(legend_changes);
+
 				var map0_changes = {};
 				if (changed.time1) map0_changes.time = ctx.time1;
 				if (changed.col1) map0_changes.col = ctx.col1;
-				if (changed.censusTracts) map0_changes.censusTracts = censusTracts;
+				if (changed.censusTracts) map0_changes.censusTracts = ctx.censusTracts;
 				map0.$set(map0_changes);
 
 				var map1_changes = {};
 				if (changed.time2) map1_changes.time = ctx.time2;
 				if (changed.col2) map1_changes.col = ctx.col2;
-				if (changed.censusTracts) map1_changes.censusTracts = censusTracts;
+				if (changed.censusTracts) map1_changes.censusTracts = ctx.censusTracts;
 				map1.$set(map1_changes);
 
 				var annotation0_changes = {};
 				if (changed.time1) annotation0_changes.period = ctx.time1;
 				if (changed.col1) annotation0_changes.col = ctx.col1;
 				if (changed.moe1) annotation0_changes.moe = ctx.moe1;
+				if (changed.prefix) annotation0_changes.prefix = ctx.prefix;
+				if (changed.suffix) annotation0_changes.suffix = ctx.suffix;
 				annotation0.$set(annotation0_changes);
 
 				var annotation1_changes = {};
 				if (changed.time2) annotation1_changes.period = ctx.time2;
 				if (changed.col2) annotation1_changes.col = ctx.col2;
 				if (changed.moe2) annotation1_changes.moe = ctx.moe2;
+				if (changed.prefix) annotation1_changes.prefix = ctx.prefix;
+				if (changed.suffix) annotation1_changes.suffix = ctx.suffix;
 				annotation1.$set(annotation1_changes);
 			},
 
@@ -1434,7 +1581,7 @@
 				legend.$destroy();
 
 				if (detaching) {
-					detach(t8);
+					detach(t10);
 					detach(div4);
 				}
 
@@ -1443,7 +1590,7 @@
 				map1.$destroy();
 
 				if (detaching) {
-					detach(t10);
+					detach(t12);
 					detach(div7);
 				}
 
@@ -1452,28 +1599,48 @@
 				annotation1.$destroy();
 
 				if (detaching) {
-					detach(t12);
+					detach(t14);
 					detach(footer);
 				}
 
-				dispose();
+				run_all(dispose);
 			}
 		};
 	}
 
-	let censusTracts = false;
-
 	function instance$3($$self, $$props, $$invalidate) {
+		let $geojsonPath;
+
+		validate_store(geojsonPath, 'geojsonPath');
+		subscribe($$self, geojsonPath, $$value => { $geojsonPath = $$value; $$invalidate('$geojsonPath', $geojsonPath); });
+
 		
 
 		let currentIndex = 0;
+		let censusTracts = false;
+		geojsonPath.update(x => './geo/tracts.geojson');
+
+		function handleCensusTracts() {
+			if (censusTracts) {
+				geojsonPath.update(x => './geo/tracts.geojson');
+				console.log($geojsonPath);
+			} else {
+				geojsonPath.update(x => './geo/towns.geojson');
+				console.log($geojsonPath);
+			}
+		}
 
 		function select_change_handler() {
 			currentIndex = select_value(this);
 			$$invalidate('currentIndex', currentIndex);
 		}
 
-		let dp, downloadPath, description, col1, col2, time1, time2, moe1, moe2;
+		function input_change_handler() {
+			censusTracts = this.checked;
+			$$invalidate('censusTracts', censusTracts);
+		}
+
+		let dp, downloadPath, description, col1, col2, time1, time2, moe1, moe2, prefix, suffix;
 		$$self.$$.update = ($$dirty = { currentIndex: 1, dp: 1, downloadPath: 1, col1: 1, col2: 1 }) => {
 			if ($$dirty.currentIndex) { $$invalidate('dp', dp = config.data[parseInt(currentIndex)]); }
 			if ($$dirty.dp) { $$invalidate('downloadPath', downloadPath = 'data/' + dp.file); }
@@ -1484,6 +1651,8 @@
 			if ($$dirty.dp) { $$invalidate('time2', time2 = dp.time2); }
 			if ($$dirty.dp) { $$invalidate('moe1', moe1 = dp.moe1); }
 			if ($$dirty.dp) { $$invalidate('moe2', moe2 = dp.moe2); }
+			if ($$dirty.dp) { $$invalidate('prefix', prefix = dp.prefix); }
+			if ($$dirty.dp) { $$invalidate('suffix', suffix = dp.suffix); }
 			if ($$dirty.downloadPath || $$dirty.col1 || $$dirty.col2) { {
 					fetch(downloadPath)
 						.then(function(res) {
@@ -1512,6 +1681,8 @@
 
 		return {
 			currentIndex,
+			censusTracts,
+			handleCensusTracts,
 			downloadPath,
 			description,
 			col1,
@@ -1520,7 +1691,10 @@
 			time2,
 			moe1,
 			moe2,
-			select_change_handler
+			prefix,
+			suffix,
+			select_change_handler,
+			input_change_handler
 		};
 	}
 
