@@ -10,16 +10,11 @@
 
 	let currentIndex = 0
 	let censusTracts = false
-	geojsonPath.update(x => './geo/tracts.geojson')
+	
+	geojsonPath.update(x => './geo/towns.geojson')
 
 	function handleCensusTracts() {
-		if (censusTracts) {
-			geojsonPath.update(x => './geo/tracts.geojson')
-			console.log($geojsonPath)
-		} else {
-			geojsonPath.update(x => './geo/towns.geojson')
-			console.log($geojsonPath)
-		}
+		geojsonPath.update(x => censusTracts ? './geo/tracts.geojson' : './geo/towns.geojson')
 	}
 
 	$: dp = config.data[parseInt(currentIndex)];

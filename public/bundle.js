@@ -584,7 +584,7 @@
 				div = element("div");
 				div.id = ctx.id;
 				div.className = "w-100 h-100";
-				add_location(div, file, 103, 0, 1926);
+				add_location(div, file, 113, 0, 2032);
 			},
 
 			l: function claim(nodes) {
@@ -649,7 +649,7 @@
 			map.fitBounds(geojsonLayer.getBounds());
 		};
 
-		onMount(async () => {
+		let initMap = async function() {
 			$$invalidate('map', map = L.map(id, {
 				center: [41.33, -72.65],
 				zoom: 9,
@@ -660,39 +660,45 @@
 			map.keyboard.disable();
 			map.doubleClickZoom.disable();
 			map.dragging.disable();
+		};
 
-			$: fetch($geojsonPath).then(response => {
-			  response.json().then(json => {
-					$$invalidate('geojsonLayer', geojsonLayer = L.geoJson(json, {
-						onEachFeature: function(f, l) {
-							l.on({
-								mouseover: function(e) {
-									ann.update(x => e.target.feature.properties.name);
-								},
-								mouseout: function(e) {
-									ann.update(x => '');
-								}
-							});
+		var reloadGeojson = async function() {
+			const res = await fetch($geojsonPath);
+			const json = await res.json();
+
+			if (geojsonLayer) {
+				map.removeLayer(geojsonLayer);
+			}
+
+			$$invalidate('geojsonLayer', geojsonLayer = L.geoJson(json, {
+				onEachFeature: function(f, l) {
+					l.on({
+						mouseover: function(e) {
+							ann.update(x => e.target.feature.properties.name);
 						},
-					}).addTo(map));
-
-					resizeMaps();
-
-					geo2data.subscribe(g2d => {
-						geojsonLayer.eachLayer(layer => {
-							layer.setStyle({
-								fillColor: getColor(g2d[layer.feature.properties.name][col]),
-								fillOpacity: 1,
-								color: 'white',
-								weight: 1
-							});
-						});
+						mouseout: function(e) {
+							ann.update(x => '');
+						}
 					});
+				},
+			}).addTo(map));
 
-			  });
+			resizeMaps();
+
+			geo2data.subscribe(g2d => {
+				geojsonLayer.eachLayer(layer => {
+					layer.setStyle({
+						fillColor: getColor(g2d[layer.feature.properties.name][col]),
+						fillOpacity: 1,
+						color: 'white',
+						weight: 1
+					});
+				});
 			});
 
-		});
+		};
+
+		onMount(initMap);
 
 		window.addEventListener('resize', resizeMaps);
 
@@ -701,6 +707,12 @@
 			if ('id' in $$props) $$invalidate('id', id = $$props.id);
 			if ('censusTracts' in $$props) $$invalidate('censusTracts', censusTracts = $$props.censusTracts);
 			if ('col' in $$props) $$invalidate('col', col = $$props.col);
+		};
+
+		$$self.$$.update = ($$dirty = { $geojsonPath: 1, map: 1, reloadGeojson: 1 }) => {
+			if ($$dirty.$geojsonPath || $$dirty.map || $$dirty.reloadGeojson) { if ($geojsonPath && map) {
+					reloadGeojson();
+				} }
 		};
 
 		return { time, id, censusTracts, col };
@@ -1243,7 +1255,7 @@
 		return child_ctx;
 	}
 
-	// (69:2) {#each config.data as dp, i}
+	// (64:2) {#each config.data as dp, i}
 	function create_each_block$1(ctx) {
 		var option, t_value = ctx.dp.name, t;
 
@@ -1253,7 +1265,7 @@
 				t = text(t_value);
 				option.__value = ctx.i;
 				option.value = option.__value;
-				add_location(option, file$3, 69, 3, 1758);
+				add_location(option, file$3, 64, 3, 1652);
 			},
 
 			m: function mount(target, anchor) {
@@ -1377,42 +1389,42 @@
 				t14 = space();
 				footer = element("footer");
 				p0.className = "f3 f2-ns mb0";
-				add_location(p0, file$3, 64, 1, 1574);
+				add_location(p0, file$3, 59, 1, 1468);
 				p1.className = "f5 f3-ns mt1";
-				add_location(p1, file$3, 65, 1, 1624);
+				add_location(p1, file$3, 60, 1, 1518);
 				if (ctx.currentIndex === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
 				select.className = "f6";
-				add_location(select, file$3, 67, 1, 1678);
+				add_location(select, file$3, 62, 1, 1572);
 				attr(input, "type", "checkbox");
 				input.name = "checkbox";
-				add_location(input, file$3, 74, 2, 1828);
-				add_location(label, file$3, 73, 1, 1818);
+				add_location(input, file$3, 69, 2, 1722);
+				add_location(label, file$3, 68, 1, 1712);
 				a.href = ctx.downloadPath;
 				a.className = "link dim";
-				add_location(a, file$3, 78, 36, 2013);
+				add_location(a, file$3, 73, 36, 1907);
 				p2.className = "black-80 f6";
-				add_location(p2, file$3, 77, 1, 1953);
+				add_location(p2, file$3, 72, 1, 1847);
 				p3.className = "f6 lh-title";
-				add_location(p3, file$3, 81, 1, 2113);
+				add_location(p3, file$3, 76, 1, 2007);
 				div0.className = "mw8 h3";
-				add_location(div0, file$3, 85, 1, 2167);
+				add_location(div0, file$3, 80, 1, 2061);
 				div1.className = "mw9 center ph3";
-				add_location(div1, file$3, 63, 0, 1544);
+				add_location(div1, file$3, 58, 0, 1438);
 				div2.className = "fl w-50 h-100";
-				add_location(div2, file$3, 96, 1, 2316);
+				add_location(div2, file$3, 91, 1, 2210);
 				div3.className = "fl w-50 h-100";
-				add_location(div3, file$3, 104, 1, 2450);
+				add_location(div3, file$3, 99, 1, 2344);
 				div4.className = "mw9 center ph3";
 				set_style(div4, "height", "600px");
-				add_location(div4, file$3, 95, 0, 2263);
+				add_location(div4, file$3, 90, 0, 2157);
 				div5.className = "fl w-50";
-				add_location(div5, file$3, 116, 1, 2629);
+				add_location(div5, file$3, 111, 1, 2523);
 				div6.className = "fl w-50";
-				add_location(div6, file$3, 125, 1, 2773);
+				add_location(div6, file$3, 120, 1, 2667);
 				div7.className = "mw9 center ph3 mb5 h3";
-				add_location(div7, file$3, 115, 0, 2592);
+				add_location(div7, file$3, 110, 0, 2486);
 				footer.className = "w-100 center tc ph3 f6 mt5 pv5 black-80 bg-lightest-blue";
-				add_location(footer, file$3, 137, 0, 2925);
+				add_location(footer, file$3, 132, 0, 2819);
 
 				dispose = [
 					listen(select, "change", ctx.select_change_handler),
@@ -1609,25 +1621,15 @@
 	}
 
 	function instance$3($$self, $$props, $$invalidate) {
-		let $geojsonPath;
-
-		validate_store(geojsonPath, 'geojsonPath');
-		subscribe($$self, geojsonPath, $$value => { $geojsonPath = $$value; $$invalidate('$geojsonPath', $geojsonPath); });
-
 		
 
 		let currentIndex = 0;
 		let censusTracts = false;
-		geojsonPath.update(x => './geo/tracts.geojson');
+		
+		geojsonPath.update(x => './geo/towns.geojson');
 
 		function handleCensusTracts() {
-			if (censusTracts) {
-				geojsonPath.update(x => './geo/tracts.geojson');
-				console.log($geojsonPath);
-			} else {
-				geojsonPath.update(x => './geo/towns.geojson');
-				console.log($geojsonPath);
-			}
+			geojsonPath.update(x => censusTracts ? './geo/tracts.geojson' : './geo/towns.geojson');
 		}
 
 		function select_change_handler() {
