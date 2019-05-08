@@ -1,12 +1,12 @@
 <script>
-	import config from './config.js';
-	import {data, jenksBreaks, geo2data, geojsonPath} from './stores.js';
+	import config from './config.js'
+	import {data, jenksBreaks, geo2data, showChange, geojsonPath} from './stores.js'
 
-	import Map from './Map.svelte';
-	import Legend from './Legend.svelte';
-	import Annotation from './Annotation.svelte';
-	import Papa from './helpers/papaparse.min.js';
-	import jenks from './helpers/jenks.js';
+	import Map from './Map.svelte'
+	import Legend from './Legend.svelte'
+	import Annotation from './Annotation.svelte'
+	import Papa from './helpers/papaparse.min.js'
+	import jenks from './helpers/jenks.js'
 
 	let currentIndex = 0
 	let censusTracts = false
@@ -17,17 +17,22 @@
 		geojsonPath.update(x => censusTracts ? './geo/tracts.geojson' : './geo/towns.geojson')
 	}
 
-	$: dp = config.data[parseInt(currentIndex)];
-	$: downloadPath = 'data/' + dp.file;
-	$: description = dp.description;
-	$: col1 = dp.col1;
-	$: col2 = dp.col2;
-	$: time1 = dp.time1;
-	$: time2 = dp.time2;
-	$: moe1 = dp.moe1;
-	$: moe2 = dp.moe2;
-	$: prefix = dp.prefix;
-	$: suffix = dp.suffix;
+	function handleShowChange() {
+		showChange.update(x => !x)
+	}
+
+	$: dp = config.data[parseInt(currentIndex)]
+	$: downloadPath = 'data/' + dp.file
+	$: description = dp.description
+	$: col1 = dp.col1
+	$: col2 = dp.col2
+	$: time1 = dp.time1
+	$: time2 = dp.time2
+	$: moe1 = dp.moe1
+	$: moe2 = dp.moe2
+	$: prefix = dp.prefix
+	$: suffix = dp.suffix
+	$: posChange = dp.change == 'positive' ? true : false
 
 	$: {
 		fetch(downloadPath)
@@ -60,15 +65,21 @@
 	<p class="f3 f2-ns mb0">{@html config.title}</p>
 	<p class="f5 f3-ns mt1">{@html config.subtitle}</p>
 
-	<select class="f6" bind:value={currentIndex}>
-		{#each config.data as dp, i}
-			<option value={i}>{dp.name}</option>
-		{/each}
-	</select>
+	<div class="pa3 bg-black-10">
+		<select class="f6" bind:value={currentIndex}>
+			{#each config.data as dp, i}
+				<option value={i}>{dp.name}</option>
+			{/each}
+		</select>
 
-	<label>
-		<input type="checkbox" name="checkbox" bind:checked={censusTracts} on:change={handleCensusTracts}> Census Tracts
-	</label>
+		<label class="ml4">
+			<input type="checkbox" name="checkbox1" bind:checked={censusTracts} on:change={handleCensusTracts}> Census Tracts
+		</label>
+
+		<label class="ml4">
+			<input type="checkbox" name="checkbox2" on:change={handleShowChange}> Show Change
+		</label>
+	</div>
 
 	<p class="black-80 f6">
 		Double-click on the map for zoom. <a href="{downloadPath}" class="link dim">Download dataset</a> powering this visualization.
@@ -102,6 +113,8 @@
 			id="map-time2"
 			time="{time2}"
 			col="{col2}"
+			prevCol="{col1}"
+			posChange="{posChange}"
 			censusTracts="{censusTracts}"
 		/>
 	</div>
@@ -125,6 +138,8 @@
 			moe="{moe2}"
 			prefix="{prefix}"
 			suffix="{suffix}"
+			posChange="{posChange}"
+			colPrev="{col1}"
 		/>
 	</div>
 </div>

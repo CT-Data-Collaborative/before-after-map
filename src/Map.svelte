@@ -1,21 +1,39 @@
 <script>
-	export let time;
-	export let id;
-	export let censusTracts;
-	export let col;
+	export let time
+	export let id
+	export let censusTracts
+	export let col
+	export let prevCol = false
+	export let posChange
 
 	import {onMount} from 'svelte'
 	import jenks from './helpers/jenks.js'
 	import tract2town from './helpers/tract2town.js'
 	import comma from './helpers/comma.js'
 	import colors from './helpers/colors.js'
+	import isNumeric from './helpers/isnumeric.js'
 
-	import {data, ann, jenksBreaks, geo2data, geojsonPath} from './stores.js'
+	import {showChange, data, ann, jenksBreaks, geo2data, geojsonPath} from './stores.js'
 
-	let map;
-	let geojsonLayer;
+	let map
+	let geojsonLayer
 
-	let getColor = function(val) {
+	let getColor = function(geo) {
+
+		let val = geo[col]
+		let valPrev = prevCol ? geo[prevCol] : false
+
+		if ($showChange && valPrev) {
+			if (isNumeric(valPrev) && isNumeric(val)) {
+				let change = val - valPrev
+				return (change > 0 && posChange) || (change < 0 && !posChange)
+					? 'green'
+					: change == 0 ? 'blue' : 'red'
+			} else {
+				return 'silver'
+			}
+		}
+
 		if (val === '-') {
 			return '#cccccc'
 		}
@@ -32,7 +50,7 @@
 			}
 		}
 
-		return '#cccccc';
+		return '#cccccc'
 	}
 
 	const resizeMaps = function() {
@@ -48,7 +66,7 @@
 			attributionControl: false,
 		});
 		map.keyboard.disable()
-		map.doubleClickZoom.disable()
+		map.doubleClickZoom.enable()
 		map.dragging.disable()
 	}
 
@@ -76,15 +94,31 @@
 		resizeMaps()
 
 		geo2data.subscribe(g2d => {
+
+			if (id == 'map-time2') {
+				showChange.subscribe(val => {
+					geojsonLayer.eachLayer(layer => {
+						layer.setStyle({
+							fillColor: getColor(g2d[layer.feature.properties.name]),
+							fillOpacity: 1,
+							color: 'white',
+							weight: 1
+						})
+					})
+				})
+			}
+
 			geojsonLayer.eachLayer(layer => {
 				layer.setStyle({
-					fillColor: getColor(g2d[layer.feature.properties.name][col]),
+					fillColor: getColor(g2d[layer.feature.properties.name]),
 					fillOpacity: 1,
 					color: 'white',
 					weight: 1
 				})
 			})
 		})
+
+
 
 	}
 
@@ -94,7 +128,7 @@
 
 	onMount(initMap)
 
-	window.addEventListener('resize', resizeMaps);
+	window.addEventListener('resize', resizeMaps)
 
 </script>
 
