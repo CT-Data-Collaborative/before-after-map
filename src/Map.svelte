@@ -10,7 +10,7 @@
 	import jenks from './helpers/jenks.js'
 	import tract2town from './helpers/tract2town.js'
 	import comma from './helpers/comma.js'
-	import colors from './helpers/colors.js'
+	import {colorsJenks, colorsChange} from './helpers/colors.js'
 	import isNumeric from './helpers/isnumeric.js'
 
 	import {showChange, data, ann, jenksBreaks, geo2data, geojsonPath} from './stores.js'
@@ -20,17 +20,21 @@
 
 	let getColor = function(geo) {
 
+		if (!geo) return '#cccccc'
+
 		let val = geo[col]
 		let valPrev = prevCol ? geo[prevCol] : false
+		let colors = colorsJenks
+		let breaks = $jenksBreaks
 
 		if ($showChange && valPrev) {
 			if (isNumeric(valPrev) && isNumeric(val)) {
-				let change = val - valPrev
-				return (change > 0 && posChange) || (change < 0 && !posChange)
-					? 'green'
-					: change == 0 ? 'blue' : 'red'
+				let change = (val - valPrev) / valPrev * 100
+				val = change
+				breaks = [-100, -10, -5, 0, 5, 10, 100]
+				colors = colorsChange
 			} else {
-				return 'silver'
+				return '#cccccc'
 			}
 		}
 
@@ -42,9 +46,9 @@
 			return colors[4]
 		}
 
-		for (let i in $jenksBreaks) {
+		for (let i in breaks) {
 			if (i > 0) {
-				if (val <= $jenksBreaks[i]) {
+				if (val <= breaks[i]) {
 					return colors[i-1]
 				}
 			}
@@ -66,7 +70,7 @@
 			attributionControl: false,
 		});
 		map.keyboard.disable()
-		map.doubleClickZoom.enable()
+		map.doubleClickZoom.disable()
 		map.dragging.disable()
 	}
 

@@ -337,6 +337,9 @@
 	  "title": "American Community Survey 2017",
 	  "subtitle": "Select tables for Connecticut by <a href='http://ctdata.org'>Connecticut Data Collaborative</a>",
 	  "footer": "Connecticut Data Collaborative is a project of InformCT, Inc.<br>&copy; 2019 Connecticut Data Collaborative",
+	  "defaultGeographyPath": "./geo/towns.geojson",
+	  "extraGeographyPath": "./geo/tracts.geojson",
+	  "extraGeographyName": "Census Tractszzzz",
 	  "data": [
 	    {
 	      "name": "Median Household Income",
@@ -567,11 +570,12 @@
 	    while (/(\d+)(\d{3})/.test(val.toString())){
 	      val = val.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
 	    }
-	    return val;
 	  }
+	  return val
 	}
 
-	var colors = ['#f6eff7', '#bdc9e1', '#74a9cf', '#2b8cbe', '#045a8d'];
+	const colorsJenks = ['#f6eff7', '#bdc9e1', '#74a9cf', '#2b8cbe', '#045a8d'];
+	const colorsChange = ['#d73027', '#f46d43', '#fdae61', '#d9ef8b', '#91cf60', '#1a9850'];
 
 	// From https://stackoverflow.com/questions/9716468/pure-javascript-a-function-like-jquerys-isnumeric
 	  function isNumeric (n) {
@@ -590,7 +594,7 @@
 				div = element("div");
 				div.id = ctx.id;
 				div.className = "w-100 h-100";
-				add_location(div, file, 147, 0, 2752);
+				add_location(div, file, 151, 0, 2835);
 			},
 
 			l: function claim(nodes) {
@@ -619,12 +623,12 @@
 	}
 
 	function instance($$self, $$props, $$invalidate) {
-		let $showChange, $jenksBreaks, $geojsonPath;
+		let $jenksBreaks, $showChange, $geojsonPath;
 
-		validate_store(showChange, 'showChange');
-		subscribe($$self, showChange, $$value => { $showChange = $$value; $$invalidate('$showChange', $showChange); });
 		validate_store(jenksBreaks, 'jenksBreaks');
 		subscribe($$self, jenksBreaks, $$value => { $jenksBreaks = $$value; $$invalidate('$jenksBreaks', $jenksBreaks); });
+		validate_store(showChange, 'showChange');
+		subscribe($$self, showChange, $$value => { $showChange = $$value; $$invalidate('$showChange', $showChange); });
 		validate_store(geojsonPath, 'geojsonPath');
 		subscribe($$self, geojsonPath, $$value => { $geojsonPath = $$value; $$invalidate('$geojsonPath', $geojsonPath); });
 
@@ -635,17 +639,21 @@
 
 		let getColor = function(geo) {
 
+			if (!geo) return '#cccccc'
+
 			let val = geo[col];
 			let valPrev = prevCol ? geo[prevCol] : false;
+			let colors = colorsJenks;
+			let breaks = $jenksBreaks;
 
 			if ($showChange && valPrev) {
 				if (isNumeric(valPrev) && isNumeric(val)) {
-					let change = val - valPrev;
-					return (change > 0 && posChange) || (change < 0 && !posChange)
-						? 'green'
-						: change == 0 ? 'blue' : 'red'
+					let change = (val - valPrev) / valPrev * 100;
+					val = change;
+					breaks = [-100, -10, -5, 0, 5, 10, 100];
+					colors = colorsChange;
 				} else {
-					return 'silver'
+					return '#cccccc'
 				}
 			}
 
@@ -657,9 +665,9 @@
 				return colors[4]
 			}
 
-			for (let i in $jenksBreaks) {
+			for (let i in breaks) {
 				if (i > 0) {
-					if (val <= $jenksBreaks[i]) {
+					if (val <= breaks[i]) {
 						return colors[i-1]
 					}
 				}
@@ -681,7 +689,7 @@
 				attributionControl: false,
 			}));
 			map.keyboard.disable();
-			map.doubleClickZoom.enable();
+			map.doubleClickZoom.disable();
 			map.dragging.disable();
 		};
 
@@ -853,9 +861,9 @@
 		return child_ctx;
 	}
 
-	// (11:2) {#each colors as color, i}
+	// (11:2) {#each colorsJenks as color, i}
 	function create_each_block(ctx) {
-		var div, raw_value = ctx.i == 0 ? '&leq;' : '', raw_after, t0, t1_value = ctx.i != 4 ? ctx.prefix + comma(ctx.$jenksBreaks[ctx.i + 1]) + ctx.suffix : '', t1, t2, t3_value = ctx.i == 4 ? ctx.prefix + comma(ctx.$jenksBreaks[ctx.i] + 1) + ctx.suffix + '+' : '', t3, t4;
+		var div, raw_value = ctx.i == 0 ? '&leq;' : '', raw_after, t0, t1_value = ctx.i != 4 ? ctx.prefix + (ctx.$jenksBreaks[ctx.i + 1] ? comma(ctx.$jenksBreaks[ctx.i + 1]) : '') + ctx.suffix : '', t1, t2, t3_value = ctx.i == 4 ? ctx.prefix + comma(ctx.$jenksBreaks[ctx.i] + 1) + ctx.suffix + '+' : '', t3, t4;
 
 		return {
 			c: function create() {
@@ -868,7 +876,7 @@
 				t4 = space();
 				div.className = "fl " + (ctx.i < 4 ? 'tr' : 'tl white') + " w-20 pv1 ph2 f6";
 				set_style(div, "background-color", ctx.color);
-				add_location(div, file$1, 11, 4, 240);
+				add_location(div, file$1, 11, 4, 252);
 			},
 
 			m: function mount(target, anchor) {
@@ -883,7 +891,7 @@
 			},
 
 			p: function update(changed, ctx) {
-				if ((changed.prefix || changed.$jenksBreaks || changed.suffix) && t1_value !== (t1_value = ctx.i != 4 ? ctx.prefix + comma(ctx.$jenksBreaks[ctx.i + 1]) + ctx.suffix : '')) {
+				if ((changed.prefix || changed.$jenksBreaks || changed.suffix) && t1_value !== (t1_value = ctx.i != 4 ? ctx.prefix + (ctx.$jenksBreaks[ctx.i + 1] ? comma(ctx.$jenksBreaks[ctx.i + 1]) : '') + ctx.suffix : '')) {
 					set_data(t1, t1_value);
 				}
 
@@ -891,7 +899,7 @@
 					set_data(t3, t3_value);
 				}
 
-				if (changed.colors) {
+				if (changed.colorsJenks) {
 					set_style(div, "background-color", ctx.color);
 				}
 			},
@@ -907,7 +915,7 @@
 	function create_fragment$1(ctx) {
 		var div;
 
-		var each_value = colors;
+		var each_value = colorsJenks;
 
 		var each_blocks = [];
 
@@ -923,7 +931,7 @@
 					each_blocks[i].c();
 				}
 				div.className = "w-100";
-				add_location(div, file$1, 9, 0, 187);
+				add_location(div, file$1, 9, 0, 194);
 			},
 
 			l: function claim(nodes) {
@@ -939,8 +947,8 @@
 			},
 
 			p: function update(changed, ctx) {
-				if (changed.colors || changed.prefix || changed.comma || changed.$jenksBreaks || changed.suffix) {
-					each_value = colors;
+				if (changed.colorsJenks || changed.prefix || changed.comma || changed.$jenksBreaks || changed.suffix) {
+					each_value = colorsJenks;
 
 					for (var i = 0; i < each_value.length; i += 1) {
 						const child_ctx = get_each_context(ctx, each_value, i);
@@ -1391,7 +1399,7 @@
 				t = text(t_value);
 				option.__value = ctx.i;
 				option.value = option.__value;
-				add_location(option, file$3, 70, 4, 1799);
+				add_location(option, file$3, 70, 4, 1832);
 			},
 
 			m: function mount(target, anchor) {
@@ -1410,7 +1418,7 @@
 	}
 
 	function create_fragment$3(ctx) {
-		var div2, p0, raw0_value = config.title, t0, p1, raw1_value = config.subtitle, t1, div0, select, t2, label0, input0, t3, t4, label1, input1, t5, t6, p2, t7, a, t8, t9, t10, p3, t11, div1, t12, div5, div3, t13, div4, t14, div8, div6, t15, div7, t16, footer, raw3_value = config.footer, current, dispose;
+		var div1, p0, raw0_value = config.title, t0, p1, raw1_value = config.subtitle, t1, form, select, t2, label0, input0, t3, t4_value = config.extraGeographyName, t4, t5, label1, input1, t6, t7, p2, a, t8, t9, t10, p3, t11, div0, t12, div4, div2, t13, div3, t14, div7, div5, t15, div6, t16, footer, raw3_value = config.footer, current, dispose;
 
 		var each_value = config.data;
 
@@ -1433,7 +1441,7 @@
 			id: "map-time1",
 			time: ctx.time1,
 			col: ctx.col1,
-			censusTracts: ctx.censusTracts
+			extraGeography: ctx.extraGeography
 		},
 			$$inline: true
 		});
@@ -1445,7 +1453,7 @@
 			col: ctx.col2,
 			prevCol: ctx.col1,
 			posChange: ctx.posChange,
-			censusTracts: ctx.censusTracts
+			extraGeography: ctx.extraGeography
 		},
 			$$inline: true
 		});
@@ -1476,12 +1484,12 @@
 
 		return {
 			c: function create() {
-				div2 = element("div");
+				div1 = element("div");
 				p0 = element("p");
 				t0 = space();
 				p1 = element("p");
 				t1 = space();
-				div0 = element("div");
+				form = element("form");
 				select = element("select");
 
 				for (var i = 0; i < each_blocks.length; i += 1) {
@@ -1491,88 +1499,88 @@
 				t2 = space();
 				label0 = element("label");
 				input0 = element("input");
-				t3 = text(" Census Tracts");
-				t4 = space();
+				t3 = space();
+				t4 = text(t4_value);
+				t5 = space();
 				label1 = element("label");
 				input1 = element("input");
-				t5 = text(" Show Change");
-				t6 = space();
+				t6 = text(" Show Change");
+				t7 = space();
 				p2 = element("p");
-				t7 = text("Double-click on the map for zoom. ");
 				a = element("a");
 				t8 = text("Download dataset");
 				t9 = text(" powering this visualization.");
 				t10 = space();
 				p3 = element("p");
 				t11 = space();
-				div1 = element("div");
+				div0 = element("div");
 				legend.$$.fragment.c();
 				t12 = space();
-				div5 = element("div");
-				div3 = element("div");
+				div4 = element("div");
+				div2 = element("div");
 				map0.$$.fragment.c();
 				t13 = space();
-				div4 = element("div");
+				div3 = element("div");
 				map1.$$.fragment.c();
 				t14 = space();
-				div8 = element("div");
-				div6 = element("div");
+				div7 = element("div");
+				div5 = element("div");
 				annotation0.$$.fragment.c();
 				t15 = space();
-				div7 = element("div");
+				div6 = element("div");
 				annotation1.$$.fragment.c();
 				t16 = space();
 				footer = element("footer");
 				p0.className = "f3 f2-ns mb0";
-				add_location(p0, file$3, 64, 1, 1581);
+				add_location(p0, file$3, 64, 1, 1602);
 				p1.className = "f5 f3-ns mt1";
-				add_location(p1, file$3, 65, 1, 1631);
+				add_location(p1, file$3, 65, 1, 1652);
 				if (ctx.currentIndex === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
 				select.className = "f6";
-				add_location(select, file$3, 68, 2, 1717);
+				add_location(select, file$3, 68, 2, 1750);
 				attr(input0, "type", "checkbox");
 				input0.name = "checkbox1";
-				add_location(input0, file$3, 75, 3, 1885);
+				add_location(input0, file$3, 75, 3, 1918);
 				label0.className = "ml4";
-				add_location(label0, file$3, 74, 2, 1862);
+				add_location(label0, file$3, 74, 2, 1895);
 				attr(input1, "type", "checkbox");
 				input1.name = "checkbox2";
-				add_location(input1, file$3, 79, 3, 2036);
+				add_location(input1, file$3, 79, 3, 2087);
 				label1.className = "ml4";
-				add_location(label1, file$3, 78, 2, 2013);
-				div0.className = "pa3 bg-black-10";
-				add_location(div0, file$3, 67, 1, 1685);
+				add_location(label1, file$3, 78, 2, 2064);
+				form.className = "boilerform pa3 bg-black-10";
+				add_location(form, file$3, 67, 1, 1706);
 				a.href = ctx.downloadPath;
 				a.className = "link dim";
-				add_location(a, file$3, 84, 36, 2199);
+				add_location(a, file$3, 84, 2, 2217);
 				p2.className = "black-80 f6";
-				add_location(p2, file$3, 83, 1, 2139);
+				add_location(p2, file$3, 83, 1, 2191);
 				p3.className = "f6 lh-title";
-				add_location(p3, file$3, 87, 1, 2299);
-				div1.className = "mw8 h3";
-				add_location(div1, file$3, 91, 1, 2353);
-				div2.className = "mw9 center ph3";
-				add_location(div2, file$3, 63, 0, 1551);
+				add_location(p3, file$3, 87, 1, 2317);
+				div0.className = "mw8 h3";
+				add_location(div0, file$3, 91, 1, 2371);
+				div1.className = "mw9 center ph3";
+				add_location(div1, file$3, 63, 0, 1572);
+				div2.className = "fl w-50 h-100";
+				add_location(div2, file$3, 102, 1, 2523);
 				div3.className = "fl w-50 h-100";
-				add_location(div3, file$3, 102, 1, 2502);
-				div4.className = "fl w-50 h-100";
-				add_location(div4, file$3, 110, 1, 2636);
-				div5.className = "mw9 center ph3";
-				set_style(div5, "height", "600px");
-				add_location(div5, file$3, 101, 0, 2449);
+				add_location(div3, file$3, 110, 1, 2661);
+				div4.className = "mw9 center ph3 cf";
+				set_style(div4, "height", "600px");
+				add_location(div4, file$3, 101, 0, 2467);
+				div5.className = "fl w-50";
+				add_location(div5, file$3, 124, 1, 2891);
 				div6.className = "fl w-50";
-				add_location(div6, file$3, 124, 1, 2862);
-				div7.className = "fl w-50";
-				add_location(div7, file$3, 133, 1, 3006);
-				div8.className = "mw9 center ph3 mb5 h3";
-				add_location(div8, file$3, 123, 0, 2825);
+				add_location(div6, file$3, 133, 1, 3035);
+				div7.className = "mw9 center ph3 mb5 h3";
+				add_location(div7, file$3, 123, 0, 2854);
 				footer.className = "w-100 center tc ph3 f6 mt5 pv5 black-80 bg-lightest-blue";
-				add_location(footer, file$3, 147, 0, 3205);
+				add_location(footer, file$3, 147, 0, 3234);
 
 				dispose = [
 					listen(select, "change", ctx.select_change_handler),
 					listen(input0, "change", ctx.input0_change_handler),
-					listen(input0, "change", ctx.handleCensusTracts),
+					listen(input0, "change", ctx.handleExtraGeography),
 					listen(input1, "change", handleShowChange)
 				];
 			},
@@ -1582,15 +1590,15 @@
 			},
 
 			m: function mount(target, anchor) {
-				insert(target, div2, anchor);
-				append(div2, p0);
+				insert(target, div1, anchor);
+				append(div1, p0);
 				p0.innerHTML = raw0_value;
-				append(div2, t0);
-				append(div2, p1);
+				append(div1, t0);
+				append(div1, p1);
 				p1.innerHTML = raw1_value;
-				append(div2, t1);
-				append(div2, div0);
-				append(div0, select);
+				append(div1, t1);
+				append(div1, form);
+				append(form, select);
 
 				for (var i = 0; i < each_blocks.length; i += 1) {
 					each_blocks[i].m(select, null);
@@ -1598,43 +1606,43 @@
 
 				select_option(select, ctx.currentIndex);
 
-				append(div0, t2);
-				append(div0, label0);
+				append(form, t2);
+				append(form, label0);
 				append(label0, input0);
 
-				input0.checked = ctx.censusTracts;
+				input0.checked = ctx.extraGeography;
 
 				append(label0, t3);
-				append(div0, t4);
-				append(div0, label1);
+				append(label0, t4);
+				append(form, t5);
+				append(form, label1);
 				append(label1, input1);
-				append(label1, t5);
-				append(div2, t6);
-				append(div2, p2);
-				append(p2, t7);
+				append(label1, t6);
+				append(div1, t7);
+				append(div1, p2);
 				append(p2, a);
 				append(a, t8);
 				append(p2, t9);
-				append(div2, t10);
-				append(div2, p3);
+				append(div1, t10);
+				append(div1, p3);
 				p3.innerHTML = ctx.description;
-				append(div2, t11);
-				append(div2, div1);
-				mount_component(legend, div1, null);
+				append(div1, t11);
+				append(div1, div0);
+				mount_component(legend, div0, null);
 				insert(target, t12, anchor);
-				insert(target, div5, anchor);
-				append(div5, div3);
-				mount_component(map0, div3, null);
-				append(div5, t13);
-				append(div5, div4);
-				mount_component(map1, div4, null);
+				insert(target, div4, anchor);
+				append(div4, div2);
+				mount_component(map0, div2, null);
+				append(div4, t13);
+				append(div4, div3);
+				mount_component(map1, div3, null);
 				insert(target, t14, anchor);
-				insert(target, div8, anchor);
-				append(div8, div6);
-				mount_component(annotation0, div6, null);
-				append(div8, t15);
-				append(div8, div7);
-				mount_component(annotation1, div7, null);
+				insert(target, div7, anchor);
+				append(div7, div5);
+				mount_component(annotation0, div5, null);
+				append(div7, t15);
+				append(div7, div6);
+				mount_component(annotation1, div6, null);
 				insert(target, t16, anchor);
 				insert(target, footer, anchor);
 				footer.innerHTML = raw3_value;
@@ -1664,7 +1672,7 @@
 				}
 
 				if (changed.currentIndex) select_option(select, ctx.currentIndex);
-				if (changed.censusTracts) input0.checked = ctx.censusTracts;
+				if (changed.extraGeography) input0.checked = ctx.extraGeography;
 
 				if (!current || changed.downloadPath) {
 					a.href = ctx.downloadPath;
@@ -1682,7 +1690,7 @@
 				var map0_changes = {};
 				if (changed.time1) map0_changes.time = ctx.time1;
 				if (changed.col1) map0_changes.col = ctx.col1;
-				if (changed.censusTracts) map0_changes.censusTracts = ctx.censusTracts;
+				if (changed.extraGeography) map0_changes.extraGeography = ctx.extraGeography;
 				map0.$set(map0_changes);
 
 				var map1_changes = {};
@@ -1690,7 +1698,7 @@
 				if (changed.col2) map1_changes.col = ctx.col2;
 				if (changed.col1) map1_changes.prevCol = ctx.col1;
 				if (changed.posChange) map1_changes.posChange = ctx.posChange;
-				if (changed.censusTracts) map1_changes.censusTracts = ctx.censusTracts;
+				if (changed.extraGeography) map1_changes.extraGeography = ctx.extraGeography;
 				map1.$set(map1_changes);
 
 				var annotation0_changes = {};
@@ -1738,7 +1746,7 @@
 
 			d: function destroy(detaching) {
 				if (detaching) {
-					detach(div2);
+					detach(div1);
 				}
 
 				destroy_each(each_blocks, detaching);
@@ -1747,7 +1755,7 @@
 
 				if (detaching) {
 					detach(t12);
-					detach(div5);
+					detach(div4);
 				}
 
 				map0.$destroy();
@@ -1756,7 +1764,7 @@
 
 				if (detaching) {
 					detach(t14);
-					detach(div8);
+					detach(div7);
 				}
 
 				annotation0.$destroy();
@@ -1781,12 +1789,12 @@
 		
 
 		let currentIndex = 0;
-		let censusTracts = false;
+		let extraGeography = false;
 		
-		geojsonPath.update(x => './geo/towns.geojson');
+		geojsonPath.update(x => config.defaultGeographyPath);
 
-		function handleCensusTracts() {
-			geojsonPath.update(x => censusTracts ? './geo/tracts.geojson' : './geo/towns.geojson');
+		function handleExtraGeography() {
+			geojsonPath.update(x => extraGeography ? config.extraGeographyPath : config.defaultGeographyPath);
 		}
 
 		function select_change_handler() {
@@ -1795,8 +1803,8 @@
 		}
 
 		function input0_change_handler() {
-			censusTracts = this.checked;
-			$$invalidate('censusTracts', censusTracts);
+			extraGeography = this.checked;
+			$$invalidate('extraGeography', extraGeography);
 		}
 
 		let dp, downloadPath, description, col1, col2, time1, time2, moe1, moe2, prefix, suffix, posChange;
@@ -1841,8 +1849,8 @@
 
 		return {
 			currentIndex,
-			censusTracts,
-			handleCensusTracts,
+			extraGeography,
+			handleExtraGeography,
 			downloadPath,
 			description,
 			col1,

@@ -9,12 +9,12 @@
 	import jenks from './helpers/jenks.js'
 
 	let currentIndex = 0
-	let censusTracts = false
+	let extraGeography = false
 	
-	geojsonPath.update(x => './geo/towns.geojson')
+	geojsonPath.update(x => config.defaultGeographyPath)
 
-	function handleCensusTracts() {
-		geojsonPath.update(x => censusTracts ? './geo/tracts.geojson' : './geo/towns.geojson')
+	function handleExtraGeography() {
+		geojsonPath.update(x => extraGeography ? config.extraGeographyPath : config.defaultGeographyPath)
 	}
 
 	function handleShowChange() {
@@ -65,7 +65,7 @@
 	<p class="f3 f2-ns mb0">{@html config.title}</p>
 	<p class="f5 f3-ns mt1">{@html config.subtitle}</p>
 
-	<div class="pa3 bg-black-10">
+	<form class="boilerform pa3 bg-black-10">
 		<select class="f6" bind:value={currentIndex}>
 			{#each config.data as dp, i}
 				<option value={i}>{dp.name}</option>
@@ -73,16 +73,16 @@
 		</select>
 
 		<label class="ml4">
-			<input type="checkbox" name="checkbox1" bind:checked={censusTracts} on:change={handleCensusTracts}> Census Tracts
+			<input type="checkbox" name="checkbox1" bind:checked={extraGeography} on:change={handleExtraGeography}> {config.extraGeographyName}
 		</label>
 
 		<label class="ml4">
 			<input type="checkbox" name="checkbox2" on:change={handleShowChange}> Show Change
 		</label>
-	</div>
+	</form>
 
 	<p class="black-80 f6">
-		Double-click on the map for zoom. <a href="{downloadPath}" class="link dim">Download dataset</a> powering this visualization.
+		<a href="{downloadPath}" class="link dim">Download dataset</a> powering this visualization.
 	</p>
 
 	<p class="f6 lh-title">
@@ -99,13 +99,13 @@
 </div>
 
 
-<div class="mw9 center ph3" style="height: 600px;">
+<div class="mw9 center ph3 cf" style="height: 600px;">
 	<div class="fl w-50 h-100">
 		<Map
 			id="map-time1"
 			time="{time1}"
 			col="{col1}"
-			censusTracts="{censusTracts}"
+			extraGeography="{extraGeography}"
 		/>
 	</div>
 	<div class="fl w-50 h-100">
@@ -115,7 +115,7 @@
 			col="{col2}"
 			prevCol="{col1}"
 			posChange="{posChange}"
-			censusTracts="{censusTracts}"
+			extraGeography="{extraGeography}"
 		/>
 	</div>
 </div>

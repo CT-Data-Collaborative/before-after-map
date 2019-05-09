@@ -2,6 +2,9 @@ export default {
   "title": "American Community Survey 2017",
   "subtitle": "Select tables for Connecticut by <a href='http://ctdata.org'>Connecticut Data Collaborative</a>",
   "footer": "Connecticut Data Collaborative is a project of InformCT, Inc.<br>&copy; 2019 Connecticut Data Collaborative",
+  "defaultGeographyPath": "./geo/towns.geojson",
+  "extraGeographyPath": "./geo/tracts.geojson",
+  "extraGeographyName": "Census Tractszzzz",
   "data": [
     {
       "name": "Median Household Income",
