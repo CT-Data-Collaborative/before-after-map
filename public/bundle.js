@@ -1,2 +1,1840 @@
-!function(){"use strict";function e(){}function t(e){return e()}function r(){return Object.create(null)}function n(e){e.forEach(t)}function i(e){return"function"==typeof e}function o(e,t){return e!=e?t==t:e!==t||e&&"object"==typeof e||"function"==typeof e}function a(e,t,r){const n=t.subscribe(r);e.$$.on_destroy.push(n.unsubscribe?()=>n.unsubscribe():n)}function s(e,t){e.appendChild(t)}function f(e,t,r){e.insertBefore(t,r)}function c(e){e.parentNode.removeChild(e)}function u(e,t){for(let r=0;r<e.length;r+=1)e[r]&&e[r].d(t)}function l(e){return document.createElement(e)}function h(e){return document.createTextNode(e)}function d(){return h(" ")}function p(e,t,r,n){return e.addEventListener(t,r,n),()=>e.removeEventListener(t,r,n)}function m(e,t,r){null==r?e.removeAttribute(t):e.setAttribute(t,r)}function g(e,t){t=""+t,e.data!==t&&(e.data=t)}function _(e,t,r){e.style.setProperty(t,r)}function v(e,t){for(let r=0;r<e.options.length;r+=1){const n=e.options[r];if(n.__value===t)return void(n.selected=!0)}}let y;function x(e){y=e}function b(e){(function(){if(!y)throw new Error("Function called outside component initialization");return y})().$$.on_mount.push(e)}const k=[],$=Promise.resolve();let w=!1;const C=[],E=[],I=[];function S(e){E.push(e)}function R(){const e=new Set;do{for(;k.length;){const e=k.shift();x(e),O(e.$$)}for(;C.length;)C.shift()();for(;E.length;){const t=E.pop();e.has(t)||(t(),e.add(t))}}while(k.length);for(;I.length;)I.pop()();w=!1}function O(e){e.fragment&&(e.update(e.dirty),n(e.before_render),e.fragment.p(e.dirty,e.ctx),e.dirty=null,e.after_render.forEach(S))}function N(e,r,o){const{fragment:a,on_mount:s,on_destroy:f,after_render:c}=e.$$;a.m(r,o),S(()=>{const r=s.map(t).filter(i);f?f.push(...r):n(r),e.$$.on_mount=[]}),c.forEach(S)}function j(e,t){e.$$.dirty||(k.push(e),w||(w=!0,$.then(R)),e.$$.dirty={}),e.$$.dirty[t]=!0}function T(t,i,o,a,s,f){const c=y;x(t);const u=i.props||{},l=t.$$={fragment:null,ctx:null,props:f,update:e,not_equal:s,bound:r(),on_mount:[],on_destroy:[],before_render:[],after_render:[],context:new Map(c?c.$$.context:[]),callbacks:r(),dirty:null};let h=!1;var d;l.ctx=o?o(t,u,(e,r)=>{l.ctx&&s(l.ctx[e],l.ctx[e]=r)&&(l.bound[e]&&l.bound[e](r),h&&j(t,e))}):u,l.update(),h=!0,n(l.before_render),l.fragment=a(l.ctx),i.target&&(i.hydrate?l.fragment.l((d=i.target,Array.from(d.childNodes))):l.fragment.c(),i.intro&&t.$$.fragment.i&&t.$$.fragment.i(),N(t,i.target,i.anchor),R()),x(c)}class D{$destroy(){var t,r;r=!0,(t=this).$$&&(n(t.$$.on_destroy),t.$$.fragment.d(r),t.$$.on_destroy=t.$$.fragment=null,t.$$.ctx={}),this.$destroy=e}$on(e,t){const r=this.$$.callbacks[e]||(this.$$.callbacks[e]=[]);return r.push(t),()=>{const e=r.indexOf(t);-1!==e&&r.splice(e,1)}}$set(){}}var A={title:"American Community Survey 2017",subtitle:"Select tables for Connecticut by <a href='http://ctdata.org'>Connecticut Data Collaborative</a>",footer:"Connecticut Data Collaborative is a project of InformCT, Inc.<br>&copy; 2019 Connecticut Data Collaborative",defaultGeographyPath:"./geo/towns.geojson",extraGeographyPath:"./geo/tracts.geojson",extraGeographyName:"Census Tracts",geojsonGeographyProperty:"name",data:[{name:"Median Household Income",file:"./data/median_household_income.csv",prefix:"$",suffix:"",before:"ACS 2008-2012",beforemoe:!0,after:"ACS 2013-2017",aftermoe:!0,positiveIncrease:!0,description:"<b>The median increase in household income across all towns in Connecticut was 5.8%.</b> In 129 towns, median household income increased, most significant increases in North Canaan (+26,400, or +58%), Westbrook (+31,700, or +50%), and Southbury (+23,100, or +34%). Note that North Canaan and Westbrook both have large margins of errors due to small populations. In 40 towns, median household income decreased compared to 2008-2012 estimate, with the highest decreases occurring in Ansonia (~ -$9,200, or nearly -17%), New London (~ –$6,800, or -15%), and East Haddam (~ $13,000, or -14%). <b>Hartford remains the town with the lowest median household income in Connecticut</b> despite a 17% increase in median household income between ACS 2008-2012 and 2013-2017 estimates. New Haven median income increased 1.8% and changing its rank from 2nd to 3rd poorest municipality, while New London dropped from 7th to 2nd due to a 15% decrease."},{name:"Per Capita Income",file:"./data/per_capita_income.csv",prefix:"$",suffix:"",suffix:"",before:"ACS 2008-2012",beforemoe:!0,after:"ACS 2013-2017",aftermoe:!0,positiveIncrease:!0,description:"Per capita income increased in 142 municipalities and decreased in 27. <b>Hartford has the lowest per capita income at $19,220</b>, followed by Windham ($19,666), Waterbury ($21,605), Mansfield ($21,916), and Bridgeport ($22,806). New Canaan, Darien, and Westport are the towns with highest per capita income, all above $100,000."}]};function G(t,r=e){let n;const i=[];function a(e){if(o(t,e)){if(t=e,!n)return;i.forEach(e=>e[1]()),i.forEach(e=>e[0](t))}}return{set:a,update:function(e){a(e(t))},subscribe:function(o,s=e){const f=[o,s];return i.push(f),1===i.length&&(n=r(a)||e),o(t),()=>{const e=i.indexOf(f);-1!==e&&i.splice(e,1),0===i.length&&n()}}}}const F=G(!1),M=G(!1),z=G(!1),P=G(!1),B=G(!1),H=G(!1);function U(e){if(e)for(;/(\d+)(\d{3})/.test(e.toString());)e=e.toString().replace(/(\d+)(\d{3})/,"$1,$2");return e}const q=["#f6eff7","#bdc9e1","#74a9cf","#2b8cbe","#045a8d"],W=["#d73027","#f46d43","#fdae61","#d9ef8b","#91cf60","#1a9850"];function K(e){return!isNaN(parseFloat(e))&&isFinite(e)}function J(t){var r;return{c(){(r=l("div")).id=t.id,r.className="w-100 h-100"},m(e,t){f(e,r,t)},p(e,t){e.id&&(r.id=t.id)},i:e,o:e,d(e){e&&c(r)}}}function Q(e,t,r){let n,i,o;a(e,M,e=>{r("$jenksBreaks",n=e)}),a(e,H,e=>{r("$showChange",i=e)}),a(e,B,e=>{r("$geojsonPath",o=e)});let s,f,{id:c,time:u,col:l,extraGeography:h,positiveIncrease:d}=t,p=function(e){if(!e)return"#cccccc";let t=e[l],r=q,o=n;if(i&&"after"==l){let n=e.before;if(!K(n)||!K(t))return"#cccccc";t=(t-n)/n*100,o=[-100,-10,-5,0,5,10,100],r=W}if("-"===t)return"#cccccc";if("+"===t[t.length-1])return r[4];for(let e in o)if(e>0&&t<=o[e])return r[e-1];return"#cccccc"};const m=function(){s.fitBounds(f.getBounds())};return b(async function(){r("map",s=L.map(c,{center:[41.33,-72.65],zoom:9,zoomControl:!1,scrollWheelZoom:!1,attributionControl:!1})),s.keyboard.disable(),s.doubleClickZoom.disable(),s.dragging.disable()}),window.addEventListener("resize",m),e.$set=(e=>{"id"in e&&r("id",c=e.id),"time"in e&&r("time",u=e.time),"col"in e&&r("col",l=e.col),"extraGeography"in e&&r("extraGeography",h=e.extraGeography),"positiveIncrease"in e&&r("positiveIncrease",d=e.positiveIncrease)}),e.$$.update=((e={$geojsonPath:1,map:1,reloadGeojson:1})=>{(e.$geojsonPath||e.map||e.reloadGeojson)&&o&&s&&async function(){const e=await fetch(o),t=await e.json();f&&s.removeLayer(f),r("geojsonLayer",f=L.geoJson(t,{onEachFeature:function(e,t){t.on({mouseover:function(e){P.update(t=>e.target.feature.properties[A.geojsonGeographyProperty])},mouseout:function(e){P.update(e=>"")}})}}).addTo(s)),m(),z.subscribe(e=>{"map-after"==c&&H.subscribe(t=>{f.eachLayer(t=>{t.setStyle({fillColor:p(e[t.feature.properties[A.geojsonGeographyProperty]]),fillOpacity:1,color:"white",weight:1})})}),f.eachLayer(t=>{t.setStyle({fillColor:p(e[t.feature.properties[A.geojsonGeographyProperty]]),fillOpacity:1,color:"white",weight:1})})})}()}),{id:c,time:u,col:l,extraGeography:h,positiveIncrease:d}}class Z extends D{constructor(e){super(),T(this,e,Q,J,o,["id","time","col","extraGeography","positiveIncrease"])}}function Y(e,t,r){const n=Object.create(e);return n.color=t[r],n.i=r,n}function X(e){var t,r,n,i,o,a,u,p=0==e.i?"&leq;":"",m=4!=e.i?e.prefix+(e.$jenksBreaks[e.i+1]?U(e.$jenksBreaks[e.i+1]):"")+e.suffix:"",v=4==e.i?e.prefix+U(e.$jenksBreaks[e.i]+1)+e.suffix+"+":"";return{c(){t=l("div"),r=l("noscript"),n=d(),i=h(m),o=d(),a=h(v),u=d(),t.className="fl "+(e.i<4?"tr":"tl white")+" w-20 pv1 ph2 f6",_(t,"background-color",e.color)},m(e,c){f(e,t,c),s(t,r),r.insertAdjacentHTML("beforebegin",p),s(t,n),s(t,i),s(t,o),s(t,a),s(t,u)},p(e,r){(e.prefix||e.$jenksBreaks||e.suffix)&&m!==(m=4!=r.i?r.prefix+(r.$jenksBreaks[r.i+1]?U(r.$jenksBreaks[r.i+1]):"")+r.suffix:"")&&g(i,m),(e.prefix||e.$jenksBreaks||e.suffix)&&v!==(v=4==r.i?r.prefix+U(r.$jenksBreaks[r.i]+1)+r.suffix+"+":"")&&g(a,v),e.colorsJenks&&_(t,"background-color",r.color)},d(e){e&&c(t)}}}function V(t){for(var r,n=q,i=[],o=0;o<n.length;o+=1)i[o]=X(Y(t,n,o));return{c(){r=l("div");for(var e=0;e<i.length;e+=1)i[e].c();r.className="w-100"},m(e,t){f(e,r,t);for(var n=0;n<i.length;n+=1)i[n].m(r,null)},p(e,t){if(e.colorsJenks||e.prefix||e.comma||e.$jenksBreaks||e.suffix){n=q;for(var o=0;o<n.length;o+=1){const a=Y(t,n,o);i[o]?i[o].p(e,a):(i[o]=X(a),i[o].c(),i[o].m(r,null))}for(;o<i.length;o+=1)i[o].d(1);i.length=n.length}},i:e,o:e,d(e){e&&c(r),u(i,e)}}}function ee(e,t,r){let n;a(e,M,e=>{r("$jenksBreaks",n=e)});let{prefix:i,suffix:o}=t;return e.$set=(e=>{"prefix"in e&&r("prefix",i=e.prefix),"suffix"in e&&r("suffix",o=e.suffix)}),{prefix:i,suffix:o,$jenksBreaks:n}}class te extends D{constructor(e){super(),T(this,e,ee,V,o,["prefix","suffix"])}}function re(e){var t,r,n,i,o,a,u,p,m,_=e.value.toLocaleString(),v=e.moe&&ne(e);return{c(){t=l("p"),r=h(e.$ann),n=d(),i=l("p"),o=l("span"),a=h(e.prefix),u=h(_),p=h(e.suffix),m=d(),v&&v.c(),t.className="f4 mt0 mb1",o.className=e.color,i.className="f3 mv0"},m(e,c){f(e,t,c),s(t,r),f(e,n,c),f(e,i,c),s(i,o),s(o,a),s(o,u),s(i,p),s(i,m),v&&v.m(i,null)},p(e,t){e.$ann&&g(r,t.$ann),e.prefix&&g(a,t.prefix),e.value&&_!==(_=t.value.toLocaleString())&&g(u,_),e.color&&(o.className=t.color),e.suffix&&g(p,t.suffix),t.moe?v?v.p(e,t):((v=ne(t)).c(),v.m(i,null)):v&&(v.d(1),v=null)},d(e){e&&(c(t),c(n),c(i)),v&&v.d()}}}function ne(e){var t,r,n,i=e.$geo2data[e.$ann][e.col+"moe"].toLocaleString();return{c(){t=l("span"),r=h("± "),n=h(i),t.className="black-50"},m(e,i){f(e,t,i),s(t,r),s(t,n)},p(e,t){(e.$geo2data||e.$ann||e.col)&&i!==(i=t.$geo2data[t.$ann][t.col+"moe"].toLocaleString())&&g(n,i)},d(e){e&&c(t)}}}function ie(t){var r,n,i,o,a=t.$ann&&re(t);return{c(){r=l("div"),n=l("p"),i=h(t.period),o=d(),a&&a.c(),n.className="f6 black-80",r.className="w-100 tc h5",_(r,"margin-top","-150px")},m(e,t){f(e,r,t),s(r,n),s(n,i),s(r,o),a&&a.m(r,null)},p(e,t){e.period&&g(i,t.period),t.$ann?a?a.p(e,t):((a=re(t)).c(),a.m(r,null)):a&&(a.d(1),a=null)},i:e,o:e,d(e){e&&c(r),a&&a.d()}}}function oe(e,t,r){let n,i;a(e,z,e=>{r("$geo2data",n=e)}),a(e,P,e=>{r("$ann",i=e)});let{period:o,col:s,moe:f,prefix:c,suffix:u,positiveIncrease:l}=t,h="black",d="";return e.$set=(e=>{"period"in e&&r("period",o=e.period),"col"in e&&r("col",s=e.col),"moe"in e&&r("moe",f=e.moe),"prefix"in e&&r("prefix",c=e.prefix),"suffix"in e&&r("suffix",u=e.suffix),"positiveIncrease"in e&&r("positiveIncrease",l=e.positiveIncrease)}),e.$$.update=((e={$geo2data:1,$ann:1,col:1,value:1,positiveIncrease:1})=>{if((e.$geo2data||e.$ann||e.col||e.value||e.positiveIncrease)&&n[i]&&(r("value",d=n[i][s]),"after"==s)){let e=n[i].before;if(K(e)&&K(d)){let t=d-e;r("color",h=t>0&&l||t<0&&!l?"green":"red")}else r("color",h="black")}}),{period:o,col:s,moe:f,prefix:c,suffix:u,positiveIncrease:l,color:h,value:d,$geo2data:n,$ann:i}}class ae extends D{constructor(e){super(),T(this,e,oe,ie,o,["period","col","moe","prefix","suffix","positiveIncrease"])}}"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self&&self;var se,fe=(function(e,t){e.exports=function e(){var t="undefined"!=typeof self?self:"undefined"!=typeof window?window:void 0!==t?t:{},r=!t.document&&!!t.postMessage,n=r&&/blob:/i.test((t.location||{}).protocol),i={},o=0,a={parse:function(r,n){var s=(n=n||{}).dynamicTyping||!1;if(b(s)&&(n.dynamicTypingFunction=s,s={}),n.dynamicTyping=s,n.transform=!!b(n.transform)&&n.transform,n.worker&&a.WORKERS_SUPPORTED){var f=function(){if(!a.WORKERS_SUPPORTED)return!1;var r,n,s=(r=t.URL||t.webkitURL||null,n=e.toString(),a.BLOB_URL||(a.BLOB_URL=r.createObjectURL(new Blob(["(",n,")();"],{type:"text/javascript"})))),f=new t.Worker(s);return f.onmessage=g,f.id=o++,i[f.id]=f}();return f.userStep=n.step,f.userChunk=n.chunk,f.userComplete=n.complete,f.userError=n.error,n.step=b(n.step),n.chunk=b(n.chunk),n.complete=b(n.complete),n.error=b(n.error),delete n.worker,void f.postMessage({input:r,config:n,workerId:f.id})}var d=null;return"string"==typeof r?d=n.download?new c(n):new l(n):!0===r.readable&&b(r.read)&&b(r.on)?d=new h(n):(t.File&&r instanceof File||r instanceof Object)&&(d=new u(n)),d.stream(r)},unparse:function(e,t){var r=!1,n=!0,i=",",o="\r\n",s='"',f=!1;"object"==typeof t&&("string"!=typeof t.delimiter||a.BAD_DELIMITERS.filter(function(e){return-1!==t.delimiter.indexOf(e)}).length||(i=t.delimiter),("boolean"==typeof t.quotes||Array.isArray(t.quotes))&&(r=t.quotes),"boolean"!=typeof t.skipEmptyLines&&"string"!=typeof t.skipEmptyLines||(f=t.skipEmptyLines),"string"==typeof t.newline&&(o=t.newline),"string"==typeof t.quoteChar&&(s=t.quoteChar),"boolean"==typeof t.header&&(n=t.header));var c=new RegExp(s,"g");if("string"==typeof e&&(e=JSON.parse(e)),Array.isArray(e)){if(!e.length||Array.isArray(e[0]))return l(null,e,f);if("object"==typeof e[0])return l(u(e[0]),e,f)}else if("object"==typeof e)return"string"==typeof e.data&&(e.data=JSON.parse(e.data)),Array.isArray(e.data)&&(e.fields||(e.fields=e.meta&&e.meta.fields),e.fields||(e.fields=Array.isArray(e.data[0])?e.fields:u(e.data[0])),Array.isArray(e.data[0])||"object"==typeof e.data[0]||(e.data=[e.data])),l(e.fields||[],e.data||[],f);throw new Error("Unable to serialize unrecognized input");function u(e){if("object"!=typeof e)return[];var t=[];for(var r in e)t.push(r);return t}function l(e,t,r){var a="";"string"==typeof e&&(e=JSON.parse(e)),"string"==typeof t&&(t=JSON.parse(t));var s=Array.isArray(e)&&0<e.length,f=!Array.isArray(t[0]);if(s&&n){for(var c=0;c<e.length;c++)0<c&&(a+=i),a+=h(e[c],c);0<t.length&&(a+=o)}for(var u=0;u<t.length;u++){var l=s?e.length:t[u].length,d=!1,p=s?0===Object.keys(t[u]).length:0===t[u].length;if(r&&!s&&(d="greedy"===r?""===t[u].join("").trim():1===t[u].length&&0===t[u][0].length),"greedy"===r&&s){for(var m=[],g=0;g<l;g++){var _=f?e[g]:g;m.push(t[u][_])}d=""===m.join("").trim()}if(!d){for(var v=0;v<l;v++){0<v&&!p&&(a+=i);var y=s&&f?e[v]:v;a+=h(t[u][y],v)}u<t.length-1&&(!r||0<l&&!p)&&(a+=o)}}return a}function h(e,t){if(null==e)return"";if(e.constructor===Date)return JSON.stringify(e).slice(1,25);e=e.toString().replace(c,s+s);var n="boolean"==typeof r&&r||Array.isArray(r)&&r[t]||function(e,t){for(var r=0;r<t.length;r++)if(-1<e.indexOf(t[r]))return!0;return!1}(e,a.BAD_DELIMITERS)||-1<e.indexOf(i)||" "===e.charAt(0)||" "===e.charAt(e.length-1);return n?s+e+s:e}}};if(a.RECORD_SEP=String.fromCharCode(30),a.UNIT_SEP=String.fromCharCode(31),a.BYTE_ORDER_MARK="\ufeff",a.BAD_DELIMITERS=["\r","\n",'"',a.BYTE_ORDER_MARK],a.WORKERS_SUPPORTED=!r&&!!t.Worker,a.NODE_STREAM_INPUT=1,a.LocalChunkSize=10485760,a.RemoteChunkSize=5242880,a.DefaultDelimiter=",",a.Parser=m,a.ParserHandle=d,a.NetworkStreamer=c,a.FileStreamer=u,a.StringStreamer=l,a.ReadableStreamStreamer=h,t.jQuery){var s=t.jQuery;s.fn.parse=function(e){var r=e.config||{},n=[];return this.each(function(e){if("INPUT"!==s(this).prop("tagName").toUpperCase()||"file"!==s(this).attr("type").toLowerCase()||!t.FileReader||!this.files||0===this.files.length)return!0;for(var i=0;i<this.files.length;i++)n.push({file:this.files[i],inputElem:this,instanceConfig:s.extend({},r)})}),i(),this;function i(){if(0!==n.length){var t,r,i,f=n[0];if(b(e.before)){var c=e.before(f.file,f.inputElem);if("object"==typeof c){if("abort"===c.action)return t=f.file,r=f.inputElem,i=c.reason,void(b(e.error)&&e.error({name:"AbortError"},t,r,i));if("skip"===c.action)return void o();"object"==typeof c.config&&(f.instanceConfig=s.extend(f.instanceConfig,c.config))}else if("skip"===c)return void o()}var u=f.instanceConfig.complete;f.instanceConfig.complete=function(e){b(u)&&u(e,f.file,f.inputElem),o()},a.parse(f.file,f.instanceConfig)}else b(e.complete)&&e.complete()}function o(){n.splice(0,1),i()}}}function f(e){this._handle=null,this._finished=!1,this._completed=!1,this._input=null,this._baseIndex=0,this._partialLine="",this._rowCount=0,this._start=0,this._nextChunk=null,this.isFirstChunk=!0,this._completeResults={data:[],errors:[],meta:{}},function(e){var t=y(e);t.chunkSize=parseInt(t.chunkSize),e.step||e.chunk||(t.chunkSize=null),this._handle=new d(t),(this._handle.streamer=this)._config=t}.call(this,e),this.parseChunk=function(e,r){if(this.isFirstChunk&&b(this._config.beforeFirstChunk)){var i=this._config.beforeFirstChunk(e);void 0!==i&&(e=i)}this.isFirstChunk=!1;var o=this._partialLine+e;this._partialLine="";var s=this._handle.parse(o,this._baseIndex,!this._finished);if(!this._handle.paused()&&!this._handle.aborted()){var f=s.meta.cursor;this._finished||(this._partialLine=o.substring(f-this._baseIndex),this._baseIndex=f),s&&s.data&&(this._rowCount+=s.data.length);var c=this._finished||this._config.preview&&this._rowCount>=this._config.preview;if(n)t.postMessage({results:s,workerId:a.WORKER_ID,finished:c});else if(b(this._config.chunk)&&!r){if(this._config.chunk(s,this._handle),this._handle.paused()||this._handle.aborted())return;s=void 0,this._completeResults=void 0}return this._config.step||this._config.chunk||(this._completeResults.data=this._completeResults.data.concat(s.data),this._completeResults.errors=this._completeResults.errors.concat(s.errors),this._completeResults.meta=s.meta),this._completed||!c||!b(this._config.complete)||s&&s.meta.aborted||(this._config.complete(this._completeResults,this._input),this._completed=!0),c||s&&s.meta.paused||this._nextChunk(),s}},this._sendError=function(e){b(this._config.error)?this._config.error(e):n&&this._config.error&&t.postMessage({workerId:a.WORKER_ID,error:e,finished:!1})}}function c(e){var t;(e=e||{}).chunkSize||(e.chunkSize=a.RemoteChunkSize),f.call(this,e),this._nextChunk=r?function(){this._readChunk(),this._chunkLoaded()}:function(){this._readChunk()},this.stream=function(e){this._input=e,this._nextChunk()},this._readChunk=function(){if(this._finished)this._chunkLoaded();else{if(t=new XMLHttpRequest,this._config.withCredentials&&(t.withCredentials=this._config.withCredentials),r||(t.onload=x(this._chunkLoaded,this),t.onerror=x(this._chunkError,this)),t.open("GET",this._input,!r),this._config.downloadRequestHeaders){var e=this._config.downloadRequestHeaders;for(var n in e)t.setRequestHeader(n,e[n])}if(this._config.chunkSize){var i=this._start+this._config.chunkSize-1;t.setRequestHeader("Range","bytes="+this._start+"-"+i)}try{t.send()}catch(e){this._chunkError(e.message)}r&&0===t.status?this._chunkError():this._start+=this._config.chunkSize}},this._chunkLoaded=function(){var e;4===t.readyState&&(t.status<200||400<=t.status?this._chunkError():(this._finished=!this._config.chunkSize||this._start>(null===(e=t.getResponseHeader("Content-Range"))?-1:parseInt(e.substr(e.lastIndexOf("/")+1))),this.parseChunk(t.responseText)))},this._chunkError=function(e){var r=t.statusText||e;this._sendError(new Error(r))}}function u(e){var t,r;(e=e||{}).chunkSize||(e.chunkSize=a.LocalChunkSize),f.call(this,e);var n="undefined"!=typeof FileReader;this.stream=function(e){this._input=e,r=e.slice||e.webkitSlice||e.mozSlice,n?((t=new FileReader).onload=x(this._chunkLoaded,this),t.onerror=x(this._chunkError,this)):t=new FileReaderSync,this._nextChunk()},this._nextChunk=function(){this._finished||this._config.preview&&!(this._rowCount<this._config.preview)||this._readChunk()},this._readChunk=function(){var e=this._input;if(this._config.chunkSize){var i=Math.min(this._start+this._config.chunkSize,this._input.size);e=r.call(e,this._start,i)}var o=t.readAsText(e,this._config.encoding);n||this._chunkLoaded({target:{result:o}})},this._chunkLoaded=function(e){this._start+=this._config.chunkSize,this._finished=!this._config.chunkSize||this._start>=this._input.size,this.parseChunk(e.target.result)},this._chunkError=function(){this._sendError(t.error)}}function l(e){var t;f.call(this,e=e||{}),this.stream=function(e){return t=e,this._nextChunk()},this._nextChunk=function(){if(!this._finished){var e=this._config.chunkSize,r=e?t.substr(0,e):t;return t=e?t.substr(e):"",this._finished=!t,this.parseChunk(r)}}}function h(e){f.call(this,e=e||{});var t=[],r=!0,n=!1;this.pause=function(){f.prototype.pause.apply(this,arguments),this._input.pause()},this.resume=function(){f.prototype.resume.apply(this,arguments),this._input.resume()},this.stream=function(e){this._input=e,this._input.on("data",this._streamData),this._input.on("end",this._streamEnd),this._input.on("error",this._streamError)},this._checkIsFinished=function(){n&&1===t.length&&(this._finished=!0)},this._nextChunk=function(){this._checkIsFinished(),t.length?this.parseChunk(t.shift()):r=!0},this._streamData=x(function(e){try{t.push("string"==typeof e?e:e.toString(this._config.encoding)),r&&(r=!1,this._checkIsFinished(),this.parseChunk(t.shift()))}catch(e){this._streamError(e)}},this),this._streamError=x(function(e){this._streamCleanUp(),this._sendError(e)},this),this._streamEnd=x(function(){this._streamCleanUp(),n=!0,this._streamData("")},this),this._streamCleanUp=x(function(){this._input.removeListener("data",this._streamData),this._input.removeListener("end",this._streamEnd),this._input.removeListener("error",this._streamError)},this)}function d(e){var t,r,n,i=/^\s*-?(\d*\.?\d+|\d+\.?\d*)(e[-+]?\d+)?\s*$/i,o=/(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,s=this,f=0,c=0,u=!1,l=!1,h=[],d={data:[],errors:[],meta:{}};if(b(e.step)){var g=e.step;e.step=function(t){if(d=t,x())v();else{if(v(),0===d.data.length)return;f+=t.data.length,e.preview&&f>e.preview?r.abort():g(d,s)}}}function _(t){return"greedy"===e.skipEmptyLines?""===t.join("").trim():1===t.length&&0===t[0].length}function v(){if(d&&n&&($("Delimiter","UndetectableDelimiter","Unable to auto-detect delimiting character; defaulted to '"+a.DefaultDelimiter+"'"),n=!1),e.skipEmptyLines)for(var t=0;t<d.data.length;t++)_(d.data[t])&&d.data.splice(t--,1);return x()&&function(){if(d){for(var t=0;x()&&t<d.data.length;t++)for(var r=0;r<d.data[t].length;r++){var n=d.data[t][r];b(e.transformHeader)&&(n=e.transformHeader(n)),h.push(n)}d.data.splice(0,1)}}(),function(){if(!d||!e.header&&!e.dynamicTyping&&!e.transform)return d;for(var t=0;t<d.data.length;t++){var r,n=e.header?{}:[];for(r=0;r<d.data[t].length;r++){var i=r,o=d.data[t][r];e.header&&(i=r>=h.length?"__parsed_extra":h[r]),e.transform&&(o=e.transform(o,i)),o=k(i,o),"__parsed_extra"===i?(n[i]=n[i]||[],n[i].push(o)):n[i]=o}d.data[t]=n,e.header&&(r>h.length?$("FieldMismatch","TooManyFields","Too many fields: expected "+h.length+" fields but parsed "+r,c+t):r<h.length&&$("FieldMismatch","TooFewFields","Too few fields: expected "+h.length+" fields but parsed "+r,c+t))}return e.header&&d.meta&&(d.meta.fields=h),c+=d.data.length,d}()}function x(){return e.header&&0===h.length}function k(t,r){return n=t,e.dynamicTypingFunction&&void 0===e.dynamicTyping[n]&&(e.dynamicTyping[n]=e.dynamicTypingFunction(n)),!0===(e.dynamicTyping[n]||e.dynamicTyping)?"true"===r||"TRUE"===r||"false"!==r&&"FALSE"!==r&&(i.test(r)?parseFloat(r):o.test(r)?new Date(r):""===r?null:r):r;var n}function $(e,t,r,n){d.errors.push({type:e,code:t,message:r,row:n})}this.parse=function(i,o,s){var f=e.quoteChar||'"';if(e.newline||(e.newline=function(e,t){e=e.substr(0,1048576);var r=new RegExp(p(t)+"([^]*?)"+p(t),"gm"),n=(e=e.replace(r,"")).split("\r"),i=e.split("\n"),o=1<i.length&&i[0].length<n[0].length;if(1===n.length||o)return"\n";for(var a=0,s=0;s<n.length;s++)"\n"===n[s][0]&&a++;return a>=n.length/2?"\r\n":"\r"}(i,f)),n=!1,e.delimiter)b(e.delimiter)&&(e.delimiter=e.delimiter(i),d.meta.delimiter=e.delimiter);else{var c=function(t,r,n,i){for(var o,s,f,c=[",","\t","|",";",a.RECORD_SEP,a.UNIT_SEP],u=0;u<c.length;u++){var l=c[u],h=0,d=0,p=0;f=void 0;for(var g=new m({comments:i,delimiter:l,newline:r,preview:10}).parse(t),v=0;v<g.data.length;v++)if(n&&_(g.data[v]))p++;else{var y=g.data[v].length;d+=y,void 0!==f?1<y&&(h+=Math.abs(y-f),f=y):f=y}0<g.data.length&&(d/=g.data.length-p),(void 0===s||h<s)&&1.99<d&&(s=h,o=l)}return{successful:!!(e.delimiter=o),bestDelimiter:o}}(i,e.newline,e.skipEmptyLines,e.comments);c.successful?e.delimiter=c.bestDelimiter:(n=!0,e.delimiter=a.DefaultDelimiter),d.meta.delimiter=e.delimiter}var l=y(e);return e.preview&&e.header&&l.preview++,t=i,r=new m(l),d=r.parse(t,o,s),v(),u?{meta:{paused:!0}}:d||{meta:{paused:!1}}},this.paused=function(){return u},this.pause=function(){u=!0,r.abort(),t=t.substr(r.getCharIndex())},this.resume=function(){u=!1,s.streamer.parseChunk(t,!0)},this.aborted=function(){return l},this.abort=function(){l=!0,r.abort(),d.meta.aborted=!0,b(e.complete)&&e.complete(d),t=""}}function p(e){return e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}function m(e){var t,r=(e=e||{}).delimiter,n=e.newline,i=e.comments,o=e.step,s=e.preview,f=e.fastMode,c=t=void 0===e.quoteChar?'"':e.quoteChar;if(void 0!==e.escapeChar&&(c=e.escapeChar),("string"!=typeof r||-1<a.BAD_DELIMITERS.indexOf(r))&&(r=","),i===r)throw new Error("Comment character same as delimiter");!0===i?i="#":("string"!=typeof i||-1<a.BAD_DELIMITERS.indexOf(i))&&(i=!1),"\n"!==n&&"\r"!==n&&"\r\n"!==n&&(n="\n");var u=0,l=!1;this.parse=function(e,a,h){if("string"!=typeof e)throw new Error("Input must be a string");var d=e.length,p=r.length,m=n.length,g=i.length,_=b(o),v=[],y=[],x=[],k=u=0;if(!e)return D();if(f||!1!==f&&-1===e.indexOf(t)){for(var $=e.split(n),w=0;w<$.length;w++){if(x=$[w],u+=x.length,w!==$.length-1)u+=n.length;else if(h)return D();if(!i||x.substr(0,g)!==i){if(_){if(v=[],O(x.split(r)),A(),l)return D()}else O(x.split(r));if(s&&s<=w)return v=v.slice(0,s),D(!0)}}return D()}for(var C,E=e.indexOf(r,u),I=e.indexOf(n,u),S=new RegExp(c.replace(/[-[\]\/{}()*+?.\\^$|]/g,"\\$&")+t,"g");;)if(e[u]!==t)if(i&&0===x.length&&e.substr(u,g)===i){if(-1===I)return D();u=I+m,I=e.indexOf(n,u),E=e.indexOf(r,u)}else if(-1!==E&&(E<I||-1===I))x.push(e.substring(u,E)),u=E+p,E=e.indexOf(r,u);else{if(-1===I)break;if(x.push(e.substring(u,I)),T(I+m),_&&(A(),l))return D();if(s&&v.length>=s)return D(!0)}else for(C=u,u++;;){if(-1===(C=e.indexOf(t,C+1)))return h||y.push({type:"Quotes",code:"MissingQuotes",message:"Quoted field unterminated",row:v.length,index:u}),j();if(C===d-1)return j(e.substring(u,C).replace(S,t));if(t!==c||e[C+1]!==c){if(t===c||0===C||e[C-1]!==c){var R=N(-1===I?E:Math.min(E,I));if(e[C+1+R]===r){x.push(e.substring(u,C).replace(S,t)),u=C+1+R+p,E=e.indexOf(r,u),I=e.indexOf(n,u);break}var L=N(I);if(e.substr(C+1+L,m)===n){if(x.push(e.substring(u,C).replace(S,t)),T(C+1+L+m),E=e.indexOf(r,u),_&&(A(),l))return D();if(s&&v.length>=s)return D(!0);break}y.push({type:"Quotes",code:"InvalidQuotes",message:"Trailing quote on quoted field is malformed",row:v.length,index:u}),C++}}else C++}return j();function O(e){v.push(e),k=u}function N(t){var r=0;if(-1!==t){var n=e.substring(C+1,t);n&&""===n.trim()&&(r=n.length)}return r}function j(t){return h||(void 0===t&&(t=e.substr(u)),x.push(t),u=d,O(x),_&&A()),D()}function T(t){u=t,O(x),x=[],I=e.indexOf(n,u)}function D(e,t){return{data:t?v[0]:v,errors:y,meta:{delimiter:r,linebreak:n,aborted:l,truncated:!!e,cursor:k+(a||0)}}}function A(){o(D(void 0,!0)),v=[],y=[]}},this.abort=function(){l=!0},this.getCharIndex=function(){return u}}function g(e){var t=e.data,r=i[t.workerId],n=!1;if(t.error)r.userError(t.error,t.file);else if(t.results&&t.results.data){var o={abort:function(){n=!0,_(t.workerId,{data:[],errors:[],meta:{aborted:!0}})},pause:v,resume:v};if(b(r.userStep)){for(var a=0;a<t.results.data.length&&(r.userStep({data:[t.results.data[a]],errors:t.results.errors,meta:t.results.meta},o),!n);a++);delete t.results}else b(r.userChunk)&&(r.userChunk(t.results,o,t.file),delete t.results)}t.finished&&!n&&_(t.workerId,t.results)}function _(e,t){var r=i[e];b(r.userComplete)&&r.userComplete(t),r.terminate(),delete i[e]}function v(){throw new Error("Not implemented.")}function y(e){if("object"!=typeof e||null===e)return e;var t=Array.isArray(e)?[]:{};for(var r in e)t[r]=y(e[r]);return t}function x(e,t){return function(){e.apply(t,arguments)}}function b(e){return"function"==typeof e}return n&&(t.onmessage=function(e){var r=e.data;if(void 0===a.WORKER_ID&&r&&(a.WORKER_ID=r.workerId),"string"==typeof r.input)t.postMessage({workerId:a.WORKER_ID,results:a.parse(r.input,r.config),finished:!0});else if(t.File&&r.input instanceof File||r.input instanceof Object){var n=a.parse(r.input,r.config);n&&t.postMessage({workerId:a.WORKER_ID,results:n,finished:!0})}}),(c.prototype=Object.create(f.prototype)).constructor=c,(u.prototype=Object.create(f.prototype)).constructor=u,(l.prototype=Object.create(l.prototype)).constructor=l,(h.prototype=Object.create(f.prototype)).constructor=h,a}()}(se={exports:{}},se.exports),se.exports);function ce(e,t,r){const n=Object.create(e);return n.dp=t[r],n.i=r,n}function ue(t){var r,n,i=t.dp.name;return{c(){r=l("option"),n=h(i),r.__value=t.i,r.value=r.__value},m(e,t){f(e,r,t),s(r,n)},p:e,d(e){e&&c(r)}}}function le(e){for(var t,r,i,o,a,g,y,x,b,k,$,w,C,E,I,R,L,O,j,T,D,G,F,M,z,P,B,H,U,q,W,K,J,Q,Y,X,V,ee,re,ne,ie=A.title,oe=A.subtitle,se=A.extraGeographyName,fe=A.footer,le=A.data,de=[],pe=0;pe<le.length;pe+=1)de[pe]=ue(ce(e,le,pe));var me=new te({props:{prefix:e.prefix,suffix:e.suffix}}),ge=new Z({props:{id:"map-before",time:e.before,col:"before",extraGeography:e.extraGeography}}),_e=new Z({props:{id:"map-after",time:e.after,col:"after",positiveIncrease:e.positiveIncrease,extraGeography:e.extraGeography}}),ve=new ae({props:{col:"before",period:e.before,moe:e.beforemoe,prefix:e.prefix,suffix:e.suffix}}),ye=new ae({props:{col:"after",period:e.after,moe:e.aftermoe,prefix:e.prefix,suffix:e.suffix,positiveIncrease:e.positiveIncrease}});return{c(){t=l("div"),r=l("p"),i=d(),o=l("p"),a=d(),g=l("form"),y=l("select");for(var n=0;n<de.length;n+=1)de[n].c();x=d(),b=l("label"),k=l("input"),$=d(),w=h(se),C=d(),E=l("label"),I=l("input"),R=h(" Show Change"),L=d(),O=l("p"),j=l("a"),T=h("Download dataset"),G=h(" powering this visualization."),F=d(),M=l("p"),z=d(),P=l("div"),me.$$.fragment.c(),B=d(),H=l("div"),U=l("div"),ge.$$.fragment.c(),q=d(),W=l("div"),_e.$$.fragment.c(),K=d(),J=l("div"),Q=l("div"),ve.$$.fragment.c(),Y=d(),X=l("div"),ye.$$.fragment.c(),V=d(),ee=l("footer"),r.className="f3 f2-ns mb0",o.className="f5 f3-ns mt1",void 0===e.currentIndex&&S(()=>e.select_change_handler.call(y)),y.className="f6",m(k,"type","checkbox"),k.name="checkbox1",b.className="ml4",m(I,"type","checkbox"),I.name="checkbox2",E.className="ml4",g.className="boilerform pa3 bg-black-10",j.href=D=e.dp.file,j.className="link dim",O.className="black-80 f6",M.className="f6 lh-title",P.className="mw8 h3",t.className="mw9 center ph3",U.className="fl w-50 h-100",W.className="fl w-50 h-100",H.className="mw9 center ph3 cf",_(H,"height","600px"),Q.className="fl w-50",X.className="fl w-50",J.className="mw9 center ph3 mb5 h3",ee.className="w-100 center tc ph3 f6 mt5 pv5 black-80 bg-lightest-blue",ne=[p(y,"change",e.select_change_handler),p(k,"change",e.input0_change_handler),p(k,"change",e.handleExtraGeography),p(I,"change",he)]},m(n,c){f(n,t,c),s(t,r),r.innerHTML=ie,s(t,i),s(t,o),o.innerHTML=oe,s(t,a),s(t,g),s(g,y);for(var u=0;u<de.length;u+=1)de[u].m(y,null);v(y,e.currentIndex),s(g,x),s(g,b),s(b,k),k.checked=e.extraGeography,s(b,$),s(b,w),s(g,C),s(g,E),s(E,I),s(E,R),s(t,L),s(t,O),s(O,j),s(j,T),s(O,G),s(t,F),s(t,M),M.innerHTML=e.description,s(t,z),s(t,P),N(me,P,null),f(n,B,c),f(n,H,c),s(H,U),N(ge,U,null),s(H,q),s(H,W),N(_e,W,null),f(n,K,c),f(n,J,c),s(J,Q),N(ve,Q,null),s(J,Y),s(J,X),N(ye,X,null),f(n,V,c),f(n,ee,c),ee.innerHTML=fe,re=!0},p(e,t){if(e.config){le=A.data;for(var r=0;r<le.length;r+=1){const n=ce(t,le,r);de[r]?de[r].p(e,n):(de[r]=ue(n),de[r].c(),de[r].m(y,null))}for(;r<de.length;r+=1)de[r].d(1);de.length=le.length}e.currentIndex&&v(y,t.currentIndex),e.extraGeography&&(k.checked=t.extraGeography),re&&!e.dp||D===(D=t.dp.file)||(j.href=D),re&&!e.description||(M.innerHTML=t.description);var n={};e.prefix&&(n.prefix=t.prefix),e.suffix&&(n.suffix=t.suffix),me.$set(n);var i={};e.before&&(i.time=t.before),e.extraGeography&&(i.extraGeography=t.extraGeography),ge.$set(i);var o={};e.after&&(o.time=t.after),e.positiveIncrease&&(o.positiveIncrease=t.positiveIncrease),e.extraGeography&&(o.extraGeography=t.extraGeography),_e.$set(o);var a={};e.before&&(a.period=t.before),e.beforemoe&&(a.moe=t.beforemoe),e.prefix&&(a.prefix=t.prefix),e.suffix&&(a.suffix=t.suffix),ve.$set(a);var s={};e.after&&(s.period=t.after),e.aftermoe&&(s.moe=t.aftermoe),e.prefix&&(s.prefix=t.prefix),e.suffix&&(s.suffix=t.suffix),e.positiveIncrease&&(s.positiveIncrease=t.positiveIncrease),ye.$set(s)},i(e){re||(me.$$.fragment.i(e),ge.$$.fragment.i(e),_e.$$.fragment.i(e),ve.$$.fragment.i(e),ye.$$.fragment.i(e),re=!0)},o(e){me.$$.fragment.o(e),ge.$$.fragment.o(e),_e.$$.fragment.o(e),ve.$$.fragment.o(e),ye.$$.fragment.o(e),re=!1},d(e){e&&c(t),u(de,e),me.$destroy(),e&&(c(B),c(H)),ge.$destroy(),_e.$destroy(),e&&(c(K),c(J)),ve.$destroy(),ye.$destroy(),e&&(c(V),c(ee)),n(ne)}}}function he(){H.update(e=>!e)}function de(e,t,r){let n,i,o,a,s,f,c,u,l,h=0,d=!1;return B.update(e=>A.defaultGeographyPath),e.$$.update=((e={currentIndex:1,dp:1})=>{e.currentIndex&&r("dp",n=A.data[parseInt(h)]),e.dp&&r("description",i=n.description),e.dp&&r("before",o=n.before),e.dp&&r("after",a=n.after),e.dp&&r("beforemoe",s=n.beforemoe),e.dp&&r("aftermoe",f=n.aftermoe),e.dp&&r("prefix",c=n.prefix),e.dp&&r("suffix",u=n.suffix),e.dp&&r("positiveIncrease",l=n.positiveIncrease),e.dp&&fetch(n.file).then(function(e){return e.text()}).then(function(e){let t=fe.parse(e,{header:!0,dynamicTyping:!0}).data,r={};for(let e in t)r[t[e].geography]=t[e];let n=t.map(e=>parseFloat(e.before)||0),i=t.map(e=>parseFloat(e.after)||0);M.update(e=>(function(e,t){return t>e.length?null:function(e,t,r){var n=e.length-1,i=[],o=r;for(i[r]=e[e.length-1],i[0]=e[0];o>1;)i[o-1]=e[t[n][o]-2],n=t[n][o]-1,o--;return i}(e=e.slice().sort(function(e,t){return e-t}),function(e,t){var r,n,i=[],o=[],a=0;for(r=0;r<e.length+1;r++){var s=[],f=[];for(n=0;n<t+1;n++)s.push(0),f.push(0);i.push(s),o.push(f)}for(r=1;r<t+1;r++)for(i[1][r]=1,o[1][r]=0,n=2;n<e.length+1;n++)o[n][r]=1/0;for(var c=2;c<e.length+1;c++){for(var u=0,l=0,h=0,d=0,p=1;p<c+1;p++){var m=c-p+1,g=e[m-1];if(a=(l+=g*g)-(u+=g)*u/++h,0!=(d=m-1))for(n=2;n<t+1;n++)o[c][n]>=a+o[d][n-1]&&(i[c][n]=m,o[c][n]=a+o[d][n-1])}i[c][1]=1,o[c][1]=a}return{lower_class_limits:i,variance_combinations:o}}(e,t).lower_class_limits,t)})(n.concat(i),5)),z.update(e=>r),F.update(e=>t)})}),{currentIndex:h,extraGeography:d,handleExtraGeography:function(){B.update(e=>d?A.extraGeographyPath:A.defaultGeographyPath)},dp:n,description:i,before:o,after:a,beforemoe:s,aftermoe:f,prefix:c,suffix:u,positiveIncrease:l,select_change_handler:function(){h=function(e){const t=e.querySelector(":checked")||e.options[0];return t&&t.__value}(this),r("currentIndex",h)},input0_change_handler:function(){d=this.checked,r("extraGeography",d)}}}new class extends D{constructor(e){super(),T(this,e,de,le,o,[])}}({target:document.body})}();
+(function () {
+	'use strict';
+
+	function noop() {}
+
+	function add_location(element, file, line, column, char) {
+		element.__svelte_meta = {
+			loc: { file, line, column, char }
+		};
+	}
+
+	function run(fn) {
+		return fn();
+	}
+
+	function blank_object() {
+		return Object.create(null);
+	}
+
+	function run_all(fns) {
+		fns.forEach(run);
+	}
+
+	function is_function(thing) {
+		return typeof thing === 'function';
+	}
+
+	function safe_not_equal(a, b) {
+		return a != a ? b == b : a !== b || ((a && typeof a === 'object') || typeof a === 'function');
+	}
+
+	function validate_store(store, name) {
+		if (!store || typeof store.subscribe !== 'function') {
+			throw new Error(`'${name}' is not a store with a 'subscribe' method`);
+		}
+	}
+
+	function subscribe(component, store, callback) {
+		const unsub = store.subscribe(callback);
+
+		component.$$.on_destroy.push(unsub.unsubscribe
+			? () => unsub.unsubscribe()
+			: unsub);
+	}
+
+	function append(target, node) {
+		target.appendChild(node);
+	}
+
+	function insert(target, node, anchor) {
+		target.insertBefore(node, anchor);
+	}
+
+	function detach(node) {
+		node.parentNode.removeChild(node);
+	}
+
+	function destroy_each(iterations, detaching) {
+		for (let i = 0; i < iterations.length; i += 1) {
+			if (iterations[i]) iterations[i].d(detaching);
+		}
+	}
+
+	function element(name) {
+		return document.createElement(name);
+	}
+
+	function text(data) {
+		return document.createTextNode(data);
+	}
+
+	function space() {
+		return text(' ');
+	}
+
+	function listen(node, event, handler, options) {
+		node.addEventListener(event, handler, options);
+		return () => node.removeEventListener(event, handler, options);
+	}
+
+	function attr(node, attribute, value) {
+		if (value == null) node.removeAttribute(attribute);
+		else node.setAttribute(attribute, value);
+	}
+
+	function children(element) {
+		return Array.from(element.childNodes);
+	}
+
+	function set_data(text, data) {
+		data = '' + data;
+		if (text.data !== data) text.data = data;
+	}
+
+	function set_style(node, key, value) {
+		node.style.setProperty(key, value);
+	}
+
+	function select_option(select, value) {
+		for (let i = 0; i < select.options.length; i += 1) {
+			const option = select.options[i];
+
+			if (option.__value === value) {
+				option.selected = true;
+				return;
+			}
+		}
+	}
+
+	function select_value(select) {
+		const selected_option = select.querySelector(':checked') || select.options[0];
+		return selected_option && selected_option.__value;
+	}
+
+	let current_component;
+
+	function set_current_component(component) {
+		current_component = component;
+	}
+
+	function get_current_component() {
+		if (!current_component) throw new Error(`Function called outside component initialization`);
+		return current_component;
+	}
+
+	function onMount(fn) {
+		get_current_component().$$.on_mount.push(fn);
+	}
+
+	const dirty_components = [];
+
+	const resolved_promise = Promise.resolve();
+	let update_scheduled = false;
+	const binding_callbacks = [];
+	const render_callbacks = [];
+	const flush_callbacks = [];
+
+	function schedule_update() {
+		if (!update_scheduled) {
+			update_scheduled = true;
+			resolved_promise.then(flush);
+		}
+	}
+
+	function add_render_callback(fn) {
+		render_callbacks.push(fn);
+	}
+
+	function flush() {
+		const seen_callbacks = new Set();
+
+		do {
+			// first, call beforeUpdate functions
+			// and update components
+			while (dirty_components.length) {
+				const component = dirty_components.shift();
+				set_current_component(component);
+				update(component.$$);
+			}
+
+			while (binding_callbacks.length) binding_callbacks.shift()();
+
+			// then, once components are updated, call
+			// afterUpdate functions. This may cause
+			// subsequent updates...
+			while (render_callbacks.length) {
+				const callback = render_callbacks.pop();
+				if (!seen_callbacks.has(callback)) {
+					callback();
+
+					// ...so guard against infinite loops
+					seen_callbacks.add(callback);
+				}
+			}
+		} while (dirty_components.length);
+
+		while (flush_callbacks.length) {
+			flush_callbacks.pop()();
+		}
+
+		update_scheduled = false;
+	}
+
+	function update($$) {
+		if ($$.fragment) {
+			$$.update($$.dirty);
+			run_all($$.before_render);
+			$$.fragment.p($$.dirty, $$.ctx);
+			$$.dirty = null;
+
+			$$.after_render.forEach(add_render_callback);
+		}
+	}
+
+	function mount_component(component, target, anchor) {
+		const { fragment, on_mount, on_destroy, after_render } = component.$$;
+
+		fragment.m(target, anchor);
+
+		// onMount happens after the initial afterUpdate. Because
+		// afterUpdate callbacks happen in reverse order (inner first)
+		// we schedule onMount callbacks before afterUpdate callbacks
+		add_render_callback(() => {
+			const new_on_destroy = on_mount.map(run).filter(is_function);
+			if (on_destroy) {
+				on_destroy.push(...new_on_destroy);
+			} else {
+				// Edge case - component was destroyed immediately,
+				// most likely as a result of a binding initialising
+				run_all(new_on_destroy);
+			}
+			component.$$.on_mount = [];
+		});
+
+		after_render.forEach(add_render_callback);
+	}
+
+	function destroy(component, detaching) {
+		if (component.$$) {
+			run_all(component.$$.on_destroy);
+			component.$$.fragment.d(detaching);
+
+			// TODO null out other refs, including component.$$ (but need to
+			// preserve final state?)
+			component.$$.on_destroy = component.$$.fragment = null;
+			component.$$.ctx = {};
+		}
+	}
+
+	function make_dirty(component, key) {
+		if (!component.$$.dirty) {
+			dirty_components.push(component);
+			schedule_update();
+			component.$$.dirty = {};
+		}
+		component.$$.dirty[key] = true;
+	}
+
+	function init(component, options, instance, create_fragment, not_equal$$1, prop_names) {
+		const parent_component = current_component;
+		set_current_component(component);
+
+		const props = options.props || {};
+
+		const $$ = component.$$ = {
+			fragment: null,
+			ctx: null,
+
+			// state
+			props: prop_names,
+			update: noop,
+			not_equal: not_equal$$1,
+			bound: blank_object(),
+
+			// lifecycle
+			on_mount: [],
+			on_destroy: [],
+			before_render: [],
+			after_render: [],
+			context: new Map(parent_component ? parent_component.$$.context : []),
+
+			// everything else
+			callbacks: blank_object(),
+			dirty: null
+		};
+
+		let ready = false;
+
+		$$.ctx = instance
+			? instance(component, props, (key, value) => {
+				if ($$.ctx && not_equal$$1($$.ctx[key], $$.ctx[key] = value)) {
+					if ($$.bound[key]) $$.bound[key](value);
+					if (ready) make_dirty(component, key);
+				}
+			})
+			: props;
+
+		$$.update();
+		ready = true;
+		run_all($$.before_render);
+		$$.fragment = create_fragment($$.ctx);
+
+		if (options.target) {
+			if (options.hydrate) {
+				$$.fragment.l(children(options.target));
+			} else {
+				$$.fragment.c();
+			}
+
+			if (options.intro && component.$$.fragment.i) component.$$.fragment.i();
+			mount_component(component, options.target, options.anchor);
+			flush();
+		}
+
+		set_current_component(parent_component);
+	}
+
+	class SvelteComponent {
+		$destroy() {
+			destroy(this, true);
+			this.$destroy = noop;
+		}
+
+		$on(type, callback) {
+			const callbacks = (this.$$.callbacks[type] || (this.$$.callbacks[type] = []));
+			callbacks.push(callback);
+
+			return () => {
+				const index = callbacks.indexOf(callback);
+				if (index !== -1) callbacks.splice(index, 1);
+			};
+		}
+
+		$set() {
+			// overridden by instance, if it has props
+		}
+	}
+
+	class SvelteComponentDev extends SvelteComponent {
+		constructor(options) {
+			if (!options || (!options.target && !options.$$inline)) {
+				throw new Error(`'target' is a required option`);
+			}
+
+			super();
+		}
+
+		$destroy() {
+			super.$destroy();
+			this.$destroy = () => {
+				console.warn(`Component was already destroyed`); // eslint-disable-line no-console
+			};
+		}
+	}
+
+	var config = {
+	  "title": "American Community Survey 2017",
+	  "subtitle": "Select tables for Connecticut by <a href='http://ctdata.org'>Connecticut Data Collaborative</a>",
+	  "footer": "Connecticut Data Collaborative is a project of InformCT, Inc.<br>&copy; 2019 Connecticut Data Collaborative",
+	  "defaultGeographyPath": "./geo/towns.geojson",
+	  "extraGeographyPath": "./geo/tracts.geojson",
+	  "extraGeographyName": "Census Tracts",
+	  "geojsonGeographyProperty": "name",
+	  "data": [
+	    {
+	      "name": "Median Household Income",
+	      "file": "./data/median_household_income.csv",
+	      "prefix": "$",
+	      "suffix": "",
+	      "before": "ACS 2008-2012",
+	      "beforemoe": true,
+	      "after": "ACS 2013-2017",
+	      "aftermoe": true,
+	      "positiveIncrease": true,
+	      "description": "<b>The median increase in household income across all towns in Connecticut was 5.8%.</b> In 129 towns, median household income increased, most significant increases in North Canaan (+26,400, or +58%), Westbrook (+31,700, or +50%), and Southbury (+23,100, or +34%). Note that North Canaan and Westbrook both have large margins of errors due to small populations. In 40 towns, median household income decreased compared to 2008-2012 estimate, with the highest decreases occurring in Ansonia (~ -$9,200, or nearly -17%), New London (~ –$6,800, or -15%), and East Haddam (~ $13,000, or -14%). <b>Hartford remains the town with the lowest median household income in Connecticut</b> despite a 17% increase in median household income between ACS 2008-2012 and 2013-2017 estimates. New Haven median income increased 1.8% and changing its rank from 2nd to 3rd poorest municipality, while New London dropped from 7th to 2nd due to a 15% decrease."
+	    },
+	    {
+	      "name": "Per Capita Income",
+	      "file": "./data/per_capita_income.csv",
+	      "prefix": "$",
+	      "suffix": "",
+	      "suffix": "",
+	      "before": "ACS 2008-2012",
+	      "beforemoe": true,
+	      "after": "ACS 2013-2017",
+	      "aftermoe": true,
+	      "positiveIncrease": true,
+	      "description": "Per capita income increased in 142 municipalities and decreased in 27. <b>Hartford has the lowest per capita income at $19,220</b>, followed by Windham ($19,666), Waterbury ($21,605), Mansfield ($21,916), and Bridgeport ($22,806). New Canaan, Darien, and Westport are the towns with highest per capita income, all above $100,000."
+	    }
+	  ]
+	};
+
+	function writable(value, start = noop) {
+		let stop;
+		const subscribers = [];
+
+		function set(new_value) {
+			if (safe_not_equal(value, new_value)) {
+				value = new_value;
+				if (!stop) return; // not ready
+				subscribers.forEach(s => s[1]());
+				subscribers.forEach(s => s[0](value));
+			}
+		}
+
+		function update(fn) {
+			set(fn(value));
+		}
+
+		function subscribe(run, invalidate = noop) {
+			const subscriber = [run, invalidate];
+			subscribers.push(subscriber);
+			if (subscribers.length === 1) stop = start(set) || noop;
+			run(value);
+
+			return () => {
+				const index = subscribers.indexOf(subscriber);
+				if (index !== -1) subscribers.splice(index, 1);
+				if (subscribers.length === 0) stop();
+			};
+		}
+
+		return { set, update, subscribe };
+	}
+
+	const data = writable(false);
+	const jenksBreaks = writable(false);
+	const geo2data = writable(false);
+	const ann = writable(false);
+	const geojsonPath = writable(false);
+	const showChange = writable(false);
+
+	// # [Jenks natural breaks optimization](http://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization)
+	//
+	// Implementations: [1](http://danieljlewis.org/files/2010/06/Jenks.pdf) (python),
+	// [2](https://github.com/vvoovv/djeo-jenks/blob/master/main.js) (buggy),
+	// [3](https://github.com/simogeo/geostats/blob/master/lib/geostats.js#L407) (works)
+	function jenks (data, n_classes) {
+
+	    // Compute the matrices required for Jenks breaks. These matrices
+	    // can be used for any classing of data with `classes <= n_classes`
+	    function getMatrices(data, n_classes) {
+
+	        // in the original implementation, these matrices are referred to
+	        // as `LC` and `OP`
+	        //
+	        // * lower_class_limits (LC): optimal lower class limits
+	        // * variance_combinations (OP): optimal variance combinations for all classes
+	        var lower_class_limits = [],
+	            variance_combinations = [],
+	            // loop counters
+	            i, j,
+	            // the variance, as computed at each step in the calculation
+	            variance = 0;
+
+	        // Initialize and fill each matrix with zeroes
+	        for (i = 0; i < data.length + 1; i++) {
+	            var tmp1 = [], tmp2 = [];
+	            for (j = 0; j < n_classes + 1; j++) {
+	                tmp1.push(0);
+	                tmp2.push(0);
+	            }
+	            lower_class_limits.push(tmp1);
+	            variance_combinations.push(tmp2);
+	        }
+
+	        for (i = 1; i < n_classes + 1; i++) {
+	            lower_class_limits[1][i] = 1;
+	            variance_combinations[1][i] = 0;
+	            // in the original implementation, 9999999 is used but
+	            // since Javascript has `Infinity`, we use that.
+	            for (j = 2; j < data.length + 1; j++) {
+	                variance_combinations[j][i] = Infinity;
+	            }
+	        }
+
+	        for (var l = 2; l < data.length + 1; l++) {
+
+	            // `SZ` originally. this is the sum of the values seen thus
+	            // far when calculating variance.
+	            var sum = 0,
+	                // `ZSQ` originally. the sum of squares of values seen
+	                // thus far
+	                sum_squares = 0,
+	                // `WT` originally. This is the number of
+	                w = 0,
+	                // `IV` originally
+	                i4 = 0;
+
+	            // in several instances, you could say `Math.pow(x, 2)`
+	            // instead of `x * x`, but this is slower in some browsers
+	            // introduces an unnecessary concept.
+	            for (var m = 1; m < l + 1; m++) {
+
+	                // `III` originally
+	                var lower_class_limit = l - m + 1,
+	                    val = data[lower_class_limit - 1];
+
+	                // here we're estimating variance for each potential classing
+	                // of the data, for each potential number of classes. `w`
+	                // is the number of data points considered so far.
+	                w++;
+
+	                // increase the current sum and sum-of-squares
+	                sum += val;
+	                sum_squares += val * val;
+
+	                // the variance at this point in the sequence is the difference
+	                // between the sum of squares and the total x 2, over the number
+	                // of samples.
+	                variance = sum_squares - (sum * sum) / w;
+
+	                i4 = lower_class_limit - 1;
+
+	                if (i4 !== 0) {
+	                    for (j = 2; j < n_classes + 1; j++) {
+	                        // if adding this element to an existing class
+	                        // will increase its variance beyond the limit, break
+	                        // the class at this point, setting the lower_class_limit
+	                        // at this point.
+	                        if (variance_combinations[l][j] >=
+	                            (variance + variance_combinations[i4][j - 1])) {
+	                            lower_class_limits[l][j] = lower_class_limit;
+	                            variance_combinations[l][j] = variance +
+	                                variance_combinations[i4][j - 1];
+	                        }
+	                    }
+	                }
+	            }
+
+	            lower_class_limits[l][1] = 1;
+	            variance_combinations[l][1] = variance;
+	        }
+
+	        // return the two matrices. for just providing breaks, only
+	        // `lower_class_limits` is needed, but variances can be useful to
+	        // evaluage goodness of fit.
+	        return {
+	            lower_class_limits: lower_class_limits,
+	            variance_combinations: variance_combinations
+	        };
+	    }
+
+
+
+	    // the second part of the jenks recipe: take the calculated matrices
+	    // and derive an array of n breaks.
+	    function breaks(data, lower_class_limits, n_classes) {
+
+	        var k = data.length - 1,
+	            kclass = [],
+	            countNum = n_classes;
+
+	        // the calculation of classes will never include the upper and
+	        // lower bounds, so we need to explicitly set them
+	        kclass[n_classes] = data[data.length - 1];
+	        kclass[0] = data[0];
+
+	        // the lower_class_limits matrix is used as indexes into itself
+	        // here: the `k` variable is reused in each iteration.
+	        while (countNum > 1) {
+	            kclass[countNum - 1] = data[lower_class_limits[k][countNum] - 2];
+	            k = lower_class_limits[k][countNum] - 1;
+	            countNum--;
+	        }
+
+	        return kclass;
+	    }
+
+	    if (n_classes > data.length) return null;
+
+	    // sort data in numerical order, since this is expected
+	    // by the matrices function
+	    data = data.slice().sort(function (a, b) { return a - b; });
+
+	    // get our basic matrices
+	    var matrices = getMatrices(data, n_classes),
+	        // we only need lower class limits here
+	        lower_class_limits = matrices.lower_class_limits;
+
+	    // extract n_classes out of the computed matrices
+	    return breaks(data, lower_class_limits, n_classes);
+
+	}
+
+	function comma(val) {
+	  if (val) {
+	    while (/(\d+)(\d{3})/.test(val.toString())){
+	      val = val.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
+	    }
+	  }
+	  return val
+	}
+
+	const colorsJenks = ['#f6eff7', '#bdc9e1', '#74a9cf', '#2b8cbe', '#045a8d'];
+	const colorsChange = ['#d73027', '#f46d43', '#fdae61', '#d9ef8b', '#91cf60', '#1a9850'];
+
+	// From https://stackoverflow.com/questions/9716468/pure-javascript-a-function-like-jquerys-isnumeric
+	  function isNumeric (n) {
+	    return !isNaN(parseFloat(n)) && isFinite(n)
+	  }
+
+	/* src/Map.svelte generated by Svelte v3.1.0 */
+
+	const file = "src/Map.svelte";
+
+	function create_fragment(ctx) {
+		var div;
+
+		return {
+			c: function create() {
+				div = element("div");
+				div.id = ctx.id;
+				div.className = "w-100 h-100";
+				add_location(div, file, 149, 0, 2882);
+			},
+
+			l: function claim(nodes) {
+				throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+			},
+
+			m: function mount(target, anchor) {
+				insert(target, div, anchor);
+			},
+
+			p: function update(changed, ctx) {
+				if (changed.id) {
+					div.id = ctx.id;
+				}
+			},
+
+			i: noop,
+			o: noop,
+
+			d: function destroy(detaching) {
+				if (detaching) {
+					detach(div);
+				}
+			}
+		};
+	}
+
+	function instance($$self, $$props, $$invalidate) {
+		let $jenksBreaks, $showChange, $geojsonPath;
+
+		validate_store(jenksBreaks, 'jenksBreaks');
+		subscribe($$self, jenksBreaks, $$value => { $jenksBreaks = $$value; $$invalidate('$jenksBreaks', $jenksBreaks); });
+		validate_store(showChange, 'showChange');
+		subscribe($$self, showChange, $$value => { $showChange = $$value; $$invalidate('$showChange', $showChange); });
+		validate_store(geojsonPath, 'geojsonPath');
+		subscribe($$self, geojsonPath, $$value => { $geojsonPath = $$value; $$invalidate('$geojsonPath', $geojsonPath); });
+
+		let { id, time, col, extraGeography, positiveIncrease } = $$props;
+
+		let map;
+		let geojsonLayer;
+
+		let getColor = function(geo) {
+			if (!geo) return '#cccccc'
+
+			let val = geo[col];
+			let colors = colorsJenks;
+			let breaks = $jenksBreaks;
+
+			if ($showChange && col == 'after') {
+				let valBefore = geo['before'];
+				if (isNumeric(valBefore) && isNumeric(val)) {
+					let change = (val - valBefore) / valBefore * 100;
+					val = change;
+					breaks = [-100, -10, -5, 0, 5, 10, 100];
+					colors = colorsChange;
+				} else {
+					return '#cccccc'
+				}
+			}
+
+			if (val === '-') {
+				return '#cccccc'
+			}
+
+			if (val[val.length - 1] === '+') {
+				return colors[4]
+			}
+
+			for (let i in breaks) {
+				if (i > 0) {
+					if (val <= breaks[i]) {
+						return colors[i-1]
+					}
+				}
+			}
+
+			return '#cccccc'
+		};
+
+		const resizeMaps = function() {
+			map.fitBounds(geojsonLayer.getBounds());
+		};
+
+		let initMap = async function() {
+			$$invalidate('map', map = L.map(id, {
+				center: [41.33, -72.65],
+				zoom: 9,
+				zoomControl: false,
+				scrollWheelZoom: false,
+				attributionControl: false,
+			}));
+			map.keyboard.disable();
+			map.doubleClickZoom.disable();
+			map.dragging.disable();
+		};
+
+		var reloadGeojson = async function() {
+			const res = await fetch($geojsonPath);
+			const json = await res.json();
+
+			if (geojsonLayer) {
+				map.removeLayer(geojsonLayer);
+			}
+
+			$$invalidate('geojsonLayer', geojsonLayer = L.geoJson(json, {
+				onEachFeature: function(f, l) {
+					l.on({
+						mouseover: function(e) {
+							ann.update(x => e.target.feature.properties[config.geojsonGeographyProperty]);
+						},
+						mouseout: function(e) {
+							ann.update(x => '');
+						}
+					});
+				},
+			}).addTo(map));
+
+			resizeMaps();
+
+			geo2data.subscribe(g2d => {
+
+				if (id == 'map-after') {
+					showChange.subscribe(val => {
+						geojsonLayer.eachLayer(layer => {
+							layer.setStyle({
+								fillColor: getColor(g2d[layer.feature.properties[config.geojsonGeographyProperty]]),
+								fillOpacity: 1,
+								color: 'white',
+								weight: 1
+							});
+						});
+					});
+				}
+
+				geojsonLayer.eachLayer(layer => {
+					layer.setStyle({
+						fillColor: getColor(g2d[layer.feature.properties[config.geojsonGeographyProperty]]),
+						fillOpacity: 1,
+						color: 'white',
+						weight: 1
+					});
+				});
+			});
+
+
+
+		};
+
+		onMount(initMap);
+
+		window.addEventListener('resize', resizeMaps);
+
+		$$self.$set = $$props => {
+			if ('id' in $$props) $$invalidate('id', id = $$props.id);
+			if ('time' in $$props) $$invalidate('time', time = $$props.time);
+			if ('col' in $$props) $$invalidate('col', col = $$props.col);
+			if ('extraGeography' in $$props) $$invalidate('extraGeography', extraGeography = $$props.extraGeography);
+			if ('positiveIncrease' in $$props) $$invalidate('positiveIncrease', positiveIncrease = $$props.positiveIncrease);
+		};
+
+		$$self.$$.update = ($$dirty = { $geojsonPath: 1, map: 1, reloadGeojson: 1 }) => {
+			if ($$dirty.$geojsonPath || $$dirty.map || $$dirty.reloadGeojson) { if ($geojsonPath && map) {
+					reloadGeojson();
+				} }
+		};
+
+		return {
+			id,
+			time,
+			col,
+			extraGeography,
+			positiveIncrease
+		};
+	}
+
+	class Map$1 extends SvelteComponentDev {
+		constructor(options) {
+			super(options);
+			init(this, options, instance, create_fragment, safe_not_equal, ["id", "time", "col", "extraGeography", "positiveIncrease"]);
+
+			const { ctx } = this.$$;
+			const props = options.props || {};
+			if (ctx.id === undefined && !('id' in props)) {
+				console.warn("<Map> was created without expected prop 'id'");
+			}
+			if (ctx.time === undefined && !('time' in props)) {
+				console.warn("<Map> was created without expected prop 'time'");
+			}
+			if (ctx.col === undefined && !('col' in props)) {
+				console.warn("<Map> was created without expected prop 'col'");
+			}
+			if (ctx.extraGeography === undefined && !('extraGeography' in props)) {
+				console.warn("<Map> was created without expected prop 'extraGeography'");
+			}
+			if (ctx.positiveIncrease === undefined && !('positiveIncrease' in props)) {
+				console.warn("<Map> was created without expected prop 'positiveIncrease'");
+			}
+		}
+
+		get id() {
+			throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set id(value) {
+			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get time() {
+			throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set time(value) {
+			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get col() {
+			throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set col(value) {
+			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get extraGeography() {
+			throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set extraGeography(value) {
+			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get positiveIncrease() {
+			throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set positiveIncrease(value) {
+			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+	}
+
+	/* src/Legend.svelte generated by Svelte v3.1.0 */
+
+	const file$1 = "src/Legend.svelte";
+
+	function get_each_context(ctx, list, i) {
+		const child_ctx = Object.create(ctx);
+		child_ctx.color = list[i];
+		child_ctx.i = i;
+		return child_ctx;
+	}
+
+	// (11:2) {#each colorsJenks as color, i}
+	function create_each_block(ctx) {
+		var div, raw_value = ctx.i == 0 ? '&leq;' : '', raw_after, t0, t1_value = ctx.i != 4 ? ctx.prefix + (ctx.$jenksBreaks[ctx.i + 1] ? comma(ctx.$jenksBreaks[ctx.i + 1]) : '') + ctx.suffix : '', t1, t2, t3_value = ctx.i == 4 ? ctx.prefix + comma(ctx.$jenksBreaks[ctx.i] + 1) + ctx.suffix + '+' : '', t3, t4;
+
+		return {
+			c: function create() {
+				div = element("div");
+				raw_after = element('noscript');
+				t0 = space();
+				t1 = text(t1_value);
+				t2 = space();
+				t3 = text(t3_value);
+				t4 = space();
+				div.className = "fl " + (ctx.i < 4 ? 'tr' : 'tl white') + " w-20 pv1 ph2 f6";
+				set_style(div, "background-color", ctx.color);
+				add_location(div, file$1, 11, 4, 252);
+			},
+
+			m: function mount(target, anchor) {
+				insert(target, div, anchor);
+				append(div, raw_after);
+				raw_after.insertAdjacentHTML("beforebegin", raw_value);
+				append(div, t0);
+				append(div, t1);
+				append(div, t2);
+				append(div, t3);
+				append(div, t4);
+			},
+
+			p: function update(changed, ctx) {
+				if ((changed.prefix || changed.$jenksBreaks || changed.suffix) && t1_value !== (t1_value = ctx.i != 4 ? ctx.prefix + (ctx.$jenksBreaks[ctx.i + 1] ? comma(ctx.$jenksBreaks[ctx.i + 1]) : '') + ctx.suffix : '')) {
+					set_data(t1, t1_value);
+				}
+
+				if ((changed.prefix || changed.$jenksBreaks || changed.suffix) && t3_value !== (t3_value = ctx.i == 4 ? ctx.prefix + comma(ctx.$jenksBreaks[ctx.i] + 1) + ctx.suffix + '+' : '')) {
+					set_data(t3, t3_value);
+				}
+
+				if (changed.colorsJenks) {
+					set_style(div, "background-color", ctx.color);
+				}
+			},
+
+			d: function destroy(detaching) {
+				if (detaching) {
+					detach(div);
+				}
+			}
+		};
+	}
+
+	function create_fragment$1(ctx) {
+		var div;
+
+		var each_value = colorsJenks;
+
+		var each_blocks = [];
+
+		for (var i = 0; i < each_value.length; i += 1) {
+			each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+		}
+
+		return {
+			c: function create() {
+				div = element("div");
+
+				for (var i = 0; i < each_blocks.length; i += 1) {
+					each_blocks[i].c();
+				}
+				div.className = "w-100";
+				add_location(div, file$1, 9, 0, 194);
+			},
+
+			l: function claim(nodes) {
+				throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+			},
+
+			m: function mount(target, anchor) {
+				insert(target, div, anchor);
+
+				for (var i = 0; i < each_blocks.length; i += 1) {
+					each_blocks[i].m(div, null);
+				}
+			},
+
+			p: function update(changed, ctx) {
+				if (changed.colorsJenks || changed.prefix || changed.comma || changed.$jenksBreaks || changed.suffix) {
+					each_value = colorsJenks;
+
+					for (var i = 0; i < each_value.length; i += 1) {
+						const child_ctx = get_each_context(ctx, each_value, i);
+
+						if (each_blocks[i]) {
+							each_blocks[i].p(changed, child_ctx);
+						} else {
+							each_blocks[i] = create_each_block(child_ctx);
+							each_blocks[i].c();
+							each_blocks[i].m(div, null);
+						}
+					}
+
+					for (; i < each_blocks.length; i += 1) {
+						each_blocks[i].d(1);
+					}
+					each_blocks.length = each_value.length;
+				}
+			},
+
+			i: noop,
+			o: noop,
+
+			d: function destroy(detaching) {
+				if (detaching) {
+					detach(div);
+				}
+
+				destroy_each(each_blocks, detaching);
+			}
+		};
+	}
+
+	function instance$1($$self, $$props, $$invalidate) {
+		let $jenksBreaks;
+
+		validate_store(jenksBreaks, 'jenksBreaks');
+		subscribe($$self, jenksBreaks, $$value => { $jenksBreaks = $$value; $$invalidate('$jenksBreaks', $jenksBreaks); });
+
+		
+
+	  let { prefix, suffix } = $$props;
+
+		$$self.$set = $$props => {
+			if ('prefix' in $$props) $$invalidate('prefix', prefix = $$props.prefix);
+			if ('suffix' in $$props) $$invalidate('suffix', suffix = $$props.suffix);
+		};
+
+		return { prefix, suffix, $jenksBreaks };
+	}
+
+	class Legend extends SvelteComponentDev {
+		constructor(options) {
+			super(options);
+			init(this, options, instance$1, create_fragment$1, safe_not_equal, ["prefix", "suffix"]);
+
+			const { ctx } = this.$$;
+			const props = options.props || {};
+			if (ctx.prefix === undefined && !('prefix' in props)) {
+				console.warn("<Legend> was created without expected prop 'prefix'");
+			}
+			if (ctx.suffix === undefined && !('suffix' in props)) {
+				console.warn("<Legend> was created without expected prop 'suffix'");
+			}
+		}
+
+		get prefix() {
+			throw new Error("<Legend>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set prefix(value) {
+			throw new Error("<Legend>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get suffix() {
+			throw new Error("<Legend>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set suffix(value) {
+			throw new Error("<Legend>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+	}
+
+	/* src/Annotation.svelte generated by Svelte v3.1.0 */
+
+	const file$2 = "src/Annotation.svelte";
+
+	// (37:2) {#if $ann}
+	function create_if_block(ctx) {
+		var p0, t0, t1, p1, span, t2, t3_value = ctx.value.toLocaleString(), t3, t4, t5;
+
+		var if_block = (ctx.moe) && create_if_block_1(ctx);
+
+		return {
+			c: function create() {
+				p0 = element("p");
+				t0 = text(ctx.$ann);
+				t1 = space();
+				p1 = element("p");
+				span = element("span");
+				t2 = text(ctx.prefix);
+				t3 = text(t3_value);
+				t4 = text(ctx.suffix);
+				t5 = space();
+				if (if_block) if_block.c();
+				p0.className = "f4 mt0 mb1";
+				add_location(p0, file$2, 37, 4, 879);
+				span.className = ctx.color;
+				add_location(span, file$2, 39, 6, 943);
+				p1.className = "f3 mv0";
+				add_location(p1, file$2, 38, 4, 918);
+			},
+
+			m: function mount(target, anchor) {
+				insert(target, p0, anchor);
+				append(p0, t0);
+				insert(target, t1, anchor);
+				insert(target, p1, anchor);
+				append(p1, span);
+				append(span, t2);
+				append(span, t3);
+				append(p1, t4);
+				append(p1, t5);
+				if (if_block) if_block.m(p1, null);
+			},
+
+			p: function update(changed, ctx) {
+				if (changed.$ann) {
+					set_data(t0, ctx.$ann);
+				}
+
+				if (changed.prefix) {
+					set_data(t2, ctx.prefix);
+				}
+
+				if ((changed.value) && t3_value !== (t3_value = ctx.value.toLocaleString())) {
+					set_data(t3, t3_value);
+				}
+
+				if (changed.color) {
+					span.className = ctx.color;
+				}
+
+				if (changed.suffix) {
+					set_data(t4, ctx.suffix);
+				}
+
+				if (ctx.moe) {
+					if (if_block) {
+						if_block.p(changed, ctx);
+					} else {
+						if_block = create_if_block_1(ctx);
+						if_block.c();
+						if_block.m(p1, null);
+					}
+				} else if (if_block) {
+					if_block.d(1);
+					if_block = null;
+				}
+			},
+
+			d: function destroy(detaching) {
+				if (detaching) {
+					detach(p0);
+					detach(t1);
+					detach(p1);
+				}
+
+				if (if_block) if_block.d();
+			}
+		};
+	}
+
+	// (41:6) {#if moe}
+	function create_if_block_1(ctx) {
+		var span, t0, t1_value = ctx.$geo2data[ctx.$ann][ctx.col + 'moe'].toLocaleString(), t1;
+
+		return {
+			c: function create() {
+				span = element("span");
+				t0 = text("± ");
+				t1 = text(t1_value);
+				span.className = "black-50";
+				add_location(span, file$2, 41, 8, 1037);
+			},
+
+			m: function mount(target, anchor) {
+				insert(target, span, anchor);
+				append(span, t0);
+				append(span, t1);
+			},
+
+			p: function update(changed, ctx) {
+				if ((changed.$geo2data || changed.$ann || changed.col) && t1_value !== (t1_value = ctx.$geo2data[ctx.$ann][ctx.col + 'moe'].toLocaleString())) {
+					set_data(t1, t1_value);
+				}
+			},
+
+			d: function destroy(detaching) {
+				if (detaching) {
+					detach(span);
+				}
+			}
+		};
+	}
+
+	function create_fragment$2(ctx) {
+		var div, p, t0, t1;
+
+		var if_block = (ctx.$ann) && create_if_block(ctx);
+
+		return {
+			c: function create() {
+				div = element("div");
+				p = element("p");
+				t0 = text(ctx.period);
+				t1 = space();
+				if (if_block) if_block.c();
+				p.className = "f6 black-80";
+				add_location(p, file$2, 35, 2, 824);
+				div.className = "w-100 tc h5";
+				set_style(div, "margin-top", "-150px");
+				add_location(div, file$2, 34, 0, 769);
+			},
+
+			l: function claim(nodes) {
+				throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+			},
+
+			m: function mount(target, anchor) {
+				insert(target, div, anchor);
+				append(div, p);
+				append(p, t0);
+				append(div, t1);
+				if (if_block) if_block.m(div, null);
+			},
+
+			p: function update(changed, ctx) {
+				if (changed.period) {
+					set_data(t0, ctx.period);
+				}
+
+				if (ctx.$ann) {
+					if (if_block) {
+						if_block.p(changed, ctx);
+					} else {
+						if_block = create_if_block(ctx);
+						if_block.c();
+						if_block.m(div, null);
+					}
+				} else if (if_block) {
+					if_block.d(1);
+					if_block = null;
+				}
+			},
+
+			i: noop,
+			o: noop,
+
+			d: function destroy(detaching) {
+				if (detaching) {
+					detach(div);
+				}
+
+				if (if_block) if_block.d();
+			}
+		};
+	}
+
+	function instance$2($$self, $$props, $$invalidate) {
+		let $geo2data, $ann;
+
+		validate_store(geo2data, 'geo2data');
+		subscribe($$self, geo2data, $$value => { $geo2data = $$value; $$invalidate('$geo2data', $geo2data); });
+		validate_store(ann, 'ann');
+		subscribe($$self, ann, $$value => { $ann = $$value; $$invalidate('$ann', $ann); });
+
+		
+
+	  let { period, col, moe, prefix, suffix, positiveIncrease } = $$props;
+
+	  let color = 'black';
+	  let value = '';
+
+		$$self.$set = $$props => {
+			if ('period' in $$props) $$invalidate('period', period = $$props.period);
+			if ('col' in $$props) $$invalidate('col', col = $$props.col);
+			if ('moe' in $$props) $$invalidate('moe', moe = $$props.moe);
+			if ('prefix' in $$props) $$invalidate('prefix', prefix = $$props.prefix);
+			if ('suffix' in $$props) $$invalidate('suffix', suffix = $$props.suffix);
+			if ('positiveIncrease' in $$props) $$invalidate('positiveIncrease', positiveIncrease = $$props.positiveIncrease);
+		};
+
+		$$self.$$.update = ($$dirty = { $geo2data: 1, $ann: 1, col: 1, value: 1, positiveIncrease: 1 }) => {
+			if ($$dirty.$geo2data || $$dirty.$ann || $$dirty.col || $$dirty.value || $$dirty.positiveIncrease) { if ($geo2data[$ann]) {
+	        $$invalidate('value', value = $geo2data[$ann][col]);
+	    
+	        if (col == 'after') {
+	          let valueBefore = $geo2data[$ann]['before'];
+	          if (isNumeric(valueBefore) && isNumeric(value)) {
+	            let change = value - valueBefore;
+	            $$invalidate('color', color = (change > 0 && positiveIncrease) || (change < 0 && !positiveIncrease) ? 'green' : 'red');
+	          } else {
+	            $$invalidate('color', color = 'black');
+	          }
+	        }
+	        
+	      } }
+		};
+
+		return {
+			period,
+			col,
+			moe,
+			prefix,
+			suffix,
+			positiveIncrease,
+			color,
+			value,
+			$geo2data,
+			$ann
+		};
+	}
+
+	class Annotation extends SvelteComponentDev {
+		constructor(options) {
+			super(options);
+			init(this, options, instance$2, create_fragment$2, safe_not_equal, ["period", "col", "moe", "prefix", "suffix", "positiveIncrease"]);
+
+			const { ctx } = this.$$;
+			const props = options.props || {};
+			if (ctx.period === undefined && !('period' in props)) {
+				console.warn("<Annotation> was created without expected prop 'period'");
+			}
+			if (ctx.col === undefined && !('col' in props)) {
+				console.warn("<Annotation> was created without expected prop 'col'");
+			}
+			if (ctx.moe === undefined && !('moe' in props)) {
+				console.warn("<Annotation> was created without expected prop 'moe'");
+			}
+			if (ctx.prefix === undefined && !('prefix' in props)) {
+				console.warn("<Annotation> was created without expected prop 'prefix'");
+			}
+			if (ctx.suffix === undefined && !('suffix' in props)) {
+				console.warn("<Annotation> was created without expected prop 'suffix'");
+			}
+			if (ctx.positiveIncrease === undefined && !('positiveIncrease' in props)) {
+				console.warn("<Annotation> was created without expected prop 'positiveIncrease'");
+			}
+		}
+
+		get period() {
+			throw new Error("<Annotation>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set period(value) {
+			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get col() {
+			throw new Error("<Annotation>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set col(value) {
+			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get moe() {
+			throw new Error("<Annotation>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set moe(value) {
+			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get prefix() {
+			throw new Error("<Annotation>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set prefix(value) {
+			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get suffix() {
+			throw new Error("<Annotation>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set suffix(value) {
+			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		get positiveIncrease() {
+			throw new Error("<Annotation>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+
+		set positiveIncrease(value) {
+			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+		}
+	}
+
+	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+	function createCommonjsModule(fn, module) {
+		return module = { exports: {} }, fn(module, module.exports), module.exports;
+	}
+
+	var papaparse_min = createCommonjsModule(function (module, exports) {
+	/* @license
+	Papa Parse
+	v5.0.0-beta.0
+	https://github.com/mholt/PapaParse
+	License: MIT
+	*/
+	!function(e,t){module.exports=t();}(commonjsGlobal,function s(){var f="undefined"!=typeof self?self:"undefined"!=typeof window?window:void 0!==f?f:{};var n=!f.document&&!!f.postMessage,o=n&&/blob:/i.test((f.location||{}).protocol),a={},h=0,k={parse:function(e,t){var r=(t=t||{}).dynamicTyping||!1;M(r)&&(t.dynamicTypingFunction=r,r={});if(t.dynamicTyping=r,t.transform=!!M(t.transform)&&t.transform,t.worker&&k.WORKERS_SUPPORTED){var i=function(){if(!k.WORKERS_SUPPORTED)return !1;var e=(r=f.URL||f.webkitURL||null,i=s.toString(),k.BLOB_URL||(k.BLOB_URL=r.createObjectURL(new Blob(["(",i,")();"],{type:"text/javascript"})))),t=new f.Worker(e);var r,i;return t.onmessage=g,t.id=h++,a[t.id]=t}();return i.userStep=t.step,i.userChunk=t.chunk,i.userComplete=t.complete,i.userError=t.error,t.step=M(t.step),t.chunk=M(t.chunk),t.complete=M(t.complete),t.error=M(t.error),delete t.worker,void i.postMessage({input:e,config:t,workerId:i.id})}var n=null;"string"==typeof e?n=t.download?new l(t):new p(t):!0===e.readable&&M(e.read)&&M(e.on)?n=new _(t):(f.File&&e instanceof File||e instanceof Object)&&(n=new c(t));return n.stream(e)},unparse:function(e,t){var i=!1,g=!0,m=",",v="\r\n",n='"',r=!1;!function(){if("object"!=typeof t)return;"string"!=typeof t.delimiter||k.BAD_DELIMITERS.filter(function(e){return -1!==t.delimiter.indexOf(e)}).length||(m=t.delimiter);("boolean"==typeof t.quotes||Array.isArray(t.quotes))&&(i=t.quotes);"boolean"!=typeof t.skipEmptyLines&&"string"!=typeof t.skipEmptyLines||(r=t.skipEmptyLines);"string"==typeof t.newline&&(v=t.newline);"string"==typeof t.quoteChar&&(n=t.quoteChar);"boolean"==typeof t.header&&(g=t.header);}();var s=new RegExp(n,"g");"string"==typeof e&&(e=JSON.parse(e));if(Array.isArray(e)){if(!e.length||Array.isArray(e[0]))return o(null,e,r);if("object"==typeof e[0])return o(a(e[0]),e,r)}else if("object"==typeof e)return "string"==typeof e.data&&(e.data=JSON.parse(e.data)),Array.isArray(e.data)&&(e.fields||(e.fields=e.meta&&e.meta.fields),e.fields||(e.fields=Array.isArray(e.data[0])?e.fields:a(e.data[0])),Array.isArray(e.data[0])||"object"==typeof e.data[0]||(e.data=[e.data])),o(e.fields||[],e.data||[],r);throw new Error("Unable to serialize unrecognized input");function a(e){if("object"!=typeof e)return [];var t=[];for(var r in e)t.push(r);return t}function o(e,t,r){var i="";"string"==typeof e&&(e=JSON.parse(e)),"string"==typeof t&&(t=JSON.parse(t));var n=Array.isArray(e)&&0<e.length,s=!Array.isArray(t[0]);if(n&&g){for(var a=0;a<e.length;a++)0<a&&(i+=m),i+=y(e[a],a);0<t.length&&(i+=v);}for(var o=0;o<t.length;o++){var h=n?e.length:t[o].length,u=!1,f=n?0===Object.keys(t[o]).length:0===t[o].length;if(r&&!n&&(u="greedy"===r?""===t[o].join("").trim():1===t[o].length&&0===t[o][0].length),"greedy"===r&&n){for(var d=[],l=0;l<h;l++){var c=s?e[l]:l;d.push(t[o][c]);}u=""===d.join("").trim();}if(!u){for(var p=0;p<h;p++){0<p&&!f&&(i+=m);var _=n&&s?e[p]:p;i+=y(t[o][_],p);}o<t.length-1&&(!r||0<h&&!f)&&(i+=v);}}return i}function y(e,t){if(null==e)return "";if(e.constructor===Date)return JSON.stringify(e).slice(1,25);e=e.toString().replace(s,n+n);var r="boolean"==typeof i&&i||Array.isArray(i)&&i[t]||function(e,t){for(var r=0;r<t.length;r++)if(-1<e.indexOf(t[r]))return !0;return !1}(e,k.BAD_DELIMITERS)||-1<e.indexOf(m)||" "===e.charAt(0)||" "===e.charAt(e.length-1);return r?n+e+n:e}}};if(k.RECORD_SEP=String.fromCharCode(30),k.UNIT_SEP=String.fromCharCode(31),k.BYTE_ORDER_MARK="\ufeff",k.BAD_DELIMITERS=["\r","\n",'"',k.BYTE_ORDER_MARK],k.WORKERS_SUPPORTED=!n&&!!f.Worker,k.NODE_STREAM_INPUT=1,k.LocalChunkSize=10485760,k.RemoteChunkSize=5242880,k.DefaultDelimiter=",",k.Parser=b,k.ParserHandle=r,k.NetworkStreamer=l,k.FileStreamer=c,k.StringStreamer=p,k.ReadableStreamStreamer=_,f.jQuery){var d=f.jQuery;d.fn.parse=function(o){var r=o.config||{},h=[];return this.each(function(e){if(!("INPUT"===d(this).prop("tagName").toUpperCase()&&"file"===d(this).attr("type").toLowerCase()&&f.FileReader)||!this.files||0===this.files.length)return !0;for(var t=0;t<this.files.length;t++)h.push({file:this.files[t],inputElem:this,instanceConfig:d.extend({},r)});}),e(),this;function e(){if(0!==h.length){var e,t,r,i,n=h[0];if(M(o.before)){var s=o.before(n.file,n.inputElem);if("object"==typeof s){if("abort"===s.action)return e="AbortError",t=n.file,r=n.inputElem,i=s.reason,void(M(o.error)&&o.error({name:e},t,r,i));if("skip"===s.action)return void u();"object"==typeof s.config&&(n.instanceConfig=d.extend(n.instanceConfig,s.config));}else if("skip"===s)return void u()}var a=n.instanceConfig.complete;n.instanceConfig.complete=function(e){M(a)&&a(e,n.file,n.inputElem),u();},k.parse(n.file,n.instanceConfig);}else M(o.complete)&&o.complete();}function u(){h.splice(0,1),e();}};}function u(e){this._handle=null,this._finished=!1,this._completed=!1,this._input=null,this._baseIndex=0,this._partialLine="",this._rowCount=0,this._start=0,this._nextChunk=null,this.isFirstChunk=!0,this._completeResults={data:[],errors:[],meta:{}},function(e){var t=E(e);t.chunkSize=parseInt(t.chunkSize),e.step||e.chunk||(t.chunkSize=null);this._handle=new r(t),(this._handle.streamer=this)._config=t;}.call(this,e),this.parseChunk=function(e,t){if(this.isFirstChunk&&M(this._config.beforeFirstChunk)){var r=this._config.beforeFirstChunk(e);void 0!==r&&(e=r);}this.isFirstChunk=!1;var i=this._partialLine+e;this._partialLine="";var n=this._handle.parse(i,this._baseIndex,!this._finished);if(!this._handle.paused()&&!this._handle.aborted()){var s=n.meta.cursor;this._finished||(this._partialLine=i.substring(s-this._baseIndex),this._baseIndex=s),n&&n.data&&(this._rowCount+=n.data.length);var a=this._finished||this._config.preview&&this._rowCount>=this._config.preview;if(o)f.postMessage({results:n,workerId:k.WORKER_ID,finished:a});else if(M(this._config.chunk)&&!t){if(this._config.chunk(n,this._handle),this._handle.paused()||this._handle.aborted())return;n=void 0,this._completeResults=void 0;}return this._config.step||this._config.chunk||(this._completeResults.data=this._completeResults.data.concat(n.data),this._completeResults.errors=this._completeResults.errors.concat(n.errors),this._completeResults.meta=n.meta),this._completed||!a||!M(this._config.complete)||n&&n.meta.aborted||(this._config.complete(this._completeResults,this._input),this._completed=!0),a||n&&n.meta.paused||this._nextChunk(),n}},this._sendError=function(e){M(this._config.error)?this._config.error(e):o&&this._config.error&&f.postMessage({workerId:k.WORKER_ID,error:e,finished:!1});};}function l(e){var i;(e=e||{}).chunkSize||(e.chunkSize=k.RemoteChunkSize),u.call(this,e),this._nextChunk=n?function(){this._readChunk(),this._chunkLoaded();}:function(){this._readChunk();},this.stream=function(e){this._input=e,this._nextChunk();},this._readChunk=function(){if(this._finished)this._chunkLoaded();else{if(i=new XMLHttpRequest,this._config.withCredentials&&(i.withCredentials=this._config.withCredentials),n||(i.onload=w(this._chunkLoaded,this),i.onerror=w(this._chunkError,this)),i.open("GET",this._input,!n),this._config.downloadRequestHeaders){var e=this._config.downloadRequestHeaders;for(var t in e)i.setRequestHeader(t,e[t]);}if(this._config.chunkSize){var r=this._start+this._config.chunkSize-1;i.setRequestHeader("Range","bytes="+this._start+"-"+r);}try{i.send();}catch(e){this._chunkError(e.message);}n&&0===i.status?this._chunkError():this._start+=this._config.chunkSize;}},this._chunkLoaded=function(){4===i.readyState&&(i.status<200||400<=i.status?this._chunkError():(this._finished=!this._config.chunkSize||this._start>function(e){var t=e.getResponseHeader("Content-Range");if(null===t)return -1;return parseInt(t.substr(t.lastIndexOf("/")+1))}(i),this.parseChunk(i.responseText)));},this._chunkError=function(e){var t=i.statusText||e;this._sendError(new Error(t));};}function c(e){var i,n;(e=e||{}).chunkSize||(e.chunkSize=k.LocalChunkSize),u.call(this,e);var s="undefined"!=typeof FileReader;this.stream=function(e){this._input=e,n=e.slice||e.webkitSlice||e.mozSlice,s?((i=new FileReader).onload=w(this._chunkLoaded,this),i.onerror=w(this._chunkError,this)):i=new FileReaderSync,this._nextChunk();},this._nextChunk=function(){this._finished||this._config.preview&&!(this._rowCount<this._config.preview)||this._readChunk();},this._readChunk=function(){var e=this._input;if(this._config.chunkSize){var t=Math.min(this._start+this._config.chunkSize,this._input.size);e=n.call(e,this._start,t);}var r=i.readAsText(e,this._config.encoding);s||this._chunkLoaded({target:{result:r}});},this._chunkLoaded=function(e){this._start+=this._config.chunkSize,this._finished=!this._config.chunkSize||this._start>=this._input.size,this.parseChunk(e.target.result);},this._chunkError=function(){this._sendError(i.error);};}function p(e){var r;u.call(this,e=e||{}),this.stream=function(e){return r=e,this._nextChunk()},this._nextChunk=function(){if(!this._finished){var e=this._config.chunkSize,t=e?r.substr(0,e):r;return r=e?r.substr(e):"",this._finished=!r,this.parseChunk(t)}};}function _(e){u.call(this,e=e||{});var t=[],r=!0,i=!1;this.pause=function(){u.prototype.pause.apply(this,arguments),this._input.pause();},this.resume=function(){u.prototype.resume.apply(this,arguments),this._input.resume();},this.stream=function(e){this._input=e,this._input.on("data",this._streamData),this._input.on("end",this._streamEnd),this._input.on("error",this._streamError);},this._checkIsFinished=function(){i&&1===t.length&&(this._finished=!0);},this._nextChunk=function(){this._checkIsFinished(),t.length?this.parseChunk(t.shift()):r=!0;},this._streamData=w(function(e){try{t.push("string"==typeof e?e:e.toString(this._config.encoding)),r&&(r=!1,this._checkIsFinished(),this.parseChunk(t.shift()));}catch(e){this._streamError(e);}},this),this._streamError=w(function(e){this._streamCleanUp(),this._sendError(e);},this),this._streamEnd=w(function(){this._streamCleanUp(),i=!0,this._streamData("");},this),this._streamCleanUp=w(function(){this._input.removeListener("data",this._streamData),this._input.removeListener("end",this._streamEnd),this._input.removeListener("error",this._streamError);},this);}function r(g){var a,o,h,i=/^\s*-?(\d*\.?\d+|\d+\.?\d*)(e[-+]?\d+)?\s*$/i,n=/(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,t=this,r=0,s=0,u=!1,e=!1,f=[],d={data:[],errors:[],meta:{}};if(M(g.step)){var l=g.step;g.step=function(e){if(d=e,p())c();else{if(c(),0===d.data.length)return;r+=e.data.length,g.preview&&r>g.preview?o.abort():l(d,t);}};}function m(e){return "greedy"===g.skipEmptyLines?""===e.join("").trim():1===e.length&&0===e[0].length}function c(){if(d&&h&&(v("Delimiter","UndetectableDelimiter","Unable to auto-detect delimiting character; defaulted to '"+k.DefaultDelimiter+"'"),h=!1),g.skipEmptyLines)for(var e=0;e<d.data.length;e++)m(d.data[e])&&d.data.splice(e--,1);return p()&&function(){if(!d)return;for(var e=0;p()&&e<d.data.length;e++)for(var t=0;t<d.data[e].length;t++){var r=d.data[e][t];M(g.transformHeader)&&(r=g.transformHeader(r)),f.push(r);}d.data.splice(0,1);}(),function(){if(!d||!g.header&&!g.dynamicTyping&&!g.transform)return d;for(var e=0;e<d.data.length;e++){var t,r=g.header?{}:[];for(t=0;t<d.data[e].length;t++){var i=t,n=d.data[e][t];g.header&&(i=t>=f.length?"__parsed_extra":f[t]),g.transform&&(n=g.transform(n,i)),n=_(i,n),"__parsed_extra"===i?(r[i]=r[i]||[],r[i].push(n)):r[i]=n;}d.data[e]=r,g.header&&(t>f.length?v("FieldMismatch","TooManyFields","Too many fields: expected "+f.length+" fields but parsed "+t,s+e):t<f.length&&v("FieldMismatch","TooFewFields","Too few fields: expected "+f.length+" fields but parsed "+t,s+e));}g.header&&d.meta&&(d.meta.fields=f);return s+=d.data.length,d}()}function p(){return g.header&&0===f.length}function _(e,t){return r=e,g.dynamicTypingFunction&&void 0===g.dynamicTyping[r]&&(g.dynamicTyping[r]=g.dynamicTypingFunction(r)),!0===(g.dynamicTyping[r]||g.dynamicTyping)?"true"===t||"TRUE"===t||"false"!==t&&"FALSE"!==t&&(i.test(t)?parseFloat(t):n.test(t)?new Date(t):""===t?null:t):t;var r;}function v(e,t,r,i){d.errors.push({type:e,code:t,message:r,row:i});}this.parse=function(e,t,r){var i=g.quoteChar||'"';if(g.newline||(g.newline=function(e,t){e=e.substr(0,1048576);var r=new RegExp(y(t)+"([^]*?)"+y(t),"gm"),i=(e=e.replace(r,"")).split("\r"),n=e.split("\n"),s=1<n.length&&n[0].length<i[0].length;if(1===i.length||s)return "\n";for(var a=0,o=0;o<i.length;o++)"\n"===i[o][0]&&a++;return a>=i.length/2?"\r\n":"\r"}(e,i)),h=!1,g.delimiter)M(g.delimiter)&&(g.delimiter=g.delimiter(e),d.meta.delimiter=g.delimiter);else{var n=function(e,t,r,i){for(var n,s,a,o=[",","\t","|",";",k.RECORD_SEP,k.UNIT_SEP],h=0;h<o.length;h++){var u=o[h],f=0,d=0,l=0;a=void 0;for(var c=new b({comments:i,delimiter:u,newline:t,preview:10}).parse(e),p=0;p<c.data.length;p++)if(r&&m(c.data[p]))l++;else{var _=c.data[p].length;d+=_,void 0!==a?1<_&&(f+=Math.abs(_-a),a=_):a=_;}0<c.data.length&&(d/=c.data.length-l),(void 0===s||f<s)&&1.99<d&&(s=f,n=u);}return {successful:!!(g.delimiter=n),bestDelimiter:n}}(e,g.newline,g.skipEmptyLines,g.comments);n.successful?g.delimiter=n.bestDelimiter:(h=!0,g.delimiter=k.DefaultDelimiter),d.meta.delimiter=g.delimiter;}var s=E(g);return g.preview&&g.header&&s.preview++,a=e,o=new b(s),d=o.parse(a,t,r),c(),u?{meta:{paused:!0}}:d||{meta:{paused:!1}}},this.paused=function(){return u},this.pause=function(){u=!0,o.abort(),a=a.substr(o.getCharIndex());},this.resume=function(){u=!1,t.streamer.parseChunk(a,!0);},this.aborted=function(){return e},this.abort=function(){e=!0,o.abort(),d.meta.aborted=!0,M(g.complete)&&g.complete(d),a="";};}function y(e){return e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}function b(e){var S,O=(e=e||{}).delimiter,x=e.newline,I=e.comments,D=e.step,T=e.preview,L=e.fastMode,A=S=void 0===e.quoteChar?'"':e.quoteChar;if(void 0!==e.escapeChar&&(A=e.escapeChar),("string"!=typeof O||-1<k.BAD_DELIMITERS.indexOf(O))&&(O=","),I===O)throw new Error("Comment character same as delimiter");!0===I?I="#":("string"!=typeof I||-1<k.BAD_DELIMITERS.indexOf(I))&&(I=!1),"\n"!==x&&"\r"!==x&&"\r\n"!==x&&(x="\n");var F=0,z=!1;this.parse=function(i,r,t){if("string"!=typeof i)throw new Error("Input must be a string");var n=i.length,e=O.length,s=x.length,a=I.length,o=M(D),h=[],u=[],f=[],d=F=0;if(!i)return C();if(L||!1!==L&&-1===i.indexOf(S)){for(var l=i.split(x),c=0;c<l.length;c++){if(f=l[c],F+=f.length,c!==l.length-1)F+=x.length;else if(t)return C();if(!I||f.substr(0,a)!==I){if(o){if(h=[],k(f.split(O)),R(),z)return C()}else k(f.split(O));if(T&&T<=c)return h=h.slice(0,T),C(!0)}}return C()}for(var p,_=i.indexOf(O,F),g=i.indexOf(x,F),m=new RegExp(A.replace(/[-[\]/{}()*+?.\\^$|]/g,"\\$&")+S,"g");;)if(i[F]!==S)if(I&&0===f.length&&i.substr(F,a)===I){if(-1===g)return C();F=g+s,g=i.indexOf(x,F),_=i.indexOf(O,F);}else if(-1!==_&&(_<g||-1===g))f.push(i.substring(F,_)),F=_+e,_=i.indexOf(O,F);else{if(-1===g)break;if(f.push(i.substring(F,g)),w(g+s),o&&(R(),z))return C();if(T&&h.length>=T)return C(!0)}else for(p=F,F++;;){if(-1===(p=i.indexOf(S,p+1)))return t||u.push({type:"Quotes",code:"MissingQuotes",message:"Quoted field unterminated",row:h.length,index:F}),E();if(p===n-1)return E(i.substring(F,p).replace(m,S));if(S!==A||i[p+1]!==A){if(S===A||0===p||i[p-1]!==A){var v=b(-1===g?_:Math.min(_,g));if(i[p+1+v]===O){f.push(i.substring(F,p).replace(m,S)),F=p+1+v+e,_=i.indexOf(O,F),g=i.indexOf(x,F);break}var y=b(g);if(i.substr(p+1+y,s)===x){if(f.push(i.substring(F,p).replace(m,S)),w(p+1+y+s),_=i.indexOf(O,F),o&&(R(),z))return C();if(T&&h.length>=T)return C(!0);break}u.push({type:"Quotes",code:"InvalidQuotes",message:"Trailing quote on quoted field is malformed",row:h.length,index:F}),p++;}}else p++;}return E();function k(e){h.push(e),d=F;}function b(e){var t=0;if(-1!==e){var r=i.substring(p+1,e);r&&""===r.trim()&&(t=r.length);}return t}function E(e){return t||(void 0===e&&(e=i.substr(F)),f.push(e),F=n,k(f),o&&R()),C()}function w(e){F=e,k(f),f=[],g=i.indexOf(x,F);}function C(e,t){return {data:t||!1?h[0]:h,errors:u,meta:{delimiter:O,linebreak:x,aborted:z,truncated:!!e,cursor:d+(r||0)}}}function R(){D(C(void 0,!0)),h=[],u=[];}},this.abort=function(){z=!0;},this.getCharIndex=function(){return F};}function g(e){var t=e.data,r=a[t.workerId],i=!1;if(t.error)r.userError(t.error,t.file);else if(t.results&&t.results.data){var n={abort:function(){i=!0,m(t.workerId,{data:[],errors:[],meta:{aborted:!0}});},pause:v,resume:v};if(M(r.userStep)){for(var s=0;s<t.results.data.length&&(r.userStep({data:[t.results.data[s]],errors:t.results.errors,meta:t.results.meta},n),!i);s++);delete t.results;}else M(r.userChunk)&&(r.userChunk(t.results,n,t.file),delete t.results);}t.finished&&!i&&m(t.workerId,t.results);}function m(e,t){var r=a[e];M(r.userComplete)&&r.userComplete(t),r.terminate(),delete a[e];}function v(){throw new Error("Not implemented.")}function E(e){if("object"!=typeof e||null===e)return e;var t=Array.isArray(e)?[]:{};for(var r in e)t[r]=E(e[r]);return t}function w(e,t){return function(){e.apply(t,arguments);}}function M(e){return "function"==typeof e}return o&&(f.onmessage=function(e){var t=e.data;void 0===k.WORKER_ID&&t&&(k.WORKER_ID=t.workerId);if("string"==typeof t.input)f.postMessage({workerId:k.WORKER_ID,results:k.parse(t.input,t.config),finished:!0});else if(f.File&&t.input instanceof File||t.input instanceof Object){var r=k.parse(t.input,t.config);r&&f.postMessage({workerId:k.WORKER_ID,results:r,finished:!0});}}),(l.prototype=Object.create(u.prototype)).constructor=l,(c.prototype=Object.create(u.prototype)).constructor=c,(p.prototype=Object.create(p.prototype)).constructor=p,(_.prototype=Object.create(u.prototype)).constructor=_,k});
+	});
+
+	/* src/App.svelte generated by Svelte v3.1.0 */
+
+	const file$3 = "src/App.svelte";
+
+	function get_each_context$1(ctx, list, i) {
+		const child_ctx = Object.create(ctx);
+		child_ctx.dp = list[i];
+		child_ctx.i = i;
+		return child_ctx;
+	}
+
+	// (67:3) {#each config.data as dp, i}
+	function create_each_block$1(ctx) {
+		var option, t_value = ctx.dp.name, t;
+
+		return {
+			c: function create() {
+				option = element("option");
+				t = text(t_value);
+				option.__value = ctx.i;
+				option.value = option.__value;
+				add_location(option, file$3, 67, 4, 1785);
+			},
+
+			m: function mount(target, anchor) {
+				insert(target, option, anchor);
+				append(option, t);
+			},
+
+			p: noop,
+
+			d: function destroy(detaching) {
+				if (detaching) {
+					detach(option);
+				}
+			}
+		};
+	}
+
+	function create_fragment$3(ctx) {
+		var div1, p0, raw0_value = config.title, t0, p1, raw1_value = config.subtitle, t1, form, select, t2, label0, input0, t3, t4_value = config.extraGeographyName, t4, t5, label1, input1, t6, t7, p2, a, t8, a_href_value, t9, t10, p3, t11, div0, t12, div4, div2, t13, div3, t14, div7, div5, t15, div6, t16, footer, raw3_value = config.footer, current, dispose;
+
+		var each_value = config.data;
+
+		var each_blocks = [];
+
+		for (var i = 0; i < each_value.length; i += 1) {
+			each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
+		}
+
+		var legend = new Legend({
+			props: {
+			prefix: ctx.prefix,
+			suffix: ctx.suffix
+		},
+			$$inline: true
+		});
+
+		var map0 = new Map$1({
+			props: {
+			id: "map-before",
+			time: ctx.before,
+			col: "before",
+			extraGeography: ctx.extraGeography
+		},
+			$$inline: true
+		});
+
+		var map1 = new Map$1({
+			props: {
+			id: "map-after",
+			time: ctx.after,
+			col: "after",
+			positiveIncrease: ctx.positiveIncrease,
+			extraGeography: ctx.extraGeography
+		},
+			$$inline: true
+		});
+
+		var annotation0 = new Annotation({
+			props: {
+			col: "before",
+			period: ctx.before,
+			moe: ctx.beforemoe,
+			prefix: ctx.prefix,
+			suffix: ctx.suffix
+		},
+			$$inline: true
+		});
+
+		var annotation1 = new Annotation({
+			props: {
+			col: "after",
+			period: ctx.after,
+			moe: ctx.aftermoe,
+			prefix: ctx.prefix,
+			suffix: ctx.suffix,
+			positiveIncrease: ctx.positiveIncrease
+		},
+			$$inline: true
+		});
+
+		return {
+			c: function create() {
+				div1 = element("div");
+				p0 = element("p");
+				t0 = space();
+				p1 = element("p");
+				t1 = space();
+				form = element("form");
+				select = element("select");
+
+				for (var i = 0; i < each_blocks.length; i += 1) {
+					each_blocks[i].c();
+				}
+
+				t2 = space();
+				label0 = element("label");
+				input0 = element("input");
+				t3 = space();
+				t4 = text(t4_value);
+				t5 = space();
+				label1 = element("label");
+				input1 = element("input");
+				t6 = text(" Show Change");
+				t7 = space();
+				p2 = element("p");
+				a = element("a");
+				t8 = text("Download dataset");
+				t9 = text(" powering this visualization.");
+				t10 = space();
+				p3 = element("p");
+				t11 = space();
+				div0 = element("div");
+				legend.$$.fragment.c();
+				t12 = space();
+				div4 = element("div");
+				div2 = element("div");
+				map0.$$.fragment.c();
+				t13 = space();
+				div3 = element("div");
+				map1.$$.fragment.c();
+				t14 = space();
+				div7 = element("div");
+				div5 = element("div");
+				annotation0.$$.fragment.c();
+				t15 = space();
+				div6 = element("div");
+				annotation1.$$.fragment.c();
+				t16 = space();
+				footer = element("footer");
+				p0.className = "f3 f2-ns mb0";
+				add_location(p0, file$3, 61, 1, 1555);
+				p1.className = "f5 f3-ns mt1";
+				add_location(p1, file$3, 62, 1, 1605);
+				if (ctx.currentIndex === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
+				select.className = "f6";
+				add_location(select, file$3, 65, 2, 1703);
+				attr(input0, "type", "checkbox");
+				input0.name = "checkbox1";
+				add_location(input0, file$3, 72, 3, 1871);
+				label0.className = "ml4";
+				add_location(label0, file$3, 71, 2, 1848);
+				attr(input1, "type", "checkbox");
+				input1.name = "checkbox2";
+				add_location(input1, file$3, 76, 3, 2040);
+				label1.className = "ml4";
+				add_location(label1, file$3, 75, 2, 2017);
+				form.className = "boilerform pa3 bg-black-10";
+				add_location(form, file$3, 64, 1, 1659);
+				a.href = a_href_value = ctx.dp.file;
+				a.className = "link dim";
+				add_location(a, file$3, 81, 2, 2170);
+				p2.className = "black-80 f6";
+				add_location(p2, file$3, 80, 1, 2144);
+				p3.className = "f6 lh-title";
+				add_location(p3, file$3, 84, 1, 2265);
+				div0.className = "mw8 h3";
+				add_location(div0, file$3, 88, 1, 2319);
+				div1.className = "mw9 center ph3";
+				add_location(div1, file$3, 60, 0, 1525);
+				div2.className = "fl w-50 h-100";
+				add_location(div2, file$3, 99, 1, 2471);
+				div3.className = "fl w-50 h-100";
+				add_location(div3, file$3, 107, 1, 2611);
+				div4.className = "mw9 center ph3 cf";
+				set_style(div4, "height", "600px");
+				add_location(div4, file$3, 98, 0, 2415);
+				div5.className = "fl w-50";
+				add_location(div5, file$3, 120, 1, 2834);
+				div6.className = "fl w-50";
+				add_location(div6, file$3, 129, 1, 2984);
+				div7.className = "mw9 center ph3 mb5 h3";
+				add_location(div7, file$3, 119, 0, 2797);
+				footer.className = "w-100 center tc ph3 f6 mt5 pv5 black-80 bg-lightest-blue";
+				add_location(footer, file$3, 142, 0, 3180);
+
+				dispose = [
+					listen(select, "change", ctx.select_change_handler),
+					listen(input0, "change", ctx.input0_change_handler),
+					listen(input0, "change", ctx.handleExtraGeography),
+					listen(input1, "change", handleShowChange)
+				];
+			},
+
+			l: function claim(nodes) {
+				throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+			},
+
+			m: function mount(target, anchor) {
+				insert(target, div1, anchor);
+				append(div1, p0);
+				p0.innerHTML = raw0_value;
+				append(div1, t0);
+				append(div1, p1);
+				p1.innerHTML = raw1_value;
+				append(div1, t1);
+				append(div1, form);
+				append(form, select);
+
+				for (var i = 0; i < each_blocks.length; i += 1) {
+					each_blocks[i].m(select, null);
+				}
+
+				select_option(select, ctx.currentIndex);
+
+				append(form, t2);
+				append(form, label0);
+				append(label0, input0);
+
+				input0.checked = ctx.extraGeography;
+
+				append(label0, t3);
+				append(label0, t4);
+				append(form, t5);
+				append(form, label1);
+				append(label1, input1);
+				append(label1, t6);
+				append(div1, t7);
+				append(div1, p2);
+				append(p2, a);
+				append(a, t8);
+				append(p2, t9);
+				append(div1, t10);
+				append(div1, p3);
+				p3.innerHTML = ctx.description;
+				append(div1, t11);
+				append(div1, div0);
+				mount_component(legend, div0, null);
+				insert(target, t12, anchor);
+				insert(target, div4, anchor);
+				append(div4, div2);
+				mount_component(map0, div2, null);
+				append(div4, t13);
+				append(div4, div3);
+				mount_component(map1, div3, null);
+				insert(target, t14, anchor);
+				insert(target, div7, anchor);
+				append(div7, div5);
+				mount_component(annotation0, div5, null);
+				append(div7, t15);
+				append(div7, div6);
+				mount_component(annotation1, div6, null);
+				insert(target, t16, anchor);
+				insert(target, footer, anchor);
+				footer.innerHTML = raw3_value;
+				current = true;
+			},
+
+			p: function update(changed, ctx) {
+				if (changed.config) {
+					each_value = config.data;
+
+					for (var i = 0; i < each_value.length; i += 1) {
+						const child_ctx = get_each_context$1(ctx, each_value, i);
+
+						if (each_blocks[i]) {
+							each_blocks[i].p(changed, child_ctx);
+						} else {
+							each_blocks[i] = create_each_block$1(child_ctx);
+							each_blocks[i].c();
+							each_blocks[i].m(select, null);
+						}
+					}
+
+					for (; i < each_blocks.length; i += 1) {
+						each_blocks[i].d(1);
+					}
+					each_blocks.length = each_value.length;
+				}
+
+				if (changed.currentIndex) select_option(select, ctx.currentIndex);
+				if (changed.extraGeography) input0.checked = ctx.extraGeography;
+
+				if ((!current || changed.dp) && a_href_value !== (a_href_value = ctx.dp.file)) {
+					a.href = a_href_value;
+				}
+
+				if (!current || changed.description) {
+					p3.innerHTML = ctx.description;
+				}
+
+				var legend_changes = {};
+				if (changed.prefix) legend_changes.prefix = ctx.prefix;
+				if (changed.suffix) legend_changes.suffix = ctx.suffix;
+				legend.$set(legend_changes);
+
+				var map0_changes = {};
+				if (changed.before) map0_changes.time = ctx.before;
+				if (changed.extraGeography) map0_changes.extraGeography = ctx.extraGeography;
+				map0.$set(map0_changes);
+
+				var map1_changes = {};
+				if (changed.after) map1_changes.time = ctx.after;
+				if (changed.positiveIncrease) map1_changes.positiveIncrease = ctx.positiveIncrease;
+				if (changed.extraGeography) map1_changes.extraGeography = ctx.extraGeography;
+				map1.$set(map1_changes);
+
+				var annotation0_changes = {};
+				if (changed.before) annotation0_changes.period = ctx.before;
+				if (changed.beforemoe) annotation0_changes.moe = ctx.beforemoe;
+				if (changed.prefix) annotation0_changes.prefix = ctx.prefix;
+				if (changed.suffix) annotation0_changes.suffix = ctx.suffix;
+				annotation0.$set(annotation0_changes);
+
+				var annotation1_changes = {};
+				if (changed.after) annotation1_changes.period = ctx.after;
+				if (changed.aftermoe) annotation1_changes.moe = ctx.aftermoe;
+				if (changed.prefix) annotation1_changes.prefix = ctx.prefix;
+				if (changed.suffix) annotation1_changes.suffix = ctx.suffix;
+				if (changed.positiveIncrease) annotation1_changes.positiveIncrease = ctx.positiveIncrease;
+				annotation1.$set(annotation1_changes);
+			},
+
+			i: function intro(local) {
+				if (current) return;
+				legend.$$.fragment.i(local);
+
+				map0.$$.fragment.i(local);
+
+				map1.$$.fragment.i(local);
+
+				annotation0.$$.fragment.i(local);
+
+				annotation1.$$.fragment.i(local);
+
+				current = true;
+			},
+
+			o: function outro(local) {
+				legend.$$.fragment.o(local);
+				map0.$$.fragment.o(local);
+				map1.$$.fragment.o(local);
+				annotation0.$$.fragment.o(local);
+				annotation1.$$.fragment.o(local);
+				current = false;
+			},
+
+			d: function destroy(detaching) {
+				if (detaching) {
+					detach(div1);
+				}
+
+				destroy_each(each_blocks, detaching);
+
+				legend.$destroy();
+
+				if (detaching) {
+					detach(t12);
+					detach(div4);
+				}
+
+				map0.$destroy();
+
+				map1.$destroy();
+
+				if (detaching) {
+					detach(t14);
+					detach(div7);
+				}
+
+				annotation0.$destroy();
+
+				annotation1.$destroy();
+
+				if (detaching) {
+					detach(t16);
+					detach(footer);
+				}
+
+				run_all(dispose);
+			}
+		};
+	}
+
+	function handleShowChange() {
+		showChange.update(x => !x);
+	}
+
+	function instance$3($$self, $$props, $$invalidate) {
+		
+
+		let currentIndex = 0;
+		let extraGeography = false;
+		
+		geojsonPath.update(x => config.defaultGeographyPath);
+
+		function handleExtraGeography() {
+			geojsonPath.update(x => extraGeography ? config.extraGeographyPath : config.defaultGeographyPath);
+		}
+
+		function select_change_handler() {
+			currentIndex = select_value(this);
+			$$invalidate('currentIndex', currentIndex);
+		}
+
+		function input0_change_handler() {
+			extraGeography = this.checked;
+			$$invalidate('extraGeography', extraGeography);
+		}
+
+		let dp, description, before, after, beforemoe, aftermoe, prefix, suffix, positiveIncrease;
+		$$self.$$.update = ($$dirty = { currentIndex: 1, dp: 1 }) => {
+			if ($$dirty.currentIndex) { $$invalidate('dp', dp = config.data[parseInt(currentIndex)]); }
+			if ($$dirty.dp) { $$invalidate('description', description = dp.description); }
+			if ($$dirty.dp) { $$invalidate('before', before = dp.before); }
+			if ($$dirty.dp) { $$invalidate('after', after = dp.after); }
+			if ($$dirty.dp) { $$invalidate('beforemoe', beforemoe = dp.beforemoe); }
+			if ($$dirty.dp) { $$invalidate('aftermoe', aftermoe = dp.aftermoe); }
+			if ($$dirty.dp) { $$invalidate('prefix', prefix = dp.prefix); }
+			if ($$dirty.dp) { $$invalidate('suffix', suffix = dp.suffix); }
+			if ($$dirty.dp) { $$invalidate('positiveIncrease', positiveIncrease = dp.positiveIncrease); }
+			if ($$dirty.dp) { {
+					fetch(dp.file)
+						.then(function(res) {
+							return res.text();
+						})
+						.then(function(csv_str) {
+							let parsed = papaparse_min.parse(csv_str, {
+								header: true,
+								dynamicTyping: true
+							}).data;
+			
+							let parsedAsObj = {};
+							for (let i in parsed) {
+								parsedAsObj[parsed[i].geography] = parsed[i];
+							}
+			
+							let valuesBefore = parsed.map(x => parseFloat(x['before']) || 0);
+							let valuesAfter = parsed.map(x => parseFloat(x['after']) || 0);
+			
+							jenksBreaks.update(x => jenks(valuesBefore.concat(valuesAfter), 5));
+							geo2data.update(x => parsedAsObj);
+							data.update(d => parsed);
+						});
+				} }
+		};
+
+		return {
+			currentIndex,
+			extraGeography,
+			handleExtraGeography,
+			dp,
+			description,
+			before,
+			after,
+			beforemoe,
+			aftermoe,
+			prefix,
+			suffix,
+			positiveIncrease,
+			select_change_handler,
+			input0_change_handler
+		};
+	}
+
+	class App extends SvelteComponentDev {
+		constructor(options) {
+			super(options);
+			init(this, options, instance$3, create_fragment$3, safe_not_equal, []);
+		}
+	}
+
+	var app = new App({
+		target: document.body
+	});
+
+}());
 //# sourceMappingURL=bundle.js.map

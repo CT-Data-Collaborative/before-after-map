@@ -2,6 +2,8 @@
 
 This is a [Svelte](https://svelte.technology) project to display two interactive data maps side by side, colored based on Jenks breaks.
 
+## [Live Demo](https://ct-data-collaborative.github.io/before-after-map/public/)
+
 ![Screenshot](screenshot.png)
 
 ## Get started
