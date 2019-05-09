@@ -339,34 +339,32 @@
 	  "footer": "Connecticut Data Collaborative is a project of InformCT, Inc.<br>&copy; 2019 Connecticut Data Collaborative",
 	  "defaultGeographyPath": "./geo/towns.geojson",
 	  "extraGeographyPath": "./geo/tracts.geojson",
-	  "extraGeographyName": "Census Tractszzzz",
+	  "extraGeographyName": "Census Tracts",
+	  "geojsonGeographyProperty": "name",
 	  "data": [
 	    {
 	      "name": "Median Household Income",
-	      "file": "median_household_income.csv",
+	      "file": "./data/median_household_income.csv",
 	      "prefix": "$",
 	      "suffix": "",
-	      "time1": "ACS 2008-2012",
-	      "col1": "ACS2012",
-	      "moe1": "ACS2012_moe",
-	      "time2": "ACS 2013-2017",
-	      "col2": "ACS2017",
-	      "moe2": "ACS2017_moe",
-	      "change": "positive",
+	      "before": "ACS 2008-2012",
+	      "beforemoe": true,
+	      "after": "ACS 2013-2017",
+	      "aftermoe": true,
+	      "positiveIncrease": true,
 	      "description": "<b>The median increase in household income across all towns in Connecticut was 5.8%.</b> In 129 towns, median household income increased, most significant increases in North Canaan (+26,400, or +58%), Westbrook (+31,700, or +50%), and Southbury (+23,100, or +34%). Note that North Canaan and Westbrook both have large margins of errors due to small populations. In 40 towns, median household income decreased compared to 2008-2012 estimate, with the highest decreases occurring in Ansonia (~ -$9,200, or nearly -17%), New London (~ –$6,800, or -15%), and East Haddam (~ $13,000, or -14%). <b>Hartford remains the town with the lowest median household income in Connecticut</b> despite a 17% increase in median household income between ACS 2008-2012 and 2013-2017 estimates. New Haven median income increased 1.8% and changing its rank from 2nd to 3rd poorest municipality, while New London dropped from 7th to 2nd due to a 15% decrease."
 	    },
 	    {
 	      "name": "Per Capita Income",
-	      "file": "per_capita_income.csv",
+	      "file": "./data/per_capita_income.csv",
 	      "prefix": "$",
 	      "suffix": "",
-	      "time1": "ACS 2008-2012",
-	      "col1": "ACS2012",
-	      "moe1": "ACS2012_moe",
-	      "time2": "ACS 2013-2017",
-	      "col2": "ACS2017",
-	      "moe2": "ACS2017_moe",
-	      "change": "positive",
+	      "suffix": "",
+	      "before": "ACS 2008-2012",
+	      "beforemoe": true,
+	      "after": "ACS 2013-2017",
+	      "aftermoe": true,
+	      "positiveIncrease": true,
 	      "description": "Per capita income increased in 142 municipalities and decreased in 27. <b>Hartford has the lowest per capita income at $19,220</b>, followed by Windham ($19,666), Waterbury ($21,605), Mansfield ($21,916), and Bridgeport ($22,806). New Canaan, Darien, and Westport are the towns with highest per capita income, all above $100,000."
 	    }
 	  ]
@@ -594,7 +592,7 @@
 				div = element("div");
 				div.id = ctx.id;
 				div.className = "w-100 h-100";
-				add_location(div, file, 151, 0, 2835);
+				add_location(div, file, 149, 0, 2882);
 			},
 
 			l: function claim(nodes) {
@@ -632,23 +630,22 @@
 		validate_store(geojsonPath, 'geojsonPath');
 		subscribe($$self, geojsonPath, $$value => { $geojsonPath = $$value; $$invalidate('$geojsonPath', $geojsonPath); });
 
-		let { time, id, censusTracts, col, prevCol = false, posChange } = $$props;
+		let { id, time, col, extraGeography, positiveIncrease } = $$props;
 
 		let map;
 		let geojsonLayer;
 
 		let getColor = function(geo) {
-
 			if (!geo) return '#cccccc'
 
 			let val = geo[col];
-			let valPrev = prevCol ? geo[prevCol] : false;
 			let colors = colorsJenks;
 			let breaks = $jenksBreaks;
 
-			if ($showChange && valPrev) {
-				if (isNumeric(valPrev) && isNumeric(val)) {
-					let change = (val - valPrev) / valPrev * 100;
+			if ($showChange && col == 'after') {
+				let valBefore = geo['before'];
+				if (isNumeric(valBefore) && isNumeric(val)) {
+					let change = (val - valBefore) / valBefore * 100;
 					val = change;
 					breaks = [-100, -10, -5, 0, 5, 10, 100];
 					colors = colorsChange;
@@ -705,7 +702,7 @@
 				onEachFeature: function(f, l) {
 					l.on({
 						mouseover: function(e) {
-							ann.update(x => e.target.feature.properties.name);
+							ann.update(x => e.target.feature.properties[config.geojsonGeographyProperty]);
 						},
 						mouseout: function(e) {
 							ann.update(x => '');
@@ -718,11 +715,11 @@
 
 			geo2data.subscribe(g2d => {
 
-				if (id == 'map-time2') {
+				if (id == 'map-after') {
 					showChange.subscribe(val => {
 						geojsonLayer.eachLayer(layer => {
 							layer.setStyle({
-								fillColor: getColor(g2d[layer.feature.properties.name]),
+								fillColor: getColor(g2d[layer.feature.properties[config.geojsonGeographyProperty]]),
 								fillOpacity: 1,
 								color: 'white',
 								weight: 1
@@ -733,7 +730,7 @@
 
 				geojsonLayer.eachLayer(layer => {
 					layer.setStyle({
-						fillColor: getColor(g2d[layer.feature.properties.name]),
+						fillColor: getColor(g2d[layer.feature.properties[config.geojsonGeographyProperty]]),
 						fillOpacity: 1,
 						color: 'white',
 						weight: 1
@@ -750,12 +747,11 @@
 		window.addEventListener('resize', resizeMaps);
 
 		$$self.$set = $$props => {
-			if ('time' in $$props) $$invalidate('time', time = $$props.time);
 			if ('id' in $$props) $$invalidate('id', id = $$props.id);
-			if ('censusTracts' in $$props) $$invalidate('censusTracts', censusTracts = $$props.censusTracts);
+			if ('time' in $$props) $$invalidate('time', time = $$props.time);
 			if ('col' in $$props) $$invalidate('col', col = $$props.col);
-			if ('prevCol' in $$props) $$invalidate('prevCol', prevCol = $$props.prevCol);
-			if ('posChange' in $$props) $$invalidate('posChange', posChange = $$props.posChange);
+			if ('extraGeography' in $$props) $$invalidate('extraGeography', extraGeography = $$props.extraGeography);
+			if ('positiveIncrease' in $$props) $$invalidate('positiveIncrease', positiveIncrease = $$props.positiveIncrease);
 		};
 
 		$$self.$$.update = ($$dirty = { $geojsonPath: 1, map: 1, reloadGeojson: 1 }) => {
@@ -765,48 +761,36 @@
 		};
 
 		return {
-			time,
 			id,
-			censusTracts,
+			time,
 			col,
-			prevCol,
-			posChange
+			extraGeography,
+			positiveIncrease
 		};
 	}
 
 	class Map$1 extends SvelteComponentDev {
 		constructor(options) {
 			super(options);
-			init(this, options, instance, create_fragment, safe_not_equal, ["time", "id", "censusTracts", "col", "prevCol", "posChange"]);
+			init(this, options, instance, create_fragment, safe_not_equal, ["id", "time", "col", "extraGeography", "positiveIncrease"]);
 
 			const { ctx } = this.$$;
 			const props = options.props || {};
-			if (ctx.time === undefined && !('time' in props)) {
-				console.warn("<Map> was created without expected prop 'time'");
-			}
 			if (ctx.id === undefined && !('id' in props)) {
 				console.warn("<Map> was created without expected prop 'id'");
 			}
-			if (ctx.censusTracts === undefined && !('censusTracts' in props)) {
-				console.warn("<Map> was created without expected prop 'censusTracts'");
+			if (ctx.time === undefined && !('time' in props)) {
+				console.warn("<Map> was created without expected prop 'time'");
 			}
 			if (ctx.col === undefined && !('col' in props)) {
 				console.warn("<Map> was created without expected prop 'col'");
 			}
-			if (ctx.prevCol === undefined && !('prevCol' in props)) {
-				console.warn("<Map> was created without expected prop 'prevCol'");
+			if (ctx.extraGeography === undefined && !('extraGeography' in props)) {
+				console.warn("<Map> was created without expected prop 'extraGeography'");
 			}
-			if (ctx.posChange === undefined && !('posChange' in props)) {
-				console.warn("<Map> was created without expected prop 'posChange'");
+			if (ctx.positiveIncrease === undefined && !('positiveIncrease' in props)) {
+				console.warn("<Map> was created without expected prop 'positiveIncrease'");
 			}
-		}
-
-		get time() {
-			throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-		}
-
-		set time(value) {
-			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 
 		get id() {
@@ -817,11 +801,11 @@
 			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 
-		get censusTracts() {
+		get time() {
 			throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 
-		set censusTracts(value) {
+		set time(value) {
 			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 
@@ -833,19 +817,19 @@
 			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 
-		get prevCol() {
+		get extraGeography() {
 			throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 
-		set prevCol(value) {
+		set extraGeography(value) {
 			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 
-		get posChange() {
+		get positiveIncrease() {
 			throw new Error("<Map>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 
-		set posChange(value) {
+		set positiveIncrease(value) {
 			throw new Error("<Map>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 	}
@@ -1040,7 +1024,7 @@
 	function create_if_block(ctx) {
 		var p0, t0, t1, p1, span, t2, t3_value = ctx.value.toLocaleString(), t3, t4, t5;
 
-		var if_block = (ctx.moe !== "false") && create_if_block_1(ctx);
+		var if_block = (ctx.moe) && create_if_block_1(ctx);
 
 		return {
 			c: function create() {
@@ -1055,11 +1039,11 @@
 				t5 = space();
 				if (if_block) if_block.c();
 				p0.className = "f4 mt0 mb1";
-				add_location(p0, file$2, 37, 4, 836);
+				add_location(p0, file$2, 37, 4, 879);
 				span.className = ctx.color;
-				add_location(span, file$2, 39, 6, 900);
+				add_location(span, file$2, 39, 6, 943);
 				p1.className = "f3 mv0";
-				add_location(p1, file$2, 38, 4, 875);
+				add_location(p1, file$2, 38, 4, 918);
 			},
 
 			m: function mount(target, anchor) {
@@ -1096,7 +1080,7 @@
 					set_data(t4, ctx.suffix);
 				}
 
-				if (ctx.moe !== "false") {
+				if (ctx.moe) {
 					if (if_block) {
 						if_block.p(changed, ctx);
 					} else {
@@ -1122,9 +1106,9 @@
 		};
 	}
 
-	// (41:6) {#if moe !== "false"}
+	// (41:6) {#if moe}
 	function create_if_block_1(ctx) {
-		var span, t0, t1_value = ctx.$geo2data[ctx.$ann][ctx.moe].toLocaleString(), t1;
+		var span, t0, t1_value = ctx.$geo2data[ctx.$ann][ctx.col + 'moe'].toLocaleString(), t1;
 
 		return {
 			c: function create() {
@@ -1132,7 +1116,7 @@
 				t0 = text("± ");
 				t1 = text(t1_value);
 				span.className = "black-50";
-				add_location(span, file$2, 41, 8, 1006);
+				add_location(span, file$2, 41, 8, 1037);
 			},
 
 			m: function mount(target, anchor) {
@@ -1142,7 +1126,7 @@
 			},
 
 			p: function update(changed, ctx) {
-				if ((changed.$geo2data || changed.$ann || changed.moe) && t1_value !== (t1_value = ctx.$geo2data[ctx.$ann][ctx.moe].toLocaleString())) {
+				if ((changed.$geo2data || changed.$ann || changed.col) && t1_value !== (t1_value = ctx.$geo2data[ctx.$ann][ctx.col + 'moe'].toLocaleString())) {
 					set_data(t1, t1_value);
 				}
 			},
@@ -1168,10 +1152,10 @@
 				t1 = space();
 				if (if_block) if_block.c();
 				p.className = "f6 black-80";
-				add_location(p, file$2, 35, 2, 781);
+				add_location(p, file$2, 35, 2, 824);
 				div.className = "w-100 tc h5";
 				set_style(div, "margin-top", "-150px");
-				add_location(div, file$2, 34, 0, 726);
+				add_location(div, file$2, 34, 0, 769);
 			},
 
 			l: function claim(nodes) {
@@ -1228,7 +1212,7 @@
 
 		
 
-	  let { period, col, moe, prefix, suffix, colPrev, posChange } = $$props;
+	  let { period, col, moe, prefix, suffix, positiveIncrease } = $$props;
 
 	  let color = 'black';
 	  let value = '';
@@ -1239,19 +1223,18 @@
 			if ('moe' in $$props) $$invalidate('moe', moe = $$props.moe);
 			if ('prefix' in $$props) $$invalidate('prefix', prefix = $$props.prefix);
 			if ('suffix' in $$props) $$invalidate('suffix', suffix = $$props.suffix);
-			if ('colPrev' in $$props) $$invalidate('colPrev', colPrev = $$props.colPrev);
-			if ('posChange' in $$props) $$invalidate('posChange', posChange = $$props.posChange);
+			if ('positiveIncrease' in $$props) $$invalidate('positiveIncrease', positiveIncrease = $$props.positiveIncrease);
 		};
 
-		$$self.$$.update = ($$dirty = { $geo2data: 1, $ann: 1, col: 1, colPrev: 1, value: 1, posChange: 1 }) => {
-			if ($$dirty.$geo2data || $$dirty.$ann || $$dirty.col || $$dirty.colPrev || $$dirty.value || $$dirty.posChange) { if ($geo2data[$ann]) {
+		$$self.$$.update = ($$dirty = { $geo2data: 1, $ann: 1, col: 1, value: 1, positiveIncrease: 1 }) => {
+			if ($$dirty.$geo2data || $$dirty.$ann || $$dirty.col || $$dirty.value || $$dirty.positiveIncrease) { if ($geo2data[$ann]) {
 	        $$invalidate('value', value = $geo2data[$ann][col]);
 	    
-	        if (colPrev) {
-	          let valPrev = $geo2data[$ann][colPrev];
-	          if (isNumeric(valPrev) && isNumeric(value)) {
-	            let change = value - valPrev;
-	            $$invalidate('color', color = (change > 0 && posChange) || (change < 0 && !posChange) ? 'green' : 'red');
+	        if (col == 'after') {
+	          let valueBefore = $geo2data[$ann]['before'];
+	          if (isNumeric(valueBefore) && isNumeric(value)) {
+	            let change = value - valueBefore;
+	            $$invalidate('color', color = (change > 0 && positiveIncrease) || (change < 0 && !positiveIncrease) ? 'green' : 'red');
 	          } else {
 	            $$invalidate('color', color = 'black');
 	          }
@@ -1266,8 +1249,7 @@
 			moe,
 			prefix,
 			suffix,
-			colPrev,
-			posChange,
+			positiveIncrease,
 			color,
 			value,
 			$geo2data,
@@ -1278,7 +1260,7 @@
 	class Annotation extends SvelteComponentDev {
 		constructor(options) {
 			super(options);
-			init(this, options, instance$2, create_fragment$2, safe_not_equal, ["period", "col", "moe", "prefix", "suffix", "colPrev", "posChange"]);
+			init(this, options, instance$2, create_fragment$2, safe_not_equal, ["period", "col", "moe", "prefix", "suffix", "positiveIncrease"]);
 
 			const { ctx } = this.$$;
 			const props = options.props || {};
@@ -1297,11 +1279,8 @@
 			if (ctx.suffix === undefined && !('suffix' in props)) {
 				console.warn("<Annotation> was created without expected prop 'suffix'");
 			}
-			if (ctx.colPrev === undefined && !('colPrev' in props)) {
-				console.warn("<Annotation> was created without expected prop 'colPrev'");
-			}
-			if (ctx.posChange === undefined && !('posChange' in props)) {
-				console.warn("<Annotation> was created without expected prop 'posChange'");
+			if (ctx.positiveIncrease === undefined && !('positiveIncrease' in props)) {
+				console.warn("<Annotation> was created without expected prop 'positiveIncrease'");
 			}
 		}
 
@@ -1345,19 +1324,11 @@
 			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 
-		get colPrev() {
+		get positiveIncrease() {
 			throw new Error("<Annotation>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 
-		set colPrev(value) {
-			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-		}
-
-		get posChange() {
-			throw new Error("<Annotation>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
-		}
-
-		set posChange(value) {
+		set positiveIncrease(value) {
 			throw new Error("<Annotation>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
 		}
 	}
@@ -1389,7 +1360,7 @@
 		return child_ctx;
 	}
 
-	// (70:3) {#each config.data as dp, i}
+	// (67:3) {#each config.data as dp, i}
 	function create_each_block$1(ctx) {
 		var option, t_value = ctx.dp.name, t;
 
@@ -1399,7 +1370,7 @@
 				t = text(t_value);
 				option.__value = ctx.i;
 				option.value = option.__value;
-				add_location(option, file$3, 70, 4, 1832);
+				add_location(option, file$3, 67, 4, 1785);
 			},
 
 			m: function mount(target, anchor) {
@@ -1418,7 +1389,7 @@
 	}
 
 	function create_fragment$3(ctx) {
-		var div1, p0, raw0_value = config.title, t0, p1, raw1_value = config.subtitle, t1, form, select, t2, label0, input0, t3, t4_value = config.extraGeographyName, t4, t5, label1, input1, t6, t7, p2, a, t8, t9, t10, p3, t11, div0, t12, div4, div2, t13, div3, t14, div7, div5, t15, div6, t16, footer, raw3_value = config.footer, current, dispose;
+		var div1, p0, raw0_value = config.title, t0, p1, raw1_value = config.subtitle, t1, form, select, t2, label0, input0, t3, t4_value = config.extraGeographyName, t4, t5, label1, input1, t6, t7, p2, a, t8, a_href_value, t9, t10, p3, t11, div0, t12, div4, div2, t13, div3, t14, div7, div5, t15, div6, t16, footer, raw3_value = config.footer, current, dispose;
 
 		var each_value = config.data;
 
@@ -1438,9 +1409,9 @@
 
 		var map0 = new Map$1({
 			props: {
-			id: "map-time1",
-			time: ctx.time1,
-			col: ctx.col1,
+			id: "map-before",
+			time: ctx.before,
+			col: "before",
 			extraGeography: ctx.extraGeography
 		},
 			$$inline: true
@@ -1448,11 +1419,10 @@
 
 		var map1 = new Map$1({
 			props: {
-			id: "map-time2",
-			time: ctx.time2,
-			col: ctx.col2,
-			prevCol: ctx.col1,
-			posChange: ctx.posChange,
+			id: "map-after",
+			time: ctx.after,
+			col: "after",
+			positiveIncrease: ctx.positiveIncrease,
 			extraGeography: ctx.extraGeography
 		},
 			$$inline: true
@@ -1460,9 +1430,9 @@
 
 		var annotation0 = new Annotation({
 			props: {
-			period: ctx.time1,
-			col: ctx.col1,
-			moe: ctx.moe1,
+			col: "before",
+			period: ctx.before,
+			moe: ctx.beforemoe,
 			prefix: ctx.prefix,
 			suffix: ctx.suffix
 		},
@@ -1471,13 +1441,12 @@
 
 		var annotation1 = new Annotation({
 			props: {
-			period: ctx.time2,
-			col: ctx.col2,
-			moe: ctx.moe2,
+			col: "after",
+			period: ctx.after,
+			moe: ctx.aftermoe,
 			prefix: ctx.prefix,
 			suffix: ctx.suffix,
-			posChange: ctx.posChange,
-			colPrev: ctx.col1
+			positiveIncrease: ctx.positiveIncrease
 		},
 			$$inline: true
 		});
@@ -1532,50 +1501,50 @@
 				t16 = space();
 				footer = element("footer");
 				p0.className = "f3 f2-ns mb0";
-				add_location(p0, file$3, 64, 1, 1602);
+				add_location(p0, file$3, 61, 1, 1555);
 				p1.className = "f5 f3-ns mt1";
-				add_location(p1, file$3, 65, 1, 1652);
+				add_location(p1, file$3, 62, 1, 1605);
 				if (ctx.currentIndex === void 0) add_render_callback(() => ctx.select_change_handler.call(select));
 				select.className = "f6";
-				add_location(select, file$3, 68, 2, 1750);
+				add_location(select, file$3, 65, 2, 1703);
 				attr(input0, "type", "checkbox");
 				input0.name = "checkbox1";
-				add_location(input0, file$3, 75, 3, 1918);
+				add_location(input0, file$3, 72, 3, 1871);
 				label0.className = "ml4";
-				add_location(label0, file$3, 74, 2, 1895);
+				add_location(label0, file$3, 71, 2, 1848);
 				attr(input1, "type", "checkbox");
 				input1.name = "checkbox2";
-				add_location(input1, file$3, 79, 3, 2087);
+				add_location(input1, file$3, 76, 3, 2040);
 				label1.className = "ml4";
-				add_location(label1, file$3, 78, 2, 2064);
+				add_location(label1, file$3, 75, 2, 2017);
 				form.className = "boilerform pa3 bg-black-10";
-				add_location(form, file$3, 67, 1, 1706);
-				a.href = ctx.downloadPath;
+				add_location(form, file$3, 64, 1, 1659);
+				a.href = a_href_value = ctx.dp.file;
 				a.className = "link dim";
-				add_location(a, file$3, 84, 2, 2217);
+				add_location(a, file$3, 81, 2, 2170);
 				p2.className = "black-80 f6";
-				add_location(p2, file$3, 83, 1, 2191);
+				add_location(p2, file$3, 80, 1, 2144);
 				p3.className = "f6 lh-title";
-				add_location(p3, file$3, 87, 1, 2317);
+				add_location(p3, file$3, 84, 1, 2265);
 				div0.className = "mw8 h3";
-				add_location(div0, file$3, 91, 1, 2371);
+				add_location(div0, file$3, 88, 1, 2319);
 				div1.className = "mw9 center ph3";
-				add_location(div1, file$3, 63, 0, 1572);
+				add_location(div1, file$3, 60, 0, 1525);
 				div2.className = "fl w-50 h-100";
-				add_location(div2, file$3, 102, 1, 2523);
+				add_location(div2, file$3, 99, 1, 2471);
 				div3.className = "fl w-50 h-100";
-				add_location(div3, file$3, 110, 1, 2661);
+				add_location(div3, file$3, 107, 1, 2611);
 				div4.className = "mw9 center ph3 cf";
 				set_style(div4, "height", "600px");
-				add_location(div4, file$3, 101, 0, 2467);
+				add_location(div4, file$3, 98, 0, 2415);
 				div5.className = "fl w-50";
-				add_location(div5, file$3, 124, 1, 2891);
+				add_location(div5, file$3, 120, 1, 2834);
 				div6.className = "fl w-50";
-				add_location(div6, file$3, 133, 1, 3035);
+				add_location(div6, file$3, 129, 1, 2984);
 				div7.className = "mw9 center ph3 mb5 h3";
-				add_location(div7, file$3, 123, 0, 2854);
+				add_location(div7, file$3, 119, 0, 2797);
 				footer.className = "w-100 center tc ph3 f6 mt5 pv5 black-80 bg-lightest-blue";
-				add_location(footer, file$3, 147, 0, 3234);
+				add_location(footer, file$3, 142, 0, 3180);
 
 				dispose = [
 					listen(select, "change", ctx.select_change_handler),
@@ -1674,8 +1643,8 @@
 				if (changed.currentIndex) select_option(select, ctx.currentIndex);
 				if (changed.extraGeography) input0.checked = ctx.extraGeography;
 
-				if (!current || changed.downloadPath) {
-					a.href = ctx.downloadPath;
+				if ((!current || changed.dp) && a_href_value !== (a_href_value = ctx.dp.file)) {
+					a.href = a_href_value;
 				}
 
 				if (!current || changed.description) {
@@ -1688,35 +1657,29 @@
 				legend.$set(legend_changes);
 
 				var map0_changes = {};
-				if (changed.time1) map0_changes.time = ctx.time1;
-				if (changed.col1) map0_changes.col = ctx.col1;
+				if (changed.before) map0_changes.time = ctx.before;
 				if (changed.extraGeography) map0_changes.extraGeography = ctx.extraGeography;
 				map0.$set(map0_changes);
 
 				var map1_changes = {};
-				if (changed.time2) map1_changes.time = ctx.time2;
-				if (changed.col2) map1_changes.col = ctx.col2;
-				if (changed.col1) map1_changes.prevCol = ctx.col1;
-				if (changed.posChange) map1_changes.posChange = ctx.posChange;
+				if (changed.after) map1_changes.time = ctx.after;
+				if (changed.positiveIncrease) map1_changes.positiveIncrease = ctx.positiveIncrease;
 				if (changed.extraGeography) map1_changes.extraGeography = ctx.extraGeography;
 				map1.$set(map1_changes);
 
 				var annotation0_changes = {};
-				if (changed.time1) annotation0_changes.period = ctx.time1;
-				if (changed.col1) annotation0_changes.col = ctx.col1;
-				if (changed.moe1) annotation0_changes.moe = ctx.moe1;
+				if (changed.before) annotation0_changes.period = ctx.before;
+				if (changed.beforemoe) annotation0_changes.moe = ctx.beforemoe;
 				if (changed.prefix) annotation0_changes.prefix = ctx.prefix;
 				if (changed.suffix) annotation0_changes.suffix = ctx.suffix;
 				annotation0.$set(annotation0_changes);
 
 				var annotation1_changes = {};
-				if (changed.time2) annotation1_changes.period = ctx.time2;
-				if (changed.col2) annotation1_changes.col = ctx.col2;
-				if (changed.moe2) annotation1_changes.moe = ctx.moe2;
+				if (changed.after) annotation1_changes.period = ctx.after;
+				if (changed.aftermoe) annotation1_changes.moe = ctx.aftermoe;
 				if (changed.prefix) annotation1_changes.prefix = ctx.prefix;
 				if (changed.suffix) annotation1_changes.suffix = ctx.suffix;
-				if (changed.posChange) annotation1_changes.posChange = ctx.posChange;
-				if (changed.col1) annotation1_changes.colPrev = ctx.col1;
+				if (changed.positiveIncrease) annotation1_changes.positiveIncrease = ctx.positiveIncrease;
 				annotation1.$set(annotation1_changes);
 			},
 
@@ -1807,22 +1770,19 @@
 			$$invalidate('extraGeography', extraGeography);
 		}
 
-		let dp, downloadPath, description, col1, col2, time1, time2, moe1, moe2, prefix, suffix, posChange;
-		$$self.$$.update = ($$dirty = { currentIndex: 1, dp: 1, downloadPath: 1, col1: 1, col2: 1 }) => {
+		let dp, description, before, after, beforemoe, aftermoe, prefix, suffix, positiveIncrease;
+		$$self.$$.update = ($$dirty = { currentIndex: 1, dp: 1 }) => {
 			if ($$dirty.currentIndex) { $$invalidate('dp', dp = config.data[parseInt(currentIndex)]); }
-			if ($$dirty.dp) { $$invalidate('downloadPath', downloadPath = 'data/' + dp.file); }
 			if ($$dirty.dp) { $$invalidate('description', description = dp.description); }
-			if ($$dirty.dp) { $$invalidate('col1', col1 = dp.col1); }
-			if ($$dirty.dp) { $$invalidate('col2', col2 = dp.col2); }
-			if ($$dirty.dp) { $$invalidate('time1', time1 = dp.time1); }
-			if ($$dirty.dp) { $$invalidate('time2', time2 = dp.time2); }
-			if ($$dirty.dp) { $$invalidate('moe1', moe1 = dp.moe1); }
-			if ($$dirty.dp) { $$invalidate('moe2', moe2 = dp.moe2); }
+			if ($$dirty.dp) { $$invalidate('before', before = dp.before); }
+			if ($$dirty.dp) { $$invalidate('after', after = dp.after); }
+			if ($$dirty.dp) { $$invalidate('beforemoe', beforemoe = dp.beforemoe); }
+			if ($$dirty.dp) { $$invalidate('aftermoe', aftermoe = dp.aftermoe); }
 			if ($$dirty.dp) { $$invalidate('prefix', prefix = dp.prefix); }
 			if ($$dirty.dp) { $$invalidate('suffix', suffix = dp.suffix); }
-			if ($$dirty.dp) { $$invalidate('posChange', posChange = dp.change == 'positive' ? true : false); }
-			if ($$dirty.downloadPath || $$dirty.col1 || $$dirty.col2) { {
-					fetch(downloadPath)
+			if ($$dirty.dp) { $$invalidate('positiveIncrease', positiveIncrease = dp.positiveIncrease); }
+			if ($$dirty.dp) { {
+					fetch(dp.file)
 						.then(function(res) {
 							return res.text();
 						})
@@ -1834,13 +1794,13 @@
 			
 							let parsedAsObj = {};
 							for (let i in parsed) {
-								parsedAsObj[parsed[i].Geography] = parsed[i];
+								parsedAsObj[parsed[i].geography] = parsed[i];
 							}
 			
-							let values1 = parsed.map(x => parseFloat(x[col1]) || 0);
-							let values2 = parsed.map(x => parseFloat(x[col2]) || 0);
+							let valuesBefore = parsed.map(x => parseFloat(x['before']) || 0);
+							let valuesAfter = parsed.map(x => parseFloat(x['after']) || 0);
 			
-							jenksBreaks.update(x => jenks(values1.concat(values2), 5));
+							jenksBreaks.update(x => jenks(valuesBefore.concat(valuesAfter), 5));
 							geo2data.update(x => parsedAsObj);
 							data.update(d => parsed);
 						});
@@ -1851,17 +1811,15 @@
 			currentIndex,
 			extraGeography,
 			handleExtraGeography,
-			downloadPath,
+			dp,
 			description,
-			col1,
-			col2,
-			time1,
-			time2,
-			moe1,
-			moe2,
+			before,
+			after,
+			beforemoe,
+			aftermoe,
 			prefix,
 			suffix,
-			posChange,
+			positiveIncrease,
 			select_change_handler,
 			input0_change_handler
 		};

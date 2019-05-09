@@ -22,20 +22,17 @@
 	}
 
 	$: dp = config.data[parseInt(currentIndex)]
-	$: downloadPath = 'data/' + dp.file
 	$: description = dp.description
-	$: col1 = dp.col1
-	$: col2 = dp.col2
-	$: time1 = dp.time1
-	$: time2 = dp.time2
-	$: moe1 = dp.moe1
-	$: moe2 = dp.moe2
+	$: before = dp.before
+	$: after = dp.after
+	$: beforemoe = dp.beforemoe
+	$: aftermoe = dp.aftermoe
 	$: prefix = dp.prefix
 	$: suffix = dp.suffix
-	$: posChange = dp.change == 'positive' ? true : false
+	$: positiveIncrease = dp.positiveIncrease
 
 	$: {
-		fetch(downloadPath)
+		fetch(dp.file)
 			.then(function(res) {
 				return res.text();
 			})
@@ -47,13 +44,13 @@
 
 				let parsedAsObj = {}
 				for (let i in parsed) {
-					parsedAsObj[parsed[i].Geography] = parsed[i];
+					parsedAsObj[parsed[i].geography] = parsed[i];
 				}
 
-				let values1 = parsed.map(x => parseFloat(x[col1]) || 0);
-				let values2 = parsed.map(x => parseFloat(x[col2]) || 0);
+				let valuesBefore = parsed.map(x => parseFloat(x['before']) || 0);
+				let valuesAfter = parsed.map(x => parseFloat(x['after']) || 0);
 
-				jenksBreaks.update(x => jenks(values1.concat(values2), 5));
+				jenksBreaks.update(x => jenks(valuesBefore.concat(valuesAfter), 5));
 				geo2data.update(x => parsedAsObj);
 				data.update(d => parsed);
 			});
@@ -82,7 +79,7 @@
 	</form>
 
 	<p class="black-80 f6">
-		<a href="{downloadPath}" class="link dim">Download dataset</a> powering this visualization.
+		<a href="{dp.file}" class="link dim">Download dataset</a> powering this visualization.
 	</p>
 
 	<p class="f6 lh-title">
@@ -102,19 +99,18 @@
 <div class="mw9 center ph3 cf" style="height: 600px;">
 	<div class="fl w-50 h-100">
 		<Map
-			id="map-time1"
-			time="{time1}"
-			col="{col1}"
+			id="map-before"
+			time="{before}"
+			col="before"
 			extraGeography="{extraGeography}"
 		/>
 	</div>
 	<div class="fl w-50 h-100">
 		<Map
-			id="map-time2"
-			time="{time2}"
-			col="{col2}"
-			prevCol="{col1}"
-			posChange="{posChange}"
+			id="map-after"
+			time="{after}"
+			col="after"
+			positiveIncrease="{positiveIncrease}"
 			extraGeography="{extraGeography}"
 		/>
 	</div>
@@ -124,22 +120,21 @@
 <div class="mw9 center ph3 mb5 h3">
 	<div class="fl w-50">
 		<Annotation
-			period="{time1}"
-			col="{col1}"
-			moe="{moe1}"
+			col="before"
+			period="{before}"
+			moe="{beforemoe}"
 			prefix="{prefix}"
 			suffix="{suffix}"
 		/>
 	</div>
 	<div class="fl w-50">
 		<Annotation
-			period="{time2}"
-			col="{col2}"
-			moe="{moe2}"
+			col="after"
+			period="{after}"
+			moe="{aftermoe}"
 			prefix="{prefix}"
 			suffix="{suffix}"
-			posChange="{posChange}"
-			colPrev="{col1}"
+			positiveIncrease="{positiveIncrease}"
 		/>
 	</div>
 </div>

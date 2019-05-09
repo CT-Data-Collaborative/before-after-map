@@ -1,17 +1,16 @@
 <script>
-	export let time
 	export let id
-	export let censusTracts
+	export let time
 	export let col
-	export let prevCol = false
-	export let posChange
+	export let extraGeography
+	export let positiveIncrease
 
 	import {onMount} from 'svelte'
 	import jenks from './helpers/jenks.js'
-	import tract2town from './helpers/tract2town.js'
 	import comma from './helpers/comma.js'
 	import {colorsJenks, colorsChange} from './helpers/colors.js'
 	import isNumeric from './helpers/isnumeric.js'
+	import config from './config.js'
 
 	import {showChange, data, ann, jenksBreaks, geo2data, geojsonPath} from './stores.js'
 
@@ -19,17 +18,16 @@
 	let geojsonLayer
 
 	let getColor = function(geo) {
-
 		if (!geo) return '#cccccc'
 
 		let val = geo[col]
-		let valPrev = prevCol ? geo[prevCol] : false
 		let colors = colorsJenks
 		let breaks = $jenksBreaks
 
-		if ($showChange && valPrev) {
-			if (isNumeric(valPrev) && isNumeric(val)) {
-				let change = (val - valPrev) / valPrev * 100
+		if ($showChange && col == 'after') {
+			let valBefore = geo['before']
+			if (isNumeric(valBefore) && isNumeric(val)) {
+				let change = (val - valBefore) / valBefore * 100
 				val = change
 				breaks = [-100, -10, -5, 0, 5, 10, 100]
 				colors = colorsChange
@@ -86,7 +84,7 @@
 			onEachFeature: function(f, l) {
 				l.on({
 					mouseover: function(e) {
-						ann.update(x => e.target.feature.properties.name)
+						ann.update(x => e.target.feature.properties[config.geojsonGeographyProperty])
 					},
 					mouseout: function(e) {
 						ann.update(x => '')
@@ -99,11 +97,11 @@
 
 		geo2data.subscribe(g2d => {
 
-			if (id == 'map-time2') {
+			if (id == 'map-after') {
 				showChange.subscribe(val => {
 					geojsonLayer.eachLayer(layer => {
 						layer.setStyle({
-							fillColor: getColor(g2d[layer.feature.properties.name]),
+							fillColor: getColor(g2d[layer.feature.properties[config.geojsonGeographyProperty]]),
 							fillOpacity: 1,
 							color: 'white',
 							weight: 1
@@ -114,7 +112,7 @@
 
 			geojsonLayer.eachLayer(layer => {
 				layer.setStyle({
-					fillColor: getColor(g2d[layer.feature.properties.name]),
+					fillColor: getColor(g2d[layer.feature.properties[config.geojsonGeographyProperty]]),
 					fillOpacity: 1,
 					color: 'white',
 					weight: 1

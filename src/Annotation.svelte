@@ -10,8 +10,8 @@
   export let suffix
 
   // For the map on the right
-  export let colPrev
-  export let posChange
+  //export let colPrev
+  export let positiveIncrease
 
   let color = 'black'
   let value = ''
@@ -19,11 +19,11 @@
   $: if ($geo2data[$ann]) {
     value = $geo2data[$ann][col]
 
-    if (colPrev) {
-      let valPrev = $geo2data[$ann][colPrev]
-      if (isNumeric(valPrev) && isNumeric(value)) {
-        let change = value - valPrev
-        color = (change > 0 && posChange) || (change < 0 && !posChange) ? 'green' : 'red'
+    if (col == 'after') {
+      let valueBefore = $geo2data[$ann]['before']
+      if (isNumeric(valueBefore) && isNumeric(value)) {
+        let change = value - valueBefore
+        color = (change > 0 && positiveIncrease) || (change < 0 && !positiveIncrease) ? 'green' : 'red'
       } else {
         color = 'black'
       }
@@ -38,8 +38,8 @@
     <p class="f4 mt0 mb1"> {$ann} </p>
     <p class="f3 mv0">
       <span class="{color}">{prefix}{value.toLocaleString()}</span>{suffix}
-      {#if moe !== "false"}
-        <span class="black-50"> &pm; {$geo2data[$ann][moe].toLocaleString()} </span>
+      {#if moe}
+        <span class="black-50"> &pm; {$geo2data[$ann][col + 'moe'].toLocaleString()} </span>
       {/if}
     </p>
   {/if}
