@@ -1,6 +1,6 @@
 # Before-After Map Template
 
-This is a [Svelte](https://svelte.technology) project to display two interactive data maps side by side using Jenks breaks.
+This is a [Svelte](https://svelte.technology) project to display two interactive data maps side by side, colored based on Jenks breaks.
 
 ![Screenshot](screenshot.png)
 
@@ -53,7 +53,7 @@ The `data` key of the config file is an array of JSON objects that define the da
 {
     // Nice name to be displayed
     "name": "Median Household Income",
-    // Dataset file path (csv)
+    // Dataset file path (csv), can be absolute URL or relative path from /public folder
     "file": "./data/median_household_income.csv",
     // Prefix for the values (eg "$")
     "prefix": "$",
@@ -77,7 +77,9 @@ The `data` key of the config file is an array of JSON objects that define the da
 
 ### 3. Create .csv data files
 
-Each parameter is a separate .csv dataset with data for all features in default and extra GeoJSONs. Each *csv* file needs to have 5 columns: `geography` needs to match the relevant property of the features in the geojson file, `before` are the values for the left map, `beforemoe` are margins of error for the values for the left map, `after` are the values for the map on the right, `aftermoe` are the margins of errors for values defined in `after`. For example,
+Data files can be stored in `/public` folder (eg in `/public/data/*`) or remotely.
+
+Each parameter is a separate .csv dataset with data for all geo features. Each *csv* file needs to have 5 columns: `geography` needs to match the relevant property of the layers in the geojson file, `before` are the values for the left map, `beforemoe` are margins of error for the values for the left map, `after` are the values for the map on the right, `aftermoe` are the margins of errors for values defined in `after`. For example,
 
 ```csv
 geography,before,beforemoe,after,aftermoe
@@ -86,3 +88,12 @@ Bridgeport,39822,1597,44841,1451
 Brookfield,111096,6658,113009,9162
 Danbury,66281,2160,68068,4517
 ```
+
+### 4. Publish your map
+In Terminal, run
+
+```
+npm run build
+```
+
+This will compile all relevant Svelte files, JavaScript, and CSS and put it in `public/` folder. Open `index.html` to see the app. It works entirely in front-end, so you can serve it from GitHub Pages or Amazon S3 bucket - no backend required.
